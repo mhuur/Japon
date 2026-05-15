@@ -1,0 +1,2859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0a1a">
+<title>Japon — Activités</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+:root{
+  --bg:#0e0a1a;--surface:#1a1430;--surface-2:#241a3d;--surface-3:#2e2350;
+  --ink:#f0f0ff;--ink-soft:#b8b0d8;--ink-faint:#7a7099;
+  --pink:#ff2e88;--violet:#a855f7;--cyan:#06d6f0;
+  --lime:#aaff00;--gold:#ffe600;--orange:#ff6b1a;
+  --peach:#ff9eb5;--skyblue:#4cc9f0;
+  --rule:rgba(168,85,247,.25);--rule-soft:rgba(168,85,247,.12);
+  --glow-pink:0 0 24px rgba(255,46,136,.45);
+  --glow-cyan:0 0 24px rgba(6,214,240,.4);
+  --glow-lime:0 0 22px rgba(170,255,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Outfit',system-ui,sans-serif;
+  background:var(--bg);
+  background-image:
+    radial-gradient(circle at 15% 10%,rgba(255,46,136,.16) 0%,transparent 45%),
+    radial-gradient(circle at 85% 20%,rgba(168,85,247,.16) 0%,transparent 45%),
+    radial-gradient(circle at 50% 80%,rgba(6,214,240,.1) 0%,transparent 50%);
+  background-attachment:fixed;
+  color:var(--ink);line-height:1.5;min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  position:relative;overflow-x:hidden;
+  padding-bottom:40px;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(2px 2px at 12% 23%,rgba(255,46,136,.45),transparent),
+    radial-gradient(1px 1px at 28% 67%,rgba(6,214,240,.35),transparent),
+    radial-gradient(2px 2px at 47% 14%,rgba(170,255,0,.35),transparent),
+    radial-gradient(1px 1px at 64% 82%,rgba(255,230,0,.45),transparent),
+    radial-gradient(2px 2px at 83% 37%,rgba(168,85,247,.35),transparent),
+    radial-gradient(1px 1px at 91% 71%,rgba(76,201,240,.35),transparent);
+  animation:twinkle 8s ease-in-out infinite alternate;
+}
+@keyframes twinkle{0%{opacity:.5}100%{opacity:1}}
+.container{max-width:780px;margin:0 auto;position:relative;z-index:1;padding:0 12px}
+
+/* === HEADER === */
+header{text-align:center;padding:14px 0 10px}
+.stamp{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  color:#fff;font-family:'Zen Maru Gothic',sans-serif;
+  font-size:20px;font-weight:900;margin-bottom:6px;
+  box-shadow:var(--glow-pink),0 4px 14px rgba(0,0,0,.35);
+  animation:pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow{
+  0%,100%{box-shadow:0 0 24px rgba(255,46,136,.45),0 4px 14px rgba(0,0,0,.35)}
+  50%{box-shadow:0 0 38px rgba(255,46,136,.7),0 0 60px rgba(168,85,247,.3)}
+}
+.eyebrow{
+  font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:3px;
+  text-shadow:0 0 12px rgba(6,214,240,.5);
+}
+h1{
+  font-family:'Zen Maru Gothic',sans-serif;font-weight:700;
+  font-size:clamp(1.15rem,4.5vw,1.6rem);line-height:1.1;
+}
+h1 .accent{
+  font-weight:900;
+  background:linear-gradient(135deg,var(--pink),var(--violet),var(--cyan));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* === LISIÈRE LATÉRALE (toujours visible, invite à ouvrir le drawer) === */
+.city-edge{
+  position:fixed;left:0;top:0;bottom:0;
+  width:36px;
+  background:linear-gradient(180deg,
+    rgba(168,85,247,.18) 0%,
+    rgba(255,46,136,.12) 50%,
+    rgba(6,214,240,.18) 100%);
+  border-right:2px solid var(--violet);
+  box-shadow:2px 0 18px rgba(168,85,247,.35);
+  cursor:pointer;
+  z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;
+  transition:background .2s, width .2s;
+}
+.city-edge:hover,.city-edge:active{
+  width:42px;
+  background:linear-gradient(180deg,
+    rgba(168,85,247,.28) 0%,
+    rgba(255,46,136,.18) 50%,
+    rgba(6,214,240,.28) 100%);
+}
+.city-edge-label{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:10px;letter-spacing:.32em;
+  text-transform:uppercase;font-weight:700;
+  color:var(--ink);
+  text-shadow:0 0 8px rgba(168,85,247,.6);
+}
+.city-edge-badge{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  color:#fff;
+  font-size:11px;font-weight:700;
+  min-width:22px;height:22px;
+  border-radius:11px;padding:0 6px;
+  display:inline-flex;align-items:center;justify-content:center;
+  box-shadow:0 0 10px rgba(255,46,136,.5);
+  font-variant-numeric:tabular-nums;
+}
+.city-edge-chevron{
+  color:var(--cyan);
+  width:14px;height:14px;
+  filter:drop-shadow(0 0 6px rgba(6,214,240,.7));
+  animation:edge-pulse 2s ease-in-out infinite;
+}
+@keyframes edge-pulse{
+  0%,100%{transform:translateX(0);opacity:.8}
+  50%{transform:translateX(3px);opacity:1}
+}
+
+/* Décale le contenu pour ne pas être masqué par la lisière */
+.container{padding-left:calc(12px + 36px)}
+@media (max-width:430px){
+  .city-edge{width:32px}
+  .container{padding-left:calc(8px + 32px)}
+}
+
+/* === DRAWER (city selector) === */
+.drawer-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;
+  transition:opacity .25s;
+  z-index:90;
+}
+.drawer-overlay.open{opacity:1;pointer-events:auto}
+.drawer{
+  position:fixed;top:0;left:0;bottom:0;
+  width:min(85vw,340px);
+  background:var(--bg);
+  border-right:1px solid var(--rule);
+  transform:translateX(-100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+  z-index:100;
+  display:flex;flex-direction:column;
+  box-shadow:8px 0 30px rgba(0,0,0,.4);
+}
+.drawer.open{transform:translateX(0)}
+.drawer-header{
+  padding:18px 18px 14px;
+  border-bottom:1px solid var(--rule-soft);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.drawer-title{
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:16px;font-weight:700;color:var(--ink);
+  letter-spacing:.04em;
+}
+.drawer-close{
+  width:32px;height:32px;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--rule-soft);
+  border-radius:8px;color:var(--ink-soft);cursor:pointer;
+}
+.drawer-close i,.drawer-close svg{width:16px;height:16px}
+.drawer-body{
+  flex:1;overflow-y:auto;
+  padding:8px 12px 20px;
+}
+.region-group{margin-top:6px}
+.region-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 12px;cursor:pointer;
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.18em;
+  color:var(--ink-soft);
+  border-radius:8px;
+  transition:background .15s;
+  user-select:none;
+}
+.region-header:hover{background:var(--surface)}
+.region-chevron{
+  width:14px;height:14px;
+  transition:transform .2s;
+  color:var(--ink-faint);
+}
+.region-group.collapsed .region-chevron{transform:rotate(-90deg)}
+.region-group.collapsed .region-cities{display:none}
+.region-cities{padding:2px 0 8px}
+.city-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 12px;margin:2px 0;
+  border-radius:10px;cursor:pointer;
+  transition:background .12s;
+  user-select:none;
+}
+.city-item:hover{background:var(--surface)}
+.city-item.active{
+  background:linear-gradient(90deg,
+    rgba(168,85,247,.18),rgba(6,214,240,.08));
+  border-left:3px solid var(--violet);padding-left:9px;
+}
+.city-checkbox{
+  width:22px;height:22px;flex-shrink:0;
+  border-radius:6px;
+  border:2px solid var(--rule);
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;transition:all .15s;
+}
+.city-item.active .city-checkbox{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  border-color:transparent;
+  box-shadow:0 0 10px rgba(255,46,136,.4);
+}
+.city-checkbox-mark{
+  width:12px;height:12px;color:#fff;opacity:0;transition:opacity .15s;
+}
+.city-item.active .city-checkbox-mark{opacity:1}
+.city-name{
+  flex:1;font-size:14px;color:var(--ink);
+  font-weight:500;
+}
+.city-count{
+  font-size:11px;color:var(--ink-faint);
+  background:var(--surface-2);
+  padding:2px 8px;border-radius:10px;
+  font-variant-numeric:tabular-nums;
+}
+.city-item.active .city-count{
+  background:rgba(168,85,247,.25);color:var(--ink);
+}
+.drawer-footer{
+  padding:14px 18px;
+  border-top:1px solid var(--rule-soft);
+  font-size:11px;color:var(--ink-faint);
+  text-align:center;
+}
+
+/* === STICKY TOOLBAR (compact) === */
+.toolbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(14,10,26,.9);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  margin:0 -12px;padding:8px 12px 8px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.tool-row{display:flex;gap:6px;align-items:center}
+.main-row{margin-bottom:0}
+
+.primary-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;border-radius:10px;
+  background:var(--surface-2);
+  border:1px solid var(--rule);
+  color:var(--ink);
+  font-size:13px;font-weight:600;
+  cursor:pointer;
+  font-family:'Outfit',sans-serif;
+  transition:all .2s;
+  flex-shrink:0;
+}
+.primary-btn svg{width:14px;height:14px;color:var(--cyan)}
+.primary-btn:hover,.primary-btn:active{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(6,214,240,.2);
+}
+.primary-btn.has-active{
+  background:linear-gradient(135deg,rgba(255,46,136,.18),rgba(168,85,247,.18));
+  border-color:var(--pink);
+}
+.primary-btn.has-active svg{color:var(--pink)}
+.primary-btn .badge{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  color:#fff;
+  padding:1px 7px;border-radius:8px;
+  font-size:10.5px;font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  margin-left:1px;
+}
+.icon-btn{padding:9px 11px}
+.icon-btn svg{width:15px;height:15px;color:var(--ink)}
+.icon-btn-small{
+  background:var(--surface-2);
+  border:1px solid var(--rule);
+  width:32px;height:32px;border-radius:8px;
+  cursor:pointer;color:var(--ink-soft);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+  flex-shrink:0;
+}
+.icon-btn-small svg{width:14px;height:14px}
+.icon-btn-small:hover,.icon-btn-small.active{
+  border-color:var(--cyan);color:var(--cyan);
+}
+.spacer{flex:1}
+
+/* === SEARCH (collapsible) === */
+.search-wrap{
+  position:relative;margin-top:6px;
+  max-height:60px;overflow:hidden;
+  transition:max-height .25s ease,margin-top .25s ease,opacity .2s ease;
+}
+.search-wrap.collapsed{max-height:0;margin-top:0;opacity:0;pointer-events:none}
+.search-wrap > i{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--cyan);pointer-events:none;
+}
+.search-input{
+  width:100%;padding:8px 34px;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink);
+  font-family:'Outfit',sans-serif;font-size:13.5px;outline:none;
+  border-radius:9px;transition:all .2s;
+}
+.search-input::placeholder{color:var(--ink-faint)}
+.search-input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(6,214,240,.15);
+}
+.search-clear{
+  position:absolute;right:6px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--ink-faint);
+  padding:6px;display:none;
+}
+.search-wrap:not(.collapsed) .search-clear.visible{display:block}
+.search-clear svg{width:13px;height:13px}
+
+/* === MORE PANEL (collapsible) === */
+.more-panel{
+  display:none;
+  margin-top:8px;padding:10px;
+  background:var(--surface);
+  border:1px solid var(--rule);border-radius:11px;
+}
+.more-panel.open{display:block;animation:slideDown .2s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.more-section + .more-section{margin-top:10px;padding-top:10px;border-top:1px solid var(--rule-soft)}
+.more-section-title{
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink-faint);margin-bottom:6px;
+}
+.more-section-body{display:flex;flex-direction:column;gap:1px}
+.more-item{
+  display:flex;align-items:center;gap:8px;
+  width:100%;padding:6px 8px;
+  background:none;border:none;
+  font-size:12.5px;color:var(--ink-soft);
+  text-align:left;cursor:pointer;border-radius:6px;
+  font-family:'Outfit',sans-serif;
+}
+.more-item:hover{background:var(--surface-2);color:var(--ink)}
+.more-item.active{color:var(--cyan);font-weight:600;background:rgba(6,214,240,.06)}
+.more-item .check{
+  width:14px;display:inline-flex;justify-content:center;
+  color:var(--cyan);
+}
+.more-item .check svg{width:13px;height:13px}
+.more-item:not(.active) .check{visibility:hidden}
+.more-chips{display:flex;flex-wrap:wrap;gap:5px}
+.more-export-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-soft);
+  cursor:pointer;font-size:12px;font-weight:500;
+  font-family:'Outfit',sans-serif;
+  transition:all .15s;
+}
+.more-export-btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.more-export-btn svg{width:13px;height:13px}
+
+/* === BOTTOM BAR (tabs + count) === */
+.bottom-bar{
+  display:flex;align-items:center;gap:8px;margin-top:8px;
+}
+.tabs-mini{
+  flex:1;display:flex;gap:2px;
+  padding:2px;background:var(--surface);
+  border:1px solid var(--rule);border-radius:8px;
+}
+.tab-mini{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+  padding:5px 8px;
+  background:none;border:none;cursor:pointer;
+  font-size:11.5px;font-weight:500;
+  color:var(--ink-faint);border-radius:6px;
+  transition:all .2s;
+  font-family:'Outfit',sans-serif;
+}
+.tab-mini.active{
+  background:linear-gradient(135deg,var(--surface-3),var(--surface-2));
+  color:var(--ink);font-weight:600;
+}
+.tab-mini .tab-count{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:10px;font-weight:700;
+  padding:0 5px;border-radius:5px;
+  background:var(--bg);color:var(--ink-faint);
+}
+.tab-mini.active .tab-count{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  color:#fff;
+}
+.tab-mini.tab-done.active .tab-count{
+  background:linear-gradient(135deg,var(--lime),var(--cyan));
+  color:#0e0a1a;
+}
+.result-count{
+  font-size:11px;color:var(--ink-faint);
+  font-family:'Space Grotesk',sans-serif;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+/* === CHIP (used in More panel) === */
+.chip{
+  font-size:11px;font-weight:500;
+  padding:4px 9px;border-radius:999px;
+  background:var(--surface-2);border:1px solid var(--rule);color:var(--ink-soft);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:4px;
+  font-family:'Outfit',sans-serif;
+}
+.chip:hover{border-color:var(--cyan);color:var(--cyan)}
+.chip.active{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  border-color:transparent;color:#fff;font-weight:600;
+  box-shadow:0 0 12px rgba(255,46,136,.4);
+}
+
+/* === BOTTOM SHEET (Zone / Cat) === */
+.sheet-overlay{
+  display:none;position:fixed;inset:0;z-index:150;
+  background:rgba(14,10,26,.85);
+  align-items:flex-end;justify-content:center;
+}
+.sheet-overlay.open{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet{
+  background:var(--surface);
+  border-top:2px solid var(--cyan);
+  border-radius:18px 18px 0 0;
+  width:100%;max-width:560px;
+  max-height:75vh;
+  display:flex;flex-direction:column;
+  animation:sheetUp .3s ease;
+  box-shadow:0 -10px 40px rgba(0,0,0,.6);
+}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:none}}
+.sheet-head{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 16px 12px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.sheet-head h3{
+  flex:1;font-size:15px;font-weight:700;
+  font-family:'Zen Maru Gothic',sans-serif;color:var(--ink);
+}
+.sheet-clear{
+  background:transparent;border:1px solid var(--rule);
+  padding:5px 11px;border-radius:7px;
+  font-size:11px;color:var(--cyan);
+  cursor:pointer;font-family:'Outfit',sans-serif;
+  font-weight:500;
+}
+.sheet-clear:hover{border-color:var(--cyan);background:rgba(6,214,240,.08)}
+.sheet-close{
+  background:var(--surface-2);border:1px solid var(--rule);
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink-soft);
+}
+.sheet-close svg{width:15px;height:15px}
+.sheet-close:hover{border-color:var(--pink);color:var(--pink)}
+.sheet-body{
+  overflow-y:auto;
+  padding:6px;
+  -webkit-overflow-scrolling:touch;
+}
+.sheet-item{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:11px 12px 11px 14px;
+  background:transparent;border:none;
+  border-left:3px solid transparent;
+  border-radius:0 8px 8px 0;
+  color:var(--ink-soft);
+  cursor:pointer;
+  font-family:'Outfit',sans-serif;
+  text-align:left;
+  font-size:13.5px;
+  transition:background-color .15s, border-color .15s, color .15s;
+}
+.sheet-item:hover{background:var(--surface-2)}
+.sheet-item:active{transform:scale(.98)}
+.sheet-item.active{
+  background:linear-gradient(90deg,rgba(255,46,136,.22),rgba(168,85,247,.16));
+  color:var(--ink);
+  border-left-color:var(--pink);
+}
+.sheet-item .check{
+  width:24px;height:24px;
+  border:2px solid var(--rule);
+  border-radius:7px;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-family:'Outfit',sans-serif;
+  font-size:16px;font-weight:900;line-height:1;
+  color:transparent;
+  background:var(--bg);
+  transition:background-color .15s, border-color .15s, color .15s;
+}
+.sheet-item.active .check{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 0 12px rgba(255,46,136,.5);
+}
+.sheet-item .label{flex:1;font-weight:500}
+.sheet-item.active .label{font-weight:600}
+.sheet-item .count{
+  font-size:11px;color:var(--ink-faint);
+  font-family:'Space Grotesk',sans-serif;
+  background:var(--bg);
+  padding:2px 8px;border-radius:6px;
+}
+.sheet-item.active .count{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+
+/* Hierarchical category sheet */
+.sheet-group{margin-bottom:2px}
+.sheet-item-row{display:flex;align-items:center;gap:2px}
+.sheet-item-row .sheet-item{flex:1}
+/* Partial state: distinct from full */
+.sheet-parent.state-partial{
+  background:linear-gradient(90deg,rgba(255,46,136,.12),rgba(168,85,247,.08));
+  color:var(--ink);
+  border-left-color:rgba(255,46,136,.6);
+}
+.sheet-parent.state-partial .check{
+  background:linear-gradient(135deg,rgba(255,46,136,.6),rgba(168,85,247,.6));
+  border-color:transparent;
+  color:#fff;
+}
+.sheet-parent.state-partial .label{font-weight:600}
+.sheet-parent .label strong{font-weight:700}
+.sheet-sub{
+  padding-left:36px !important;
+  font-size:12.5px !important;
+}
+.sheet-sub .check{
+  width:20px;height:20px;
+  border-radius:6px;
+  font-size:14px;
+}
+.sheet-sub .label{font-weight:400;color:var(--ink-soft)}
+/* Override for active sub: distinct lime/cyan gradient to distinguish from pink parent */
+.sheet-sub.active{
+  background:linear-gradient(90deg,rgba(170,255,0,.22),rgba(6,214,240,.16)) !important;
+  border-left-color:var(--lime) !important;
+}
+.sheet-sub.active .label{color:var(--ink);font-weight:600}
+.sheet-sub.active .check{
+  background:linear-gradient(135deg,var(--lime),var(--cyan)) !important;
+  border-color:transparent !important;
+  color:#0e0a1a !important;
+  box-shadow:0 0 12px rgba(170,255,0,.5) !important;
+}
+.sheet-sub.active .count{
+  background:rgba(255,255,255,.18) !important;
+  color:#fff !important;
+}
+.sheet-expand{
+  flex-shrink:0;
+  width:34px;height:34px;
+  background:transparent;border:none;
+  cursor:pointer;color:var(--ink-faint);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:7px;
+  transition:all .2s;
+  padding:8px;
+}
+.sheet-expand svg{width:100%;height:100%;transition:transform .25s;display:block}
+.sheet-expand.expanded svg{transform:rotate(180deg)}
+.sheet-expand:hover{background:var(--surface-2);color:var(--cyan)}
+
+/* === ACTIVE FILTERS PILLS === */
+.active-filters{
+  display:none;flex-wrap:wrap;gap:5px;
+  margin-top:10px;
+}
+.active-filters.has-items{display:flex}
+.filter-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;padding:4px 4px 4px 10px;border-radius:999px;
+  background:rgba(255,46,136,.12);
+  border:1px solid rgba(255,46,136,.35);
+  color:var(--ink);
+  font-family:'Outfit',sans-serif;
+}
+.filter-pill button{
+  background:rgba(255,255,255,.1);
+  border:none;color:#fff;
+  width:18px;height:18px;border-radius:50%;
+  cursor:pointer;font-size:11px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+}
+.filter-pill button:hover{background:var(--pink)}
+.clear-all-pill{
+  font-size:10.5px;color:var(--cyan);background:none;border:none;
+  cursor:pointer;padding:4px 8px;
+}
+.clear-all-pill:hover{text-shadow:0 0 8px rgba(6,214,240,.5)}
+
+/* === ACTIVITY LIST === */
+.activity-list{margin-top:14px}
+.group-header{
+  display:flex;align-items:baseline;gap:8px;
+  padding:14px 4px 8px;
+  font-family:'Outfit',sans-serif;
+  border-bottom:1px solid var(--rule-soft);
+  margin-bottom:6px;
+}
+.group-header:first-child{padding-top:6px}
+.group-header .group-name{
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-weight:700;font-size:14px;color:var(--cyan);
+  letter-spacing:.02em;
+  text-shadow:0 0 10px rgba(6,214,240,.3);
+}
+.group-header .group-count{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:11px;font-weight:600;color:var(--ink-faint);
+}
+
+.act{
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:11px;
+  padding:10px 12px;
+  margin-bottom:6px;
+  position:relative;
+  transition:all .2s;
+  overflow:hidden;
+}
+.act:hover{border-color:rgba(6,214,240,.4)}
+.act.done{opacity:.55}
+.act.done .act-name{
+  text-decoration:line-through;
+  text-decoration-color:rgba(170,255,0,.7);
+  text-decoration-thickness:2px;
+}
+.act.deleting{animation:fadeOut .25s forwards}
+@keyframes fadeOut{to{opacity:0;transform:translateX(30px);max-height:0;margin:0;padding:0}}
+
+.act-head{
+  display:flex;align-items:flex-start;gap:8px;
+}
+.act-info-wrap{flex:1;min-width:0}
+.act-cat{
+  font-size:9px;font-weight:700;
+  letter-spacing:.13em;text-transform:uppercase;
+  margin-bottom:1px;
+  font-family:'Outfit',sans-serif;
+  display:flex;align-items:center;gap:4px;
+  flex-wrap:wrap;
+}
+.act-cat-parent{color:var(--ink-faint);opacity:.7}
+.act-cat-sep{color:var(--ink-faint);opacity:.5;font-weight:400}
+.act-cat-sub{color:var(--violet)}
+.act-name{
+  font-family:'Zen Maru Gothic',sans-serif;font-weight:700;
+  font-size:14.5px;color:var(--ink);line-height:1.25;
+  margin-bottom:3px;
+}
+.act-desc{
+  font-size:12px;line-height:1.4;color:var(--ink-soft);
+  margin-bottom:6px;
+}
+.act-when{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-bottom:6px;
+  padding:5px 10px;
+  background:linear-gradient(135deg,rgba(255,230,0,.14),rgba(255,107,26,.10));
+  border:1px solid rgba(255,230,0,.35);
+  border-left:3px solid var(--gold);
+  border-radius:7px;
+  font-size:11.5px;font-weight:600;
+  color:var(--gold);
+  text-shadow:0 0 8px rgba(255,230,0,.25);
+}
+.act-when i{width:13px;height:13px;flex-shrink:0}
+.act-when span{line-height:1.3}
+
+/* Date filter input */
+.date-filter-row{display:flex;align-items:center;gap:8px}
+.date-input{
+  flex:1;
+  background:var(--surface-2);
+  border:1px solid var(--rule);
+  color:var(--ink);
+  font-family:'Outfit',sans-serif;
+  font-size:13px;font-weight:500;
+  padding:9px 11px;
+  border-radius:8px;
+  outline:none;
+  transition:border-color .15s;
+  color-scheme:dark;
+}
+.date-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(255,230,0,.15)}
+.date-clear{
+  background:transparent;
+  border:1px solid var(--rule);
+  color:var(--ink-soft);
+  width:36px;height:36px;
+  border-radius:8px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.date-clear:hover,.date-clear:active{background:rgba(255,46,136,.15);color:var(--pink);border-color:var(--pink)}
+.date-clear i{width:14px;height:14px}
+.date-clear.disabled{opacity:.35;pointer-events:none}
+.date-filter-hint{
+  font-size:10.5px;
+  color:var(--ink-faint);
+  line-height:1.4;
+  margin-top:6px;
+  font-style:italic;
+}
+.act-addr{
+  display:flex;align-items:flex-start;gap:6px;
+  margin-bottom:6px;
+  font-size:11px;line-height:1.35;
+  color:var(--ink-faint);
+}
+.act-addr-text{flex:1;min-width:0}
+.act-addr-text .addr-name{color:var(--peach);font-weight:600}
+.act-addr-text .addr-sep{opacity:.45;margin:0 4px}
+.act-maps-btn{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;justify-content:center;
+  width:26px;height:26px;border-radius:7px;
+  background:rgba(76,201,240,.12);
+  border:1px solid rgba(76,201,240,.32);
+  color:var(--skyblue);
+  text-decoration:none;
+  transition:all .15s;
+}
+.act-maps-btn:hover,.act-maps-btn:active{
+  background:rgba(76,201,240,.25);
+  border-color:var(--skyblue);
+  box-shadow:0 0 8px rgba(76,201,240,.4);
+}
+.act-maps-btn svg{width:13px;height:13px}
+.act-meta{
+  display:flex;flex-wrap:wrap;gap:4px 8px;
+  font-size:10.5px;color:var(--ink-faint);
+  font-family:'Outfit',sans-serif;
+}
+.act-meta span{display:inline-flex;align-items:center;gap:3px}
+.act-meta .m-zone{color:var(--cyan)}
+.act-meta .m-price{color:var(--gold)}
+.act-meta .m-time{color:var(--skyblue)}
+.act-meta i{width:11px;height:11px;opacity:.7}
+
+.act-actions{
+  display:flex;flex-direction:column;gap:4px;
+  flex-shrink:0;align-self:flex-start;
+}
+.act-btn{
+  background:var(--surface-2);
+  border:1px solid var(--rule);
+  cursor:pointer;
+  color:var(--ink-soft);
+  width:38px;height:38px;border-radius:9px;
+  transition:all .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.act-btn svg{width:18px;height:18px}
+.act-btn:hover,.act-btn:active{background:rgba(168,85,247,.2);color:var(--ink);border-color:var(--violet)}
+.act-btn.btn-done{color:var(--lime);border-color:rgba(170,255,0,.25)}
+.act-btn.btn-done:hover,.act-btn.btn-done:active{background:rgba(170,255,0,.18);border-color:var(--lime);box-shadow:0 0 10px rgba(170,255,0,.4)}
+.act-btn.btn-del{color:var(--pink);border-color:rgba(255,46,136,.25)}
+.act-btn.btn-del:hover,.act-btn.btn-del:active{background:rgba(255,46,136,.18);border-color:var(--pink);box-shadow:0 0 10px rgba(255,46,136,.4)}
+.act-btn.btn-drag{
+  color:var(--ink-faint);opacity:.55;
+  border-color:transparent;background:transparent;
+  width:38px;height:30px; /* plus court pour signaler poignée */
+  touch-action:none; /* indispensable : laisse JS gérer le geste, désactive scroll natif */
+  cursor:grab;
+}
+.act-btn.btn-drag:active{cursor:grabbing;opacity:1;background:rgba(168,85,247,.15);color:var(--violet)}
+.act-btn.btn-drag svg{width:20px;height:20px}
+.act.dragging{
+  opacity:.92;
+  box-shadow:0 12px 32px rgba(0,0,0,.55),0 0 24px rgba(168,85,247,.4);
+  border-color:var(--violet);
+  z-index:100;
+  position:relative;
+  transition:none !important;
+  will-change:transform;
+}
+.act.drop-target-before{position:relative}
+.act.drop-target-before::before{
+  content:"";position:absolute;left:-2px;right:-2px;top:-7px;
+  height:4px;background:var(--violet);border-radius:3px;
+  box-shadow:0 0 14px var(--violet),0 0 24px rgba(168,85,247,.6);
+  z-index:50;pointer-events:none;
+}
+.act.drop-target-after{position:relative}
+.act.drop-target-after::before{
+  content:"";position:absolute;left:-2px;right:-2px;bottom:-7px;
+  height:4px;background:var(--violet);border-radius:3px;
+  box-shadow:0 0 14px var(--violet),0 0 24px rgba(168,85,247,.6);
+  z-index:50;pointer-events:none;
+}
+body.drag-active{user-select:none;-webkit-user-select:none}
+body.drag-active *{cursor:grabbing !important}
+.act.done .act-btn.btn-done{color:#0e0a1a;background:var(--lime);border-color:var(--lime);box-shadow:var(--glow-lime)}
+
+/* === EMPTY STATE === */
+.empty{
+  padding:60px 20px;text-align:center;
+  color:var(--ink-faint);
+}
+.empty .icon{
+  width:48px;height:48px;display:inline-block;
+  margin-bottom:14px;color:var(--violet);opacity:.4;
+}
+.empty h3{
+  font-size:15px;color:var(--ink-soft);margin-bottom:4px;
+  font-family:'Outfit',sans-serif;font-weight:600;
+}
+.empty p{font-size:13px;margin-bottom:14px}
+.empty button{
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  border:none;color:#fff;
+  padding:8px 18px;border-radius:999px;
+  cursor:pointer;font-size:12.5px;font-weight:600;
+  font-family:'Outfit',sans-serif;
+}
+
+/* === TOAST === */
+.toast{
+  position:fixed;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(20px);
+  background:var(--surface);
+  border:1px solid var(--rule);border-top:2px solid var(--pink);
+  color:var(--ink);
+  padding:10px 14px;border-radius:12px;
+  box-shadow:0 8px 30px rgba(0,0,0,.5),var(--glow-pink);
+  font-size:13px;
+  display:flex;align-items:center;gap:10px;
+  opacity:0;pointer-events:none;
+  transition:all .25s;z-index:100;
+  max-width:90vw;
+  font-family:'Outfit',sans-serif;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast button{
+  background:linear-gradient(135deg,var(--lime),var(--cyan));
+  border:none;color:#0e0a1a;
+  padding:4px 12px;border-radius:999px;
+  cursor:pointer;font-size:11px;font-weight:700;
+  font-family:'Outfit',sans-serif;
+}
+
+/* === WELCOME BANNER (1ère utilisation, pas de sauvegarde locale) === */
+.welcome-banner{
+  position:sticky;top:0;z-index:90;
+  background:linear-gradient(135deg,rgba(6,214,240,.16),rgba(170,255,0,.12));
+  border-bottom:1px solid var(--cyan);
+  padding:12px 14px;
+  font-family:'Outfit',sans-serif;
+  animation:welcomeSlide .35s ease-out;
+}
+@keyframes welcomeSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.welcome-banner-inner{
+  display:flex;align-items:center;gap:10px;
+  max-width:900px;margin:0 auto;
+}
+.welcome-banner-icon{
+  flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--lime));
+  display:flex;align-items:center;justify-content:center;
+  color:#0e0a1a;
+}
+.welcome-banner-icon svg{width:18px;height:18px}
+.welcome-banner-text{flex:1;min-width:0}
+.welcome-banner-title{font-weight:600;font-size:13.5px;color:var(--ink);line-height:1.2}
+.welcome-banner-sub{font-size:11.5px;color:var(--ink-dim);margin-top:2px;line-height:1.3}
+.welcome-banner-btn{
+  flex-shrink:0;
+  background:linear-gradient(135deg,var(--lime),var(--cyan));
+  border:none;color:#0e0a1a;
+  padding:8px 14px;border-radius:999px;
+  display:flex;align-items:center;gap:6px;
+  cursor:pointer;font-size:12.5px;font-weight:700;
+  font-family:'Outfit',sans-serif;
+  box-shadow:0 0 12px rgba(170,255,0,.35);
+}
+.welcome-banner-btn svg{width:14px;height:14px}
+.welcome-banner-close{
+  flex-shrink:0;
+  background:transparent;border:none;
+  color:var(--ink-dim);
+  width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.welcome-banner-close:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+.welcome-banner-close svg{width:14px;height:14px}
+
+/* Toast de confirmation chargement état embarqué (auto-fade) */
+.embedded-loaded-toast{
+  position:fixed;top:14px;left:50%;transform:translateX(-50%);
+  background:var(--surface);
+  border:1px solid var(--lime);
+  color:var(--lime);
+  padding:8px 14px;border-radius:999px;
+  font-size:12px;font-weight:600;
+  font-family:'Outfit',sans-serif;
+  display:flex;align-items:center;gap:8px;
+  box-shadow:0 0 20px rgba(170,255,0,.4);
+  z-index:150;
+  animation:embeddedFade 3.5s ease-out forwards;
+}
+.embedded-loaded-toast svg{width:14px;height:14px}
+@keyframes embeddedFade{
+  0%{opacity:0;transform:translate(-50%,-10px)}
+  10%{opacity:1;transform:translate(-50%,0)}
+  85%{opacity:1;transform:translate(-50%,0)}
+  100%{opacity:0;transform:translate(-50%,-10px);visibility:hidden}
+}
+
+/* === MODAL === */
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(14,10,26,.92);
+  align-items:center;justify-content:center;
+  padding:16px;
+}
+.modal-overlay.open{display:flex}
+.modal-content{
+  background:var(--surface);
+  border:1px solid var(--rule);border-top:2px solid var(--cyan);
+  border-radius:16px;
+  width:100%;max-width:480px;max-height:90vh;
+  display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(6,214,240,.15);
+  animation:slideUp .25s ease;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.modal-head{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 16px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.modal-head h2{
+  font-family:'Zen Maru Gothic',sans-serif;
+  font-size:16px;font-weight:700;color:var(--ink);
+}
+.modal-close{
+  background:var(--surface-2);border:1px solid var(--rule);
+  width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--ink-soft);
+  transition:all .15s;
+}
+.modal-close svg{width:16px;height:16px}
+.modal-close:hover{border-color:var(--pink);color:var(--pink)}
+.modal-body{
+  padding:14px 16px 16px;
+  overflow-y:auto;
+}
+.modal-stats{
+  font-size:12.5px;color:var(--ink-soft);
+  margin-bottom:14px;
+  padding:8px 12px;border-radius:8px;
+  background:var(--surface-2);
+  border:1px solid var(--rule-soft);
+  text-align:center;
+  font-family:'Outfit',sans-serif;
+}
+.modal-action-list{display:flex;flex-direction:column;gap:8px}
+.action-card{
+  display:flex;align-items:center;gap:12px;
+  width:100%;padding:12px 14px;
+  background:var(--surface-2);
+  border:1px solid var(--rule);border-radius:12px;
+  cursor:pointer;text-align:left;
+  transition:all .2s;
+  font-family:'Outfit',sans-serif;
+}
+.action-card:hover{
+  border-color:var(--cyan);
+  background:var(--surface-3);
+  transform:translateY(-1px);
+}
+.action-icon{
+  width:36px;height:36px;flex-shrink:0;
+  border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+}
+.action-icon svg{width:18px;height:18px}
+.action-icon-cyan{
+  background:rgba(6,214,240,.15);color:var(--cyan);
+  border:1px solid rgba(6,214,240,.3);
+}
+.action-icon-pink{
+  background:rgba(255,46,136,.15);color:var(--pink);
+  border:1px solid rgba(255,46,136,.3);
+}
+.action-text{flex:1;min-width:0}
+.action-title{
+  font-size:13.5px;font-weight:600;color:var(--ink);
+  margin-bottom:2px;
+}
+.action-sub{
+  font-size:11.5px;color:var(--ink-faint);
+}
+.modal-status{
+  margin-top:12px;font-size:12px;
+  min-height:18px;color:var(--ink-faint);
+  font-family:'Outfit',sans-serif;
+  text-align:center;
+}
+.modal-status.success{color:var(--lime);text-shadow:0 0 8px rgba(170,255,0,.4)}
+.modal-status.error{color:var(--pink);text-shadow:0 0 8px rgba(255,46,136,.4)}
+
+@media (max-width:480px){
+  .primary-btn{padding:8px 11px;font-size:12px;gap:5px}
+  .primary-btn svg{width:13px;height:13px}
+}
+</style>
+</head>
+<body>
+
+<!-- BANNIÈRE DE BIENVENUE : affichée si aucune sauvegarde détectée -->
+<div class="welcome-banner" id="welcomeBanner" style="display:none">
+  <div class="welcome-banner-inner">
+    <div class="welcome-banner-icon"><i data-lucide="upload-cloud"></i></div>
+    <div class="welcome-banner-text">
+      <div class="welcome-banner-title">Nouvelle version téléchargée ?</div>
+      <div class="welcome-banner-sub">Restaure ta sauvegarde JSON pour retrouver tes activités faites et supprimées.</div>
+    </div>
+    <button class="welcome-banner-btn" id="welcomeImportBtn">
+      <i data-lucide="upload"></i>
+      <span>Importer</span>
+    </button>
+    <button class="welcome-banner-close" id="welcomeCloseBtn" aria-label="Plus tard">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+</div>
+
+<!-- TOAST CONFIRMATION ÉTAT EMBARQUÉ -->
+<div class="embedded-loaded-toast" id="embeddedLoadedToast" style="display:none">
+  <i data-lucide="check-circle"></i>
+  <span>Sauvegarde intégrée chargée</span>
+</div>
+
+<!-- LISIÈRE LATÉRALE : tap pour ouvrir le sélecteur de villes -->
+<div class="city-edge" id="cityEdge" role="button" aria-label="Choisir une ville">
+  <i data-lucide="chevron-right" class="city-edge-chevron"></i>
+  <span class="city-edge-label" id="cityEdgeLabel">Villes</span>
+  <span class="city-edge-badge" id="cityEdgeBadge">0</span>
+</div>
+
+<!-- DRAWER : sélecteur de villes -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-header">
+    <div class="drawer-title">日本 · Japon</div>
+    <button class="drawer-close" id="drawerClose" aria-label="Fermer">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- Rempli dynamiquement par buildDrawer() -->
+  </div>
+  <div class="drawer-footer">Sélectionne une ou plusieurs villes</div>
+</aside>
+
+<div class="container">
+  <header>
+    <div class="stamp">日</div>
+    <div class="eyebrow">日本 · Japon</div>
+    <h1>Activités <span class="accent">curatées</span></h1>
+  </header>
+
+  <div class="toolbar">
+    <div class="tool-row main-row">
+      <button class="primary-btn icon-btn" id="searchBtn" aria-label="Rechercher">
+        <i data-lucide="search"></i>
+      </button>
+      <button class="primary-btn" id="zoneBtn">
+        <i data-lucide="map-pin"></i>
+        <span>Zone</span>
+        <span class="badge" id="zoneBadge" style="display:none">0</span>
+      </button>
+      <button class="primary-btn" id="catBtn">
+        <i data-lucide="tag"></i>
+        <span>Cat.</span>
+        <span class="badge" id="catBadge" style="display:none">0</span>
+      </button>
+      <span class="spacer"></span>
+      <button class="icon-btn-small" id="moreBtn" aria-label="Plus d'options" title="Tri, filtres, export">
+        <i data-lucide="more-horizontal"></i>
+      </button>
+    </div>
+
+    <div class="search-wrap collapsed" id="searchWrap">
+      <i data-lucide="search"></i>
+      <input type="text" class="search-input" id="search" placeholder="Rechercher (Maru, ramen, dôme…)">
+      <button class="search-clear" id="searchClear" aria-label="Effacer"><i data-lucide="x"></i></button>
+    </div>
+
+    <div class="more-panel" id="morePanel">
+      <div class="more-section">
+        <div class="more-section-title">Tri</div>
+        <div class="more-section-body">
+          <button class="more-item active" data-sort="default"><span class="check"><i data-lucide="check"></i></span>Par défaut</button>
+          <button class="more-item" data-sort="name"><span class="check"><i data-lucide="check"></i></span>Nom (A-Z)</button>
+          <button class="more-item" data-sort="price-low"><span class="check"><i data-lucide="check"></i></span>Prix croissant</button>
+          <button class="more-item" data-sort="price-high"><span class="check"><i data-lucide="check"></i></span>Prix décroissant</button>
+          <button class="more-item" data-sort="time-low"><span class="check"><i data-lucide="check"></i></span>Durée courte</button>
+          <button class="more-item" data-sort="time-high"><span class="check"><i data-lucide="check"></i></span>Durée longue</button>
+          <button class="more-item" data-sort="manual"><span class="check"><i data-lucide="check"></i></span>Manuel (glisser-déposer)</button>
+        </div>
+      </div>
+      <div class="more-section">
+        <div class="more-section-title">Grouper</div>
+        <div class="more-section-body">
+          <button class="more-item active" data-group="none"><span class="check"><i data-lucide="check"></i></span>Aucun</button>
+          <button class="more-item" data-group="zone"><span class="check"><i data-lucide="check"></i></span>Par zone</button>
+          <button class="more-item" data-group="cat"><span class="check"><i data-lucide="check"></i></span>Par catégorie</button>
+        </div>
+      </div>
+      <div class="more-section">
+        <div class="more-section-title">Tarif</div>
+        <div class="more-chips" id="filterPrice">
+          <button class="chip" data-price="free">Gratuit</button>
+          <button class="chip" data-price="paid">Payant</button>
+        </div>
+      </div>
+      <div class="more-section">
+        <div class="more-section-title">Durée</div>
+        <div class="more-chips" id="filterDuration">
+          <button class="chip" data-duration="short">≤ 1h</button>
+          <button class="chip" data-duration="medium">1-2h</button>
+          <button class="chip" data-duration="long">2h+</button>
+        </div>
+      </div>
+      <div class="more-section">
+        <div class="more-section-title">Date (pour spectacles & événements programmés)</div>
+        <div class="more-section-body">
+          <div class="date-filter-row">
+            <input type="date" class="date-input" id="filterDate" aria-label="Choisir une date">
+            <button class="date-clear" id="filterDateClear" aria-label="Effacer la date" title="Effacer">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+          <div class="date-filter-hint">Si renseigné, masque les événements programmés à d'autres dates. Les lieux non liés à une date ne sont pas affectés.</div>
+        </div>
+      </div>
+      <div class="more-section">
+        <button class="more-export-btn" id="exportBtn">
+          <i data-lucide="download"></i>
+          Sauvegarde (export / import)
+        </button>
+      </div>
+    </div>
+
+    <div class="active-filters" id="activeFilters"></div>
+
+    <div class="bottom-bar">
+      <div class="tabs-mini">
+        <button class="tab-mini active" data-tab="todo">
+          À voir <span class="tab-count" id="tabCountTodo">0</span>
+        </button>
+        <button class="tab-mini tab-done" data-tab="done">
+          Faites <span class="tab-count" id="tabCountDone">0</span>
+        </button>
+      </div>
+      <span class="result-count" id="resultCount">—</span>
+    </div>
+  </div>
+
+  <!-- Bottom sheet for zones -->
+  <div class="sheet-overlay" id="zoneSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Zone</h3>
+        <button class="sheet-clear" id="zoneClear">Effacer</button>
+        <button class="sheet-close" data-sheet="zoneSheet" aria-label="Fermer"><i data-lucide="x"></i></button>
+      </div>
+      <div class="sheet-body" id="zoneSheetBody"></div>
+    </div>
+  </div>
+
+  <!-- Bottom sheet for categories -->
+  <div class="sheet-overlay" id="catSheet">
+    <div class="sheet">
+      <div class="sheet-head">
+        <h3>Catégorie</h3>
+        <button class="sheet-clear" id="catClear">Effacer</button>
+        <button class="sheet-close" data-sheet="catSheet" aria-label="Fermer"><i data-lucide="x"></i></button>
+      </div>
+      <div class="sheet-body" id="catSheetBody"></div>
+    </div>
+  </div>
+
+  <div class="activity-list" id="activityList"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="icon"><i data-lucide="search-x" style="width:48px;height:48px"></i></div>
+    <h3 id="emptyTitle">Aucune activité</h3>
+    <p id="emptyMsg">Modifie tes filtres pour voir plus de résultats.</p>
+    <button id="emptyReset">Réinitialiser</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">
+  <span id="toastMsg"></span>
+  <button id="undoBtn">Annuler</button>
+</div>
+
+<div class="modal-overlay" id="dataModal">
+  <div class="modal-content">
+    <div class="modal-head">
+      <h2>Sauvegarde</h2>
+      <button class="modal-close" id="modalClose" aria-label="Fermer"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+      <p class="modal-stats" id="modalStats">—</p>
+      <div class="modal-action-list">
+        <button class="action-card" id="downloadBtn">
+          <div class="action-icon action-icon-cyan"><i data-lucide="download"></i></div>
+          <div class="action-text">
+            <div class="action-title">Télécharger ma sauvegarde</div>
+            <div class="action-sub">Fichier JSON dans tes téléchargements</div>
+          </div>
+        </button>
+        <button class="action-card" id="importBtn">
+          <div class="action-icon action-icon-pink"><i data-lucide="upload"></i></div>
+          <div class="action-text">
+            <div class="action-title">Restaurer depuis un fichier</div>
+            <div class="action-sub">Remplace les modifs actuelles</div>
+          </div>
+        </button>
+        <input type="file" id="fileInput" accept=".json,application/json" style="display:none">
+      </div>
+      <p class="modal-status" id="modalStatus"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* === ÉTAT INITIAL EMBARQUÉ ===
+   Bloc rempli par Claude lors d'une nouvelle génération.
+   Si le localStorage est vide (typique sur Android quand on ouvre via content://),
+   on charge ces valeurs comme défaut. Sinon, le localStorage gagne.
+   
+   Format identique à l'export JSON :
+   {
+     "deleted": ["Nom1","Nom2",...],
+     "done":    ["Nom3",...],
+     "cities":  ["Hiroshima","Miyajima",...],
+     "order":   ["Nom4","Nom5",...],
+     "sort":    "default",
+     "exportedAt": "2026-05-15T..."
+   }
+*/
+</script>
+<script id="initial-state" type="application/json">
+{}
+</script>
+
+<script>
+/* === MODÈLE MULTI-VILLES ===
+   
+   L'app gère plusieurs villes du Japon (Hiroshima, et plus tard Kyoto, Tokyo...).
+   Chaque entrée porte un champ `city` qui détermine à quelle ville/sous-ville
+   elle appartient. Le registre `cities` ci-dessous définit la hiérarchie
+   Région > Ville/Sous-ville utilisée par le drawer latéral.
+   
+   Pour ajouter une nouvelle ville :
+   1. Ajouter une entrée dans `cities` (avec sa région parent)
+   2. Ajouter des items dans `data` avec city:"NomDeLaVille"
+   
+   Pour ajouter une sous-ville (ex: Miyajima sous Hiroshima) :
+   - Même chose, mais l'entrée cities indique parent:"NomDeLaVilleMère"
+*/
+
+// Registre hiérarchique des villes (région > ville/sous-ville).
+// L'ordre détermine l'ordre d'affichage dans le drawer.
+const cities = [
+  // Région Hiroshima
+  {key:"Hiroshima", label:"Hiroshima", region:"Hiroshima"},
+  {key:"Miyajima",  label:"Miyajima",  region:"Hiroshima", parent:"Hiroshima"},
+  // Région Yamaguchi
+  {key:"Iwakuni",   label:"Iwakuni",   region:"Yamaguchi"},
+  // Futures villes/régions à ajouter ici (Kyoto, Tokyo, etc.)
+];
+
+/* === GRILLE DE CLASSIFICATION ===
+   
+   ┌─────────────────────────────────────────────────────────────────┐
+   │ MISSION                                                          │
+   │ Cet outil curate des expériences/shops INSOLITES, INCONTOURNABLES│
+   │ ou INÉDITS. Pas générique, pas Lonely-Planet-1ère-page sauf si   │
+   │ c'est un incontournable absolu (Peace Park, Itsukushima Torii).  │
+   │ Pas de restaurants ni bars sauf cas exceptionnel.                │
+   └─────────────────────────────────────────────────────────────────┘
+   
+   CRITÈRES "INSOLITE / INCONTOURNABLE / INÉDIT" :
+   ✓ Hidden gem / off the beaten path mentionné dans guides locaux
+   ✓ Caractère unique (seul village qui fabrique X, etc.)
+   ✓ Architecture remarquable, charge historique avec angle peu connu
+   ✓ Expérience participative immersive
+   ✗ Pas de chaînes, restos non-étoilés, attractions génériques.
+   
+   ════════════════════════════════════════════════════════════════════
+   CATÉGORIES PLATES (6 valeurs, plus de sous-catégories)
+   ════════════════════════════════════════════════════════════════════
+   
+   Q. À quelle catégorie appartient l'item ? Choisir UNE valeur :
+   
+   • "Spécialités"          → un PLAT/ALIMENT/BOISSON à goûter
+                              (le produit, pas le lieu). Pour ces
+                              entrées, `addr` pointe vers une boutique
+                              de référence représentative.
+                              Ex: huîtres grillées, momiji manju, saké.
+   
+   • "Shopping"             → boutiques, magasins, malls, arcades,
+                              hobby stores, pop-culture shops, rues
+                              commerçantes.
+                              Ex: Hondori Arcade, Volks, JUMP SHOP,
+                              Omotesando Shopping Street.
+   
+   • "Spectacle"            → on assiste à une PERFORMANCE VIVANTE
+                              sans participer (théâtre, danse, kagura,
+                              concert, cérémonie spectaculaire).
+                              Ex: Kagura Jinrin, Bugaku, hi-watari-shiki.
+                              Typiquement avec champs `when` + `availability`.
+   
+   • "Musée et expo"        → COLLECTIONS scenographiées à regarder
+                              (musée, expo temporaire, galerie d'art,
+                              bibliothèque publique).
+                              Ex: Peace Memorial Museum, MOCA, Mazda
+                              Museum, Manga Library.
+   
+   • "Atelier et découverte"→ on FAIT quelque chose soi-même (cuisine,
+                              origami, pinceau, dégustation) OU on
+                              participe à un tour guidé immersif.
+                              Ex: cours okonomiyaki, atelier shamoji,
+                              dégustation saké Saijo, Night Cruise.
+   
+   • "Visites et excursions"→ TOUT LE RESTE : monuments, sanctuaires,
+                              temples, parcs, jardins, nature, randos,
+                              quartiers urbains à arpenter, aquarium,
+                              points de vue, ouvrages commémoratifs.
+                              Ex: Dôme Genbaku, Itsukushima Jinja,
+                              Mont Misen, Yokogawa, Aquarium Miyajima.
+   
+   ════════════════════════════════════════════════════════════════════
+   INSTRUCTIONS POUR UNE IA QUI AJOUTE DES ITEMS
+   ════════════════════════════════════════════════════════════════════
+   
+   FORMAT EXACT d'une entrée (champs obligatoires + 3 optionnels) :
+   {
+     city:     "Hiroshima",          // clé de la ville (cf. `cities`)
+     cat:      "Visites et excursions", // 6 valeurs possibles ci-dessus
+     name:     "Nom de l'item",      // titre court, unique
+     zone:     "Nom de zone",        // sous-secteur géographique
+     desc:     "Description...",     // 1-3 phrases denses
+     addr:     "Nom officiel — Adresse postale",
+                                     // SÉPARATEUR EXACT " — " (espace +
+                                     // tiret cadratin + espace).
+                                     // Nom officiel = nom RÉEL du lieu
+                                     // (idéalement en kanji + romaji
+                                     // entre parenthèses).
+                                     // Le bouton Google Maps utilisera
+                                     // ce champ pour pointer le lieu.
+     priceN:   200,                  // PRIX EN NOMBRE pour tri
+     price:    "200 ¥",              // prix affiché (string libre)
+     timeN:    120,                  // DURÉE EN MINUTES pour tri/filtre
+     time:     "2h min",             // durée affichée (string libre)
+     info:     "Info pratique..."    // horaires, accès, conseils
+   }
+   
+   CHAMPS OPTIONNELS (pour événements programmés) :
+     when:     "Date et heure visible"
+                                     // Affichage prominent (encart doré).
+                                     // Renseigner UNIQUEMENT pour spectacles,
+                                     // représentations, événements à dates
+                                     // fixes ou récurrentes. Exemples :
+                                     //   "Tous les mercredis · 19h00"
+                                     //   "15 avril + 15 novembre · 11h-14h"
+                                     //   "Chaque soir au coucher du soleil"
+     availability: { ... }           // Pendant STRUCTURÉ pour le filtre date.
+                                     // Schemas :
+                                     //   { recurring: "daily" }
+                                     //   { recurring: "weekly", weekdays:[3] }
+                                     //     (0=Dim, 1=Lun, ..., 6=Sam)
+                                     //   { recurring: "annual",
+                                     //     dates:["04-15","10-15"] }
+                                     //   { recurring: "once",
+                                     //     dates:["2026-04-15"] }
+                                     // Sans availability, l'entrée n'est
+                                     // jamais filtrée par la date.
+   
+   VALEURS POSSIBLES POUR `zone` :
+   • Zones intra-ville Hiroshima : "Peace Park", "Naka-ku centre",
+     "Hondori", "Gare Hiroshima", "Hijiyama", "Yokogawa", "Ekinishi",
+     "Nagarekawa", "Nishi-ku", "Futaba (Higashi-ku)"
+   • Zones périphérie/hors-ville : "Périphérie ouest", "Fuchu (Aki-gun)",
+     "Saijo (hors-ville)", "Kumano (hors-ville)", "Kure (hors-ville)"
+   • Zones Miyajima : "Miyajima centre", "Omotesando", "Momijidani",
+     "Mont Misen"
+   • Zones Iwakuni : "Kintaikyo" (pont, château, Kikko Park),
+     "Centre Iwakuni" (autour gare JR Iwakuni)
+   • "Variable" si l'item est itinérant ou multi-lieux
+   
+   TONALITÉ ATTENDUE pour `desc` :
+   ✓ Concrète, riche en faits (architecte, dates, dimensions, anecdote)
+   ✓ 1 à 3 phrases denses, pas de remplissage
+   ✓ Mentionne le détail INSOLITE qui justifie l'inclusion
+   ✗ ÉVITER : descriptions génériques type "Beau sanctuaire à visiter"
+   
+   TONALITÉ ATTENDUE pour `info` :
+   ✓ Pratique et bref : horaires, accès, réservation, conseil insider
+   
+   OÙ INSÉRER LES NOUVELLES LIGNES dans `data` :
+   • Le tableau est groupé par catégorie (commentaires `// === ... ===`)
+   • Insérer dans la section de la cat correspondante
+   • Conserver l'ordre logique au sein d'une cat (ville, zone, thème)
+   
+   AVANT DE VALIDER UN ITEM, VÉRIFIER :
+   □ L'item passe le filtre INSOLITE/INCONTOURNABLE/INÉDIT
+   □ `cat` est l'une des 6 valeurs ci-dessus (PAS de sous-cat)
+   □ `addr` respecte le format "Nom — Adresse" avec le tiret cadratin
+   □ `priceN` et `timeN` sont des NOMBRES
+   □ Si `when` est renseigné, ajouter aussi `availability` structuré
+*/
+const data = [
+  // === VISITES ET EXCURSIONS ===
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Dôme Genbaku (A-Bomb Dome)", zone:"Peace Park", desc:"Bâtiment survivant emblématique, ancienne Préfecture de Promotion Industrielle (1915, architecte Jan Letzel). Resté debout à 160m de l'hypocentre alors que la bombe a explosé à 600m au-dessus. Squelette de béton et acier préservé en l'état comme symbole universel de paix et de l'horreur nucléaire. UNESCO 1996", addr:"原爆ドーム (Atomic Bomb Dome) — 1-10 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:0, price:"Gratuit", timeN:30, time:"20-30 min", info:"Ne se visite pas à l'intérieur. Vue extérieure jour ET nuit (illuminé). Tram 2 ou 6, arrêt Genbaku Dome-mae"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Honkawa Peace Museum", zone:"Peace Park", desc:"École primaire survivante à 350m du dôme, témoignages d'élèves scenographiés", addr:"本川小学校平和資料館 (Honkawa Elementary School Peace Museum) — 1-5-39 Honkawa-cho, Naka-ku, Hiroshima 730-0802", priceN:0, price:"Gratuit", timeN:40, time:"30-45 min", info:"Peu visité, ambiance forte"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Fukuromachi Peace Museum", zone:"Hondori", desc:"École-mémorial avec messages des survivants au charbon sur les murs", addr:"袋町小学校平和資料館 (Fukuromachi Elementary School Peace Museum) — 6-36 Fukuromachi, Naka-ku, Hiroshima 730-0036", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"Quartier commerçant"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Hypocentre (plaque Shima)", zone:"Naka-ku centre", desc:"Le vrai point zéro à 160m du dôme, plaque sobre devant l'ancien hôpital Shima détruit avec ses 81 occupants", addr:"爆心地 / 島病院 (Hypocenter / Shima Hospital) — 1-5-25 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:0, price:"Gratuit", timeN:15, time:"10-15 min", info:"5 min du dôme. L'hôpital actuel est tenu par la même famille 80 ans après"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Pont Aioi (cible visée)", zone:"Peace Park", desc:"Pont en T qui était la cible visée par Enola Gay, reconstruit à l'identique en 1983 — forme unique reconnaissable du ciel", addr:"相生橋 (Aioi Bridge) — Otemachi/Motomachi, Naka-ku, Hiroshima", priceN:0, price:"Gratuit", timeN:10, time:"5-10 min", info:"Juste à côté du dôme, à pied"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Jizo à l'ombre nucléaire", zone:"Peace Park", desc:"Statue Jizo (gardienne des enfants) de l'ancien temple Sairen-ji. La bombe a explosé directement au-dessus : la partie exposée est rugueuse, celle protégée est restée lisse — créant une 'ombre nucléaire' visible sur la pierre", addr:"原爆被爆地蔵尊 (A-bombed Jizo Statue) — derrière le Dôme Genbaku, 1-10 Otemachi, Naka-ku, Hiroshima", priceN:0, price:"Gratuit", timeN:10, time:"5-10 min", info:"Derrière le Dôme, côté opposé du passage piéton, près de la porte d'un bâtiment blanc. Facile à manquer"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Parc Hijiyama", zone:"Hijiyama", desc:"Parc en colline boisée, sculptures outdoor, points de vue sur la ville. Le Skywalk (tapis roulant motorisé depuis Aeon Mall) évite la grimpette. Combinable avec MOCA et Manga Library qui sont dans le parc", addr:"比治山公園 (Hijiyama Park) — Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:90, time:"1h30", info:"Skywalk depuis Aeon Mall"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Jardin Shukkei-en", zone:"Naka-ku centre", desc:"Jardin japonais 17e, étang à carpes, maison de thé. Chercher Chōzen-kyō : petite île secrète accessible en marchant dans le sens horaire, vues parfaites au coucher du soleil", addr:"縮景園 (Shukkei-en Garden) — 2-11 Kaminobori-cho, Naka-ku, Hiroshima 730-0014", priceN:350, price:"350 ¥", timeN:60, time:"1h", info:"Matcha ~500 ¥ supplémentaires"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Sento Ondo", zone:"Variable", desc:"Bain public de quartier, 4 bassins, sauna, tatouages OK", addr:"公衆浴場 (sentō de quartier — choisir un sentō traditionnel à Hiroshima centre, p. ex. Asahi-yu) — Naka-ku, Hiroshima", priceN:500, price:"~500 ¥", timeN:60, time:"1h", info:"Ouvre 13h, ambiance shōwa"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Yokogawa", zone:"Yokogawa", desc:"Quartier rétro local, live houses, friperies", addr:"横川駅周辺 (Yokogawa Station area) — Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:0, price:"Gratuit", timeN:90, time:"1-2h", info:"Tram depuis la gare, sans touristes"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Ekinishi", zone:"Ekinishi", desc:"Bar district rétro Shōwa à 3 min de la gare, tabearuki entre micro-izakaya (Maru sake debout, Baltan thaï, Tori no Kura yakitori, Garapago tequila+abats)", addr:"駅西エリア (Ekinishi bar district) — sortie ouest de la gare de Hiroshima, Wakakusa-cho, Higashi-ku, Hiroshima", priceN:2000, price:"Variable", timeN:180, time:"2-4h", info:"18h-23h, plein de petits izakaya"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Nagarekawa", zone:"Nagarekawa", desc:"Plus grand quartier nocturne, neon, clubs, izakaya. Inclut Okonomimura (bâtiment 4 étages, 25 stands okonomiyaki teppan)", addr:"流川 (Nagarekawa entertainment district) — Nagarekawa-cho, Naka-ku, Hiroshima 730-0028", priceN:3000, price:"Variable", timeN:240, time:"Soirée", info:"Tram Ebisucho, pic 21h"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Mont Futaba + Pagode", zone:"Futaba (Higashi-ku)", desc:"433 marches en forêt, torii rouges, ruines bunkers WW2, pagode, meilleure vue panoramique sur la ville", addr:"二葉の里歴史の散歩道 / 仏舎利塔 (Futaba-no-sato Historical Trail / Pagoda) — Futabanosato 2-chome, Higashi-ku, Hiroshima 732-0057", priceN:0, price:"Gratuit", timeN:90, time:"1h30 A/R", info:"Depuis la gare à pied"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Mitaki-dera", zone:"Périphérie ouest", desc:"Temple bouddhiste caché en forêt, 3 cascades, pagode rouge relogée de Wakayama en 1951 en mémorial des victimes A-bomb, statues moussues. Randonnée possible jusqu'au sommet. Spectaculaire en automne", addr:"三瀧寺 (Mitaki-dera Temple) — 411 Mitakiyama, Nishi-ku, Hiroshima 733-0805", priceN:200, price:"200 ¥", timeN:105, time:"1h30-2h", info:"30 min en bus, note 4.6/5"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Onomichi + Cat Alley", zone:"Variable", desc:"Ville en collines face à la mer, départ du Shimanami Kaido (cycle route). Cat Alley (Neko no Hosomichi) : 200m de ruelles avec 'fukuishi neko' — chats peints à la main sur des pierres par Shunji Sonoyama. Cafés, galeries, sake bars", addr:"猫の細道 (Neko no Hosomichi / Cat Alley) — Higashitsuchidocho, Onomichi 722-0033", priceN:1500, price:"~1500 ¥ train", timeN:480, time:"Journée", info:"Train JR Sanyo via Onomichi (1h). Idéal en vélo (location en gare). Combinable avec Shimanami Kaido"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"sokoiko! Izakaya cycling", zone:"Yokogawa", desc:"Vélo électrique + bar-hopping nocturne, 3 izakayas hors guidebook", addr:"sokoiko! Yokogawa base — 1-7-3 Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:6000, price:"~6000 ¥", timeN:180, time:"2h30-3h30", info:"Départ Yokogawa, guide anglais"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Sanctuaire Itsukushima (torii flottant)", zone:"Miyajima centre", desc:"Sanctuaire shintoïste UNESCO bâti sur pilotis au-dessus de la mer, fondé en 593, remodelé par Taira-no-Kiyomori en 1168. Grand torii de 16,6m vermillon en bois de camphrier (version actuelle de 1875) 'flottant' à marée haute, accessible à pied à marée basse. 6 Trésors Nationaux dont la seule scène Noh sur l'eau du Japon", addr:"厳島神社 (Itsukushima Jinja) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:300, price:"300 ¥", timeN:60, time:"1h", info:"Vérifier les marées avant. Parcours à sens unique. Couloirs sur pilotis sans clous, espaces entre planches pour laisser passer l'eau"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Daisho-in", zone:"Miyajima centre", desc:"Temple bouddhiste Shingon de 1200 ans aux pieds du Mont Misen. Escalier bordé de roues à prières métalliques à faire tourner, 500 statues Rakan toutes différentes, sand mandala créé par des moines tibétains visiteurs, cloche centenaire. Foliage spectaculaire en automne, point de départ du sentier Daisho-in vers le Mont Misen", addr:"大聖院 (Daisho-in Temple) — 210 Miyajimacho, Hatsukaichi, Hiroshima 739-0592", priceN:0, price:"Gratuit", timeN:60, time:"1h", info:"5 min à pied du sanctuaire Itsukushima"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Senjokaku + Pagode 5 étages", zone:"Miyajima centre", desc:"Grand hall en bois sans murs commissionné par Toyotomi Hideyoshi en 1587, laissé inachevé après sa mort — 'Hall des 1000 tatamis' avec poutres apparentes massives. Pagode rouge 5 étages adjacente (1407), 27,6m, mêlant styles japonais et chinois, Trésor National", addr:"豊国神社 千畳閣 + 五重塔 (Toyokuni Shrine Senjokaku + Five-Storied Pagoda) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:100, price:"100 ¥", timeN:30, time:"30 min", info:"Sur la colline à côté du sanctuaire Itsukushima"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Plus grand shamoji du monde", zone:"Omotesando", desc:"Symbole de Miyajima berceau du shamoji (pelle à riz en bois) : pelle géante de 7,7m de long, 2,7m de large, 2,5 tonnes — taillée pendant 2 ans et 10 mois dans un seul bloc de zelkova, créée en 1983. Symbole de chance et prospérité", addr:"世界一の大杓子 (World's Largest Wooden Rice Scoop) — Omotesando Shopping Street, Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:0, price:"Gratuit", timeN:10, time:"10 min", info:"Le long de la rue commerçante Omotesando, vers la fin"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Tahōtō (pagode à deux étages)", zone:"Miyajima centre", desc:"Pagode 'aux nombreux trésors' construite en 1523, rouge vermillon, perchée sur un promontoire boisé entre Senjokaku et le ropeway. Architecture rare au Japon : base carrée surmontée d'un dôme rond et d'un toit pyramidal. Bien Culturel Important. Belvédère discret, foule absente, vue plongeante sur le toit du sanctuaire et la baie", addr:"多宝塔 (Tahōtō Pagoda) — Miyajimacho (entre Senjokaku et le ropeway), Hatsukaichi, Hiroshima 739-0588", priceN:0, price:"Gratuit", timeN:25, time:"20-30 min", info:"Court raidillon 5 min depuis le sanctuaire. Point photo très peu fréquenté, contrechamp idéal pour les photographes"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Miyajima Public Aquarium (Miyajimarin)", zone:"Miyajima centre", desc:"Aquarium dédié aux créatures de la mer intérieure de Seto : marsouins aptères (finless porpoises, espèce locale rare), loutres de mer, manchots, huîtres de Hiroshima vivantes présentées comme une attraction. Spectacle d'otaries plusieurs fois par jour. Architecture en bois local intégrée au paysage. Combinable avec une promenade dans le quartier ancien Machiya-dōri", addr:"宮島水族館 みやじマリン (Miyajima Public Aquarium) — 10-3 Miyajimacho, Hatsukaichi, Hiroshima 739-0534", priceN:1420, price:"1420 ¥", timeN:90, time:"1h30", info:"Ouvert 9h-17h (dernière entrée 16h). 25 min à pied du ferry par le quartier Machiya-dōri (ruelles préservées, peu de touristes)"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Momijidani Park", zone:"Momijidani", desc:"Parc paisible le long de la rivière Momijidani, ~700 érables japonais (560 Acer palmatum, 100 Acer amoenum, 40 autres dont mountain maples). Brise fraîche en été, embrasement écarlate en automne. Promenade contemplative entre les daims libres. Aussi station basse du ropeway vers le Mont Misen", addr:"紅葉谷公園 (Momijidani Park) — Momijidani, Miyajimacho, Hatsukaichi, Hiroshima 739-0522", priceN:0, price:"Gratuit", timeN:60, time:"1h", info:"10 min à pied du sanctuaire Itsukushima. Spectaculaire en novembre. Shuttle bus gratuit depuis l'entrée toutes les 20 min"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Onsen public Miyajima Grand Hotel", zone:"Miyajima centre", desc:"Bain public accessible aux non-résidents dans le ryokan Miyajima Grand Hotel Arimoto : grand bain intérieur en cyprès hinoki, eau de source naturelle. Petite ambiance feutrée, peu fréquenté l'après-midi. Idéal pour récupérer après une rando au Mont Misen ou une longue marche", addr:"宮島グランドホテル有もと 大浴場 (Miyajima Grand Hotel Arimoto - Public Bath) — 364 Miyajimacho, Hatsukaichi, Hiroshima 739-0522", priceN:700, price:"700 ¥", timeN:60, time:"1h", info:"Ouvert 13h-20h aux visiteurs externes. Apporter sa serviette ou en louer. Tatouages : à vérifier sur place"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Marche au pied du torii (marée basse)", zone:"Miyajima centre", desc:"À marée basse, l'eau se retire complètement et on peut marcher sur le sable boueux jusqu'au pied du Grand Torii (16,6m de haut). On lève la tête pour voir l'intérieur des piliers en camphrier creux, lestés de 7 tonnes de pierres à la base. Tradition : glisser une pièce dans une fissure des piliers porte chance. Le 14 mai 2026, marée basse vers 13h30", addr:"大鳥居 (Ōtorii / Great Torii Gate) — devant Itsukushima Jinja, 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", when:"Aujourd'hui 14/05/2026 · marée basse ~13h30 (fenêtre ~11h30-15h30)", availability:{recurring:"daily"}, priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"Vérifier l'heure exacte de marée basse du jour avant de venir. Chaussures qui peuvent se salir (sable mouillé). Fenêtre d'environ 2h autour de la marée basse"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Mont Misen (rando + ropeway)", zone:"Mont Misen", desc:"Sommet sacré à 535m, vues panoramiques sur la mer intérieure de Seto. 3 sentiers de rando depuis Daisho-in, Momijidani ou Omoto (~90 min). Forêt primaire intacte (Trésor Naturel National). Au sommet : Reikado Hall avec la 'Flamme éternelle' allumée par Kobo Daishi il y a 1200 ans — utilisée pour allumer la Flamme de la Paix de Hiroshima. Chaudron sacré d'eau chaude réputée guérir toutes maladies", addr:"宮島ロープウエー 紅葉谷駅 (Miyajima Ropeway Momijidani Station) — Momijidani-koen, Miyajimacho, Hatsukaichi, Hiroshima 739-0522", priceN:2000, price:"~2000 ¥ ropeway A/R", timeN:240, time:"3-4h", info:"Ropeway depuis Momijidani Park (Shishiiwa) + 30 min de marche au sommet. Ou rando pure (~90 min montée)"},
+  {city:"Miyajima", cat:"Visites et excursions", name:"Light-up nocturne du torii et du sanctuaire", zone:"Miyajima centre", desc:"Chaque soir de la tombée de la nuit jusqu'à 23h, le Grand Torii et les couloirs sur pilotis du sanctuaire Itsukushima sont illuminés depuis la rive. À marée haute (vers 20h le 14 mai 2026), reflet doublé sur l'eau noire — l'image la plus iconique du Japon. Atmosphère silencieuse après le départ des day-trippers (dernier ferry 22h14). Belle balade contemplative depuis la plage Mikasahama", addr:"御笠浜 (Mikasahama Beach) — bord de mer devant Itsukushima Jinja, Miyajimacho, Hatsukaichi, Hiroshima 739-0588", when:"Chaque soir au coucher du soleil jusqu'à 23h00 · 14/05/2026 : marée haute ~20h00 (reflet doublé)", availability:{recurring:"daily"}, priceN:0, price:"Gratuit", timeN:45, time:"45 min", info:"Illumination toute l'année, gratuite. Best spots : plage Mikasahama, derrière le Senjokaku, pier d'embarquement. Apporter trépied pour photo. Si on dort sur l'île, accès libre vs day-trippers"},
+  {city:"Iwakuni", cat:"Visites et excursions", name:"Pont Kintai-kyo (錦帯橋)", zone:"Kintaikyo", desc:"Un des 3 plus grands ponts du Japon, 5 arches en bois sur 4 piles de pierre traversant la rivière Nishiki sur 193m. Commandé en 1673 par Kikkawa Hiroyoshi, 3e seigneur d'Iwakuni, pour résister aux crues. Détruit par typhon Kijia en 1950 puis reconstruit à l'identique en 1953. Sans clous, assemblage à tenons-mortaises. Place of Scenic Beauty national, 2 étoiles Guide Michelin Vert. Reflet spectaculaire sur l'eau, magique au coucher du soleil", addr:"錦帯橋 (Kintaikyo Bridge) — 1-chome Iwakuni, Iwakuni-shi, Yamaguchi 741-0062", priceN:310, price:"310 ¥ (A/R)", timeN:30, time:"30 min", info:"50 min en JR Sanyo de Hiroshima vers Iwakuni Station (770 ¥), puis bus 15 min (300 ¥) jusqu'à Kintaikyo. Set ticket pont+ropeway+château ~1140 ¥. Très beau aussi sans payer, vu d'en bas depuis la berge"},
+  {city:"Iwakuni", cat:"Visites et excursions", name:"Château d'Iwakuni + ropeway", zone:"Kintaikyo", desc:"Donjon perché à 200m sur le Mont Yokoyama, vue panoramique sur le pont Kintai-kyo, la ville et les îles de la mer intérieure de Seto. Tour originale de 1608 détruite 7 ans plus tard sous la loi 'un domaine, un château' du shogunat, ruines visitables à côté. Reconstruction béton en 1962 légèrement décalée au sud pour optimiser la vue depuis le pont. Murs de pierres à la technique locale : petites pierres comblant les espaces entre les grosses, arêtes droites privilégiant la sécurité structurelle à l'esthétique", addr:"岩国城 (Iwakuni Castle) — 3 Yokoyama, Iwakuni-shi, Yamaguchi 741-0081", priceN:560, price:"560 ¥ ropeway A/R + 270 ¥ château", timeN:90, time:"1h30", info:"Ropeway 3 min depuis Kikko Park, départ toutes les 15 min, 9h-17h. Fermé 13/01-17/02/2026 pour maintenance ropeway. Set ticket pont+ropeway+château 1140 ¥"},
+  {city:"Iwakuni", cat:"Visites et excursions", name:"Parc Kikko + résidences samouraïs", zone:"Kintaikyo", desc:"Ancien jardin du clan Kikkawa au pied du Mont Yokoyama, juste après le pont Kintai-kyo. Étangs à carpes, fontaines, cerisiers en avril, érables en automne. Inclus dans les 100 plus beaux parcs historiques du Japon. À l'intérieur : ancienne résidence Mekata (samurai house de l'époque Edo, classée Bien Culturel Important), Kikko Shrine dédié aux ancêtres Kikkawa, statue de Hiroyoshi Kikkawa (commanditaire du pont). Promenade contemplative très peu touristique en semaine", addr:"吉香公園 (Kikko Park) — Yokoyama, Iwakuni-shi, Yamaguchi 741-0081", priceN:0, price:"Gratuit (parc)", timeN:90, time:"1-1h30", info:"5 min à pied de l'arrêt de bus Kintaikyo. Combinable avec le pont, le château, le musée des serpents blancs, U no Sato (enclos cormorans) — tout est à pied dans un rayon de 500m"},
+  {city:"Iwakuni", cat:"Visites et excursions", name:"Sanctuaire Shirohebi (serpents blancs sacrés)", zone:"Centre Iwakuni", desc:"Sanctuaire shintô fondé en 2012, dédié à la vénération du serpent blanc d'Iwakuni — variété albinos du serpent ratier japonais (Elaphe climacophora), 1,8m de long, yeux rouge rubis, écailles iridescentes. Considéré messager de Benzaiten (déesse de l'eau et de la prospérité), il était l'allié des paysans qui le laissaient nicher dans les greniers à riz pour chasser les rats. Population stabilisée par 6 centres d'élevage depuis 1965, classé Monument Naturel National en 1972. Enclos sur place avec serpents observables, torii blanc unique, omamori avec mue véritable", addr:"岩国白蛇神社 (Iwakuni Shirohebi Jinja) — 6 Imazumachi, Iwakuni-shi, Yamaguchi 740-0017", priceN:0, price:"Gratuit (don bienvenu)", timeN:45, time:"30-60 min", info:"15-20 min à pied de la gare JR Iwakuni (côté nord). Alternative ou complément du Shirohebi Museum dans Kikko Park. Goshuin (sceau) avec motif serpent, rare et recherché des collectionneurs"},
+  
+  // === MUSÉE ET EXPO ===
+  {city:"Hiroshima", cat:"Musée et expo", name:"Musée Mémorial Paix", zone:"Peace Park", desc:"Musée rénové 2019, immersif via objets et témoignages", addr:"広島平和記念資料館 (Hiroshima Peace Memorial Museum) — 1-2 Nakajima-cho, Naka-ku, Hiroshima 730-0811", priceN:200, price:"200 ¥", timeN:120, time:"2h min", info:"Ouvert 7h30-19h, réserver online"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"MOCA Hijiyama (Art contemporain)", zone:"Hijiyama", desc:"Hiroshima City Museum of Contemporary Art : 1er musée public d'art contemporain du Japon. Architecture remarquable, collection axée sur l'art post-1945 et le thème de la paix, expos temporaires renouvelées 4×/an", addr:"広島市現代美術館 (Hiroshima City Museum of Contemporary Art) — 1-1 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:370, price:"370 ¥", timeN:90, time:"1h30", info:"Au sommet de Hijiyama, accès via Skywalk. Combinable avec le parc et la Manga Library"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Ancienne Banque du Japon", zone:"Naka-ku centre", desc:"Bâtiment survivant, expos d'artistes dans les anciens coffres", addr:"旧日本銀行広島支店 (Former Bank of Japan Hiroshima Branch) — 5-21 Fukuromachi, Naka-ku, Hiroshima 730-0036", priceN:0, price:"Gratuit", timeN:40, time:"30-45 min", info:"Centre, proche Hondori"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Expo Toulouse-Lautrec & Mucha", zone:"Naka-ku centre", desc:"Belle Époque parisienne, Montmartre + Art Nouveau", addr:"広島県立美術館 (Hiroshima Prefectural Art Museum) — 2-22 Kaminobori-cho, Naka-ku, Hiroshima 730-0014", priceN:1500, price:"~1500 ¥", timeN:90, time:"1h30", info:"Préf. Art Museum, jusqu'au 31/5"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Expo Albert Marquet", zone:"Naka-ku centre", desc:"Rétrospective Fauves, 90 huiles, ami de Matisse", addr:"ひろしま美術館 (Hiroshima Museum of Art) — 3-2 Motomachi, Naka-ku, Hiroshima 730-0011", priceN:1500, price:"~1500 ¥", timeN:75, time:"1h-1h30", info:"Museum of Art, jusqu'au 31/5"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Mazda Museum", zone:"Fuchu (Aki-gun)", desc:"Tour gratuit 90-120 min : musée (collection 787B vainqueur Le Mans 1991, moteur rotatif, voitures historiques) + traversée en bus de l'usine avec vue sur la chaîne d'assemblage. Hiroshima est la ville natale de Mazda depuis 1920", addr:"マツダミュージアム (Mazda Museum) — 3-1 Shinchi, Fuchu-cho, Aki-gun, Hiroshima 730-8670", priceN:0, price:"Gratuit", timeN:120, time:"2h", info:"Tour EN 14h15 en semaine, réserver online à l'avance. Train JR vers Mukainada (8 min)"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Kure Iron Whale + Yamato", zone:"Kure (hors-ville)", desc:"Sous-marin Akishio JMSDF (76m) visitable de l'intérieur, le 'Iron Whale' — postes de contrôle, quartiers d'équipage. Musée du cuirassé Yamato à côté. 45 min en train de Hiroshima", addr:"てつのくじら館 + 大和ミュージアム (JMSDF Kure Museum & Yamato Museum) — 5-32 Takaramachi, Kure, Hiroshima 737-0029", priceN:500, price:"~500 ¥/musée", timeN:240, time:"Demi-journée", info:"45 min en train de Hiroshima"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Hiroshima City Manga Library", zone:"Hijiyama", desc:"Bibliothèque publique dédiée au manga : 150 000 volumes, classiques, magazines (Jump, Animage), section internationale incluant français. Lecture sur place gratuite, salle de lecture calme au 2e étage", addr:"広島市まんが図書館 (Hiroshima City Manga Library) — 1-4 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:60, time:"1h+", info:"Fermé lundi. À côté du MOCA dans le parc Hijiyama (combinable)"},
+  {city:"Iwakuni", cat:"Musée et expo", name:"Shirohebi Museum (musée des serpents blancs)", zone:"Kintaikyo", desc:"Petit musée consacré au serpent blanc d'Iwakuni, situé dans le parc Kikko juste après le pont Kintai-kyo. Enclos vitrés avec serpents albinos vivants observables de très près, panneaux didactiques sur l'écologie de l'espèce, l'albinisme génétique fixé (rare en nature : il ne dure normalement qu'une génération), la transmission héréditaire unique à Iwakuni, l'histoire du culte. Souvent plus animé que le Shirohebi Shrine, vraie pépite pour qui s'intéresse à la faune ou à la mythologie shintô", addr:"岩国シロヘビの館 (Iwakuni Shirohebi Museum) — 2-6-52 Yokoyama, Iwakuni-shi, Yamaguchi 741-0081", priceN:200, price:"~200 ¥", timeN:45, time:"30-60 min", info:"Dans Kikko Park, angle nord. Combinable avec le pont, le château et la résidence Mekata dans la même balade"},
+  
+  // === ATELIER ET DÉCOUVERTE ===
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Atelier Koto", zone:"Variable", desc:"Apprendre à jouer du koto, instrument traditionnel, en anglais", addr:"Koto-Salon (cours itinérants) — réservation en ligne, sessions dans le centre de Hiroshima (Naka-ku)", priceN:5000, price:"~5000 ¥", timeN:60, time:"1h", info:"Hommage à la paix via la musique"},
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Wood Egg Okonomiyaki Museum (Otafuku)", zone:"Nishi-ku", desc:"Bâtiment-œuf en bois (architecte Sambuichi). Cours de cuisine sur teppan pro où on cuisine son propre okonomiyaki avec instructeur, + musée et visite usine de sauce Otafuku. Bouteille de sauce encore chaude offerte", addr:"オタフクソース Wood Egg お好み焼館 — 2-3-13 Shoko Center, Nishi-ku, Hiroshima 733-8567", priceN:1100, price:"1100 ¥ (cours)", timeN:90, time:"1h30", info:"Réservation requise (parfois en japonais). Tram rouge ligne 2 jusqu'à Inokuchi"},
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Orizuru Tower", zone:"Peace Park", desc:"On plie son propre origami pour l'ajouter au mur des cranes en hommage à Sadako Sasaki. Observatoire 13e étage en plein air avec vue directe sur le Dôme, fresques murales, descente par slide de 70m sur 9 étages", addr:"おりづるタワー (Orizuru Tower) — 1-2-1 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1700, price:"1700 ¥", timeN:90, time:"1-1h30", info:"Architecte Hiroshi Sambuichi. Magnifique au coucher de soleil. Sur passeport étranger : réduction"},
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Saijo Sake Town", zone:"Saijo (hors-ville)", desc:"7 brasseries de saké à pied depuis JR Saijo, dégustations guidées en anglais. Tour 3 brasseries (semaine 10h30) ou 7 brasseries (Lun/Ven 13h). Hiroshima saké = soft water method, style mellow umami 'women's sake'", addr:"JR西条駅 (Saijo Sake Town - JR Saijo Station) — Saijo-Honmachi, Higashi-Hiroshima 739-0011", priceN:5500, price:"5500-7700 ¥", timeN:240, time:"Demi-journée", info:"35 min en train. Kamotsuru (méthode ginjō-zukuri), Hakubotan, Saijotsuru, Kirei, Fukubijin. Réserver Viator"},
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Kumano (pinceaux calligraphie)", zone:"Kumano (hors-ville)", desc:"Village qui produit 80% des pinceaux de calligraphie du Japon. À Fude no Sato Kobo : musée + démos d'artisans en direct + atelier participatif où l'on fabrique soi-même un pinceau (2 étapes sur 12, ~3500 ¥, réservation requise). Possible engraving de son nom sur le manche. ~45 min en bus depuis Hiroshima", addr:"筆の里工房 Fude no Sato Kobo — 5-17-1 Nakamizo, Kumano-cho, Aki-gun, Hiroshima 731-4214", priceN:3500, price:"600 ¥ (musée) à 3500 ¥ (atelier)", timeN:180, time:"Demi-journée", info:"Fude no Sato Kobo, fermé lundi. Réserver l'atelier 1 semaine avant"},
+  {city:"Miyajima", cat:"Atelier et découverte", name:"Cuisson de son propre momiji manju (Yamadaya)", zone:"Omotesando", desc:"Atelier où l'on cuit soi-même ses momiji manju sur des moules en fonte chauffés au-dessus de la flamme : verser la pâte, déposer la garniture (azuki, matcha, crème, chocolat), refermer le moule, retourner — sortir un gâteau-feuille d'érable doré à manger chaud. Yamadaya propose au 2e étage l'expérience guidée. Une des rares 'wagashi participatives' du Japon", addr:"やまだ屋 おおのファクトリー / 紅葉堂 本店 (Yamadaya / Momijido for momiji-baking experience) — 448-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:1000, price:"~1000 ¥", timeN:45, time:"45 min", info:"Yamadaya sur Omotesando. Walk-in possible mais réservation conseillée le week-end. À comparer avec la version frite (age-momiji) du voisin Kouyoudou Nibanya"},
+  {city:"Miyajima", cat:"Atelier et découverte", name:"Atelier shamoji personnalisé (Miyajima Tezukuri Koubou)", zone:"Omotesando", desc:"Miyajima est le berceau du shamoji, inventé vers 1800 par le moine ascète Seishin inspiré du biwa de Saraswati. Cette boutique imprime une photo de ton choix (depuis téléphone) sur un shamoji en bois en 10 min pour 600 ¥. Souvenir unique et personnalisé qui sort des sentiers battus", addr:"みやじま手づくり工房 (Miyajima Tezukuri Koubou) — Omotesando Shopping Street, Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:600, price:"~600 ¥", timeN:30, time:"30 min", info:"Sur Omotesando, à pied du ferry"},
+  {city:"Miyajima", cat:"Atelier et découverte", name:"Okeiko : kimono + activités traditionnelles", zone:"Miyajima centre", desc:"Expérience immersive de la culture japonaise : on porte un kimono authentique et on participe à des activités encadrées (cérémonie du thé, calligraphie, ikebana selon l'option). Réservation requise. Photos sur l'île possibles", addr:"Okeiko Japan Miyajima — 459-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:6000, price:"~6000 ¥", timeN:90, time:"1h30", info:"Plusieurs studios proposent l'expérience. Réserver online à l'avance"},
+  {city:"Miyajima", cat:"Atelier et découverte", name:"Night Cruise (torii illuminé depuis la mer)", zone:"Miyajima centre", desc:"Croisière nocturne de 30 min sur un bateau traditionnel japonais à cabine couverte ('Daisan Mikasamaru'), spécialement conçu pour les croisières de culte. Vue rapprochée du torii et du sanctuaire illuminés depuis l'eau — possibilité d'approcher le Grand Torii à marée haute. Atmosphère unique et silencieuse", addr:"宮島ナイトクルーズ Aqua-net (Daisan Mikasamaru) — Pier 3, Miyajima Port, Miyajimacho 1162-18, Hatsukaichi, Hiroshima 739-0588", when:"Tous les soirs · départs ~18h30 à 19h30 selon saison (variable, vérifier)", availability:{recurring:"daily"}, priceN:1600, price:"1600 ¥", timeN:30, time:"30 min", info:"Réservation requise minimum 2h avant départ. Départ Pier n°3 (au bout en venant du sanctuaire)"},
+  {city:"Iwakuni", cat:"Atelier et découverte", name:"Tour des 5 brasseries de saké d'Iwakuni", zone:"Variable", desc:"Iwakuni surnommée 'village d'eau célèbre' grâce à l'eau souterraine ultra-douce de la rivière Nishiki. 5 brasseries de saké historiques produisent ici dont 3 emblématiques : Sakai Shuzo (酒井酒造, fondée 1871, marque 'Gokyō' / 五橋 nommée d'après les 5 arches du pont Kintai-kyo), Yaoshin Shuzo (八百新酒造) à 5 min à pied de Kintai-kyo, et Murashige Shuzo (村重酒造) avec sa marque Kinkan Kuromatsu et ses puits de granularités différentes (eau ultra-douce du puits Ganryu et eau dure du puits Kannon utilisées selon les sakés). Plusieurs proposent visites + dégustation", addr:"酒井酒造 (Sakai Shuzo - Gokyō) — 1-5-23 Chuo, Iwakuni-shi, Yamaguchi 741-0081", priceN:1000, price:"Variable (gratuit à payant)", timeN:180, time:"Demi-journée", info:"Yaoshin Shuzo : 5 min à pied du pont. Sakai Shuzo + Murashige Shuzo à organiser sur place. Combiner avec la visite du pont et du château pour une journée complète. Réservation conseillée à l'avance pour Yaoshin"},
+  
+  // === SPECTACLE ===
+  {city:"Hiroshima", cat:"Spectacle", name:"Kagura Jinrin", zone:"Naka-ku centre", desc:"Théâtre traditionnel masqué, sous-titres EN, intro EN", addr:"RCC文化センター (RCC Bunka Center) — 7-1 Motomachi, Naka-ku, Hiroshima 730-0011", when:"Tous les mercredis · 19h00", availability:{recurring:"weekly", weekdays:[3]}, priceN:3500, price:"~3500 ¥", timeN:45, time:"45 min", info:"RCC Bunka Center, 19h, tous les mercredis"},
+  {city:"Miyajima", cat:"Spectacle", name:"Bugaku sur la scène Takabutai d'Itsukushima", zone:"Miyajima centre", desc:"Danse de cour gagaku exécutée sur la scène en bois Takabutai (Trésor National) au-dessus de l'eau du sanctuaire, masques peints, costumes rouge et vert vifs, flûtes et tambours traditionnels. Tradition importée de Kyoto par Taira-no-Kiyomori il y a ~1000 ans — l'une des 3 dernières lignées préservées au Japon avec l'Agence Impériale et Shitennō-ji d'Osaka. 20 pièces conservées à Itsukushima. Offert aux dieux 2x/an", addr:"厳島神社 高舞台 (Takabutai stage, Itsukushima Jinja) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", when:"Printemps (Tōka-sai) : 15 avril ~12h00 · Automne (Kikka-sai) : 15 octobre 17h00 (coucher de soleil)", availability:{recurring:"annual", dates:["04-15","10-15"]}, priceN:300, price:"300 ¥ (entrée sanctuaire)", timeN:60, time:"1h", info:"2 fois par an seulement : Tōka-sai 15-18 avril (printemps) + Kikkasai 15 octobre (automne, illumination au coucher du soleil). PAS aujourd'hui. Pour 2026 : prochain rendez-vous 15/10"},
+  {city:"Miyajima", cat:"Spectacle", name:"Tōka Shin-noh (Noh sur la scène flottante)", zone:"Miyajima centre", desc:"Représentations de Noh sur l'UNIQUE scène au-dessus de l'eau du Japon — Bien Culturel Important construit en 1680, sans grandes jarres résonantes (impossibles sur l'eau), conçu pour que les pas des acteurs résonnent grâce à un plancher creux. Tradition initiée par Mōri Motonari en 1568 après sa victoire à la bataille d'Itsukushima. 3 jours consécutifs avec 3 écoles : Kita (jour 1), Kanze (jour 2), Kita (jour 3)", addr:"厳島神社 能舞台 (Noh stage, Itsukushima Jinja) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", when:"16, 17 et 18 avril chaque année · 3 jours consécutifs en journée", availability:{recurring:"annual", dates:["04-16","04-17","04-18"]}, priceN:300, price:"300 ¥ (entrée sanctuaire)", timeN:120, time:"2h", info:"3 dates fixes : 16, 17 et 18 avril chaque année. Manqué pour 2026 — prochain en 2027. Arriver tôt, places limitées sur les berges"},
+  {city:"Miyajima", cat:"Spectacle", name:"Hi-watari-shiki à Daisho-in (marche sur le feu)", zone:"Miyajima centre", desc:"Cérémonie shingon spectaculaire : 11h sutras Hannya-haramita, ~13h rituel Saito-goma — 2 moines tournent l'enceinte sabre en main, tirent 7 flèches en l'air (les fidèles se les arrachent), puis les conques retentissent et une pile de branches de cyprès est embrasée. ~14h marche pieds nus sur les braises rougeoyantes par le moine en chef, ses disciples puis les fidèles volontaires — le public peut participer", addr:"大聖院 (Daisho-in Temple) — 210 Miyajimacho, Hatsukaichi, Hiroshima 739-0592", when:"15 avril + 15 novembre · 11h sutras → 13h goma → 14h marche sur le feu", availability:{recurring:"annual", dates:["04-15","11-15"]}, priceN:0, price:"Gratuit", timeN:180, time:"3h", info:"2 fois par an seulement : 15 avril (printemps) + 15 novembre (automne), date fixe peu importe le jour de la semaine. PAS aujourd'hui. Pour 2026 : prochain 15/11. Apporter linge pour s'essuyer les pieds"},
+  {city:"Iwakuni", cat:"Spectacle", name:"Ukai — pêche aux cormorans sur la Nishiki", zone:"Kintaikyo", desc:"Méthode de pêche traditionnelle vieille de 1300 ans (mentionnée dans le Kojiki), pratiquée ici depuis le début de l'époque Edo (~400 ans) avec le pont Kintai-kyo en toile de fond. Suspendue puis ressuscitée en 1952. Un usho (maître pêcheur) guide à la corde une dizaine de cormorans dressés à attraper l'ayu (poisson-doux) sous la lumière de braseros à la proue. Anneau au cou pour empêcher d'avaler les grosses prises. Embarquement sur yakatabune (bateau traditionnel couvert) à quelques mètres de l'action, ou observation gratuite depuis la berge ou le pont", addr:"錦帯橋 鵜飼 (Kintaikyo Ukai) — embarcadère face au pont Kintai-kyo, rive nord, Iwakuni-shi, Yamaguchi 741-0062", when:"Du 1er juin au 10 septembre · départs ~19h-21h", availability:{recurring:"annual", dates:["06-01","06-02","06-03","06-04","06-05","06-06","06-07","06-08","06-09","06-10","06-11","06-12","06-13","06-14","06-15","06-16","06-17","06-18","06-19","06-20","06-21","06-22","06-23","06-24","06-25","06-26","06-27","06-28","06-29","06-30","07-01","07-02","07-03","07-04","07-05","07-06","07-07","07-08","07-09","07-10","07-11","07-12","07-13","07-14","07-15","07-16","07-17","07-18","07-19","07-20","07-21","07-22","07-23","07-24","07-25","07-26","07-27","07-28","07-29","07-30","07-31","08-01","08-02","08-03","08-04","08-05","08-06","08-07","08-08","08-09","08-10","08-11","08-12","08-13","08-14","08-15","08-16","08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30","08-31","09-01","09-02","09-03","09-04","09-05","09-06","09-07","09-08","09-09","09-10"]}, priceN:3500, price:"~3500 ¥ (bateau)", timeN:120, time:"2h", info:"Réservation conseillée au 0827-28-2877. Fonctionne aussi sous la pluie. Bento livré à la commande possible. Observation gratuite depuis la berge ou le pont. PAS aujourd'hui (14/05/2026, hors saison) — saison ouvre le 01/06"},
+  
+  // === SHOPPING ===
+  {city:"Hiroshima", cat:"Shopping", name:"JUMP SHOP", zone:"Gare Hiroshima", desc:"Boutique officielle Shueisha : One Piece, Dragon Ball, Naruto, Demon Slayer. Bonbons Devil Fruit en boîtes-fruits", addr:"JUMP SHOP 広島駅店 — ekie 2F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:1500, price:"Variable", timeN:40, time:"30-45 min", info:"Minamoa, à la gare. Statue Goku Kamehameha à l'entrée"},
+  {city:"Hiroshima", cat:"Shopping", name:"Bâtiment animate", zone:"Hondori", desc:"Hub otaku 5 étages : animate (manga/goodies), Lashinbang (figurines occasion 4F), Melonbooks (doujinshi), arcade Namco", addr:"animate 広島本店 (animate Hiroshima Honten) — 8-8 Hatchobori, Naka-ku, Hiroshima 730-0013", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Kamiya-cho. Lashinbang : expertise figurines le week-end"},
+  {city:"Hiroshima", cat:"Shopping", name:"Pokémon Center", zone:"Gare Hiroshima", desc:"Goodies exclusifs Hiroshima (Red Gyarados, version Carp)", addr:"ポケモンセンターヒロシマ (Pokémon Center Hiroshima) — Hiroshima Station Minamoa 1F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"À la gare de Hiroshima"},
+  {city:"Hiroshima", cat:"Shopping", name:"Volks Showroom", zone:"Hondori", desc:"Le plus grand hobby store de la ville : figurines neuves, Gunpla, plastic models. Planque pour locaux", addr:"ボークス 広島ショールーム (Volks Hiroshima Showroom) — Hiroshima Sunmall 4F, 6-27 Kanayama-cho, Naka-ku, Hiroshima 730-0022", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"4F Hiroshima Sunmall, peu visible depuis l'extérieur"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yellow Submarine", zone:"Hondori", desc:"Chaîne nationale : TCG (cartes), Gunpla, figurines, modèles plastiques", addr:"イエローサブマリン 広島本通り店 (Yellow Submarine Hiroshima Hondori) — 7-19 Hondori, Naka-ku, Hiroshima 730-0035", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Hondori Street, complément de Volks"},
+  {city:"Hiroshima", cat:"Shopping", name:"Hondori Arcade", zone:"Hondori", desc:"Galerie couverte 1 km, artisanat, cafés, poteries", addr:"本通り商店街 (Hondori Shopping Arcade) — Hondori, Naka-ku, Hiroshima 730-0035", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Centre, couverte si pluie"},
+  {city:"Hiroshima", cat:"Shopping", name:"Shareo souterrain", zone:"Hondori", desc:"Galerie sous Kamiyacho, enseignes locales, food court", addr:"シャレオ (Shareo Underground Mall) — sous Kamiyacho intersection, Naka-ku, Hiroshima 730-0031", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Moins touristique"},
+  {city:"Hiroshima", cat:"Shopping", name:"Ekie gare", zone:"Gare Hiroshima", desc:"Complexe shopping/food sous la gare, souvenirs, bento", addr:"ekie 広島駅 (ekie Hiroshima Station) — 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Pratique avant le shinkansen"},
+  {city:"Hiroshima", cat:"Shopping", name:"Dumb Records (vinyles punk + curry)", zone:"Nagarekawa", desc:"Disquaire punk perché au 4e étage d'un immeuble anonyme, tenu par Nass, vieux briscard de la scène rock japonaise. 1000+ vinyles pop/melodic punk dans l'esprit Ramones (énorme poster à l'entrée, logo stylisé façon CBGB's). Tient son propre label indépendant et organise des concerts en boutique. Originalité totale : un comptoir curry maison tourne en parallèle du digging — combinaison improbable, signature des lieux", addr:"DUMB RECORDS — 3F-A Dai-Ichi Shimizu Bldg, 5-15 Mikawacho, Naka-ku, Hiroshima 730-0029", priceN:2000, price:"Variable", timeN:60, time:"45-90 min", info:"À ~50m du Washington Hotel (même rue). Vérifier horaires sur dumbrecords.com — ouvre généralement l'après-midi"},
+  {city:"Hiroshima", cat:"Shopping", name:"Furugiya JAM (friperie vintage)", zone:"Nagarekawa", desc:"Friperie vintage japonaise au 2e étage, sélection ultra-curatée par les locaux : robes rétro, denim classique, accessoires kawaii, streetwear japonais années 90, sneakers de seconde main. Concept 'sustainable fashion' affiché, ambiance feutrée avec racks bien rangés. Une des meilleures adresses 'furugi' (vintage) du centre selon les habitués. Pièces uniques, prix corrects", addr:"古着屋JAM 広島店 (Furugiya JAM Hiroshimaten) — 3-16 Mikawacho, 2F, Naka-ku, Hiroshima 730-0029", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"À ~150m du Washington Hotel. Ouvert 11h-20h tous les jours. Plus calme en semaine"},
+  {city:"Hiroshima", cat:"Shopping", name:"Tayama Bungu (papeterie historique)", zone:"Hondori", desc:"Papeterie de Hiroshima de longue date, autrefois au pied de Hondori, désormais discrètement perchée au 3e étage de Hondori Hills. Spécialité maison : stylos plume Sailor — la manufacture historique est à Kure, à 30 min — avec modèles et encres exclusifs Tayama qu'on ne trouve nulle part ailleurs. Du frixion jetable au plume haut de gamme, gamme complète, conseils experts. Bonus même étage : Watanabe Ceramics pour combiner stylo + objet artisanal", addr:"田山文具店 (Tayama Bungu) — Hondori Hills 3F, 8-23 Hondori, Naka-ku, Hiroshima 730-0035", priceN:1500, price:"Variable", timeN:30, time:"30 min", info:"Repère extérieur : magasin Adidas au RDC d'angle au milieu de l'arcade. Site : tayama-bungu.net"},
+  {city:"Hiroshima", cat:"Shopping", name:"COAST Board Game Café", zone:"Naka-ku centre", desc:"Pas une boutique mais un café-ludothèque insolite : 500+ jeux de plateau (production japonaise + import européen/US), location à la table sans achat obligatoire. Catalogue consultable en ligne avant de venir — utile pour repérer un titre précis. Horaires généreux le week-end, ambiance feutrée plutôt que bruyante. Boissons + petite restauration. Idéal après-midi pluvieuse ou soirée tranquille à plusieurs", addr:"COAST Board Game Cafe — 2-6-21 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1500, price:"~1000-1500 ¥/pers.", timeN:150, time:"2-3h", info:"Semaine 17h-23h · Week-end/fériés 10h-23h · Fermé lundi (si lundi férié, fermé le mardi). Pas de parking. Site : coast-bgcafe.com"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yamato-ya (saké & shochu)", zone:"Nagarekawa", desc:"Caviste familial à l'extrémité nord de Yagenbori-dori, famille Oyama liée au brassage de saké depuis 2 siècles, boutique depuis 50+ ans. Sélection pointue de sakés Hiroshima (Saijo, Kure, Takehara), shochu, vins, fournit la majorité des grands restaurants et bars de la ville. Conseil expert pour cadeau ou découverte, livraison à domicile commandable en ligne. Alternative locale et concrète à un aller-retour à Saijo si on manque de temps", addr:"大和屋酒舗 (Yamato-ya Shuho) — 4-3 Ebisu-cho, Naka-ku, Hiroshima 730-0021", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Au nord de Yagenbori-dori, ~300m du Washington Hotel. Horaires longs en plein centre. Site : e-yamatoya.jp"},
+  {city:"Hiroshima", cat:"Shopping", name:"Bookoff Super Bazaar (Otemachi)", zone:"Naka-ku centre", desc:"Le plus gros bazar d'occasion du centre, 2000 m² : mangas, livres, vinyles/CD/DVD, jeux vidéo (consoles + softs), cartes à jouer (TCG), figurines et jouets, instruments de musique, électronique, vêtements et accessoires de marque. Tarifs très bas, stock énorme renouvelé en permanence. Détaxe touristes. Le bon plan pour fouiller manga d'occasion et tomber sur un objet introuvable ailleurs", addr:"BOOK・OFF SUPER BAZAAR 広島大手町店 — 2-7-6 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1500, price:"Variable", timeN:90, time:"1-2h", info:"Ouvert 10h-22h tous les jours. ~800m du Washington Hotel, 2 blocs de la station tram Hondori, proche Peace Park"},
+  {city:"Hiroshima", cat:"Shopping", name:"Groovin' Records (Kyobashi)", zone:"Gare Hiroshima", desc:"Disquaire spécialiste de la seconde main à Kyobashi-cho (sud de la gare), réputé chez les diggers étrangers pour son rayon rock/pop western et jazz. Achat-vente-curation : on peut y faire estimer une collection. Stock vaste, soigneusement trié et bien rangé, prix corrects. Complète Dumb Records (punk, Mikawacho) avec un spectre musical différent — les deux ensemble couvrent à peu près toute la planète vinyle de Hiroshima", addr:"GROOVIN' レコード 広島本店 (Groovin' Records Hiroshima) — 2-21 Kyobashi-cho, Minami-ku, Hiroshima 732-0828", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"~1,5 km du Washington Hotel, 5 min à pied au sud de la gare. Site : groovin-jp.co.jp. Vérifier horaires (jours de fermeture variables)"},
+  {city:"Hiroshima", cat:"Shopping", name:"Hon to jiyuu (livres + bar à Yokogawa)", zone:"Yokogawa", desc:"'Livres & Liberté' — librairie indépendante de Yokogawa qui vend du neuf et de l'occasion, avec une micro-cuisine où l'on peut prendre café, bière ou verre de vin en lisant sur place. Voisine immédiate du Yokogawa Cinema (cinéma d'auteur culte) et d'une fresque géante de l'artiste local SUIKO. Lieu emblématique de la scène alternative locale, à mille lieues du shopping mainstream de Hondori", addr:"本と自由 (Hon to Jiyuu) — 3-3-1 Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:1500, price:"Variable", timeN:60, time:"45-90 min", info:"~2,5 km du Washington Hotel, tram ou JR jusqu'à Yokogawa. À combiner avec le Yokogawa Cinema, les fresques SUIKO et les minuscules izakaya sous les voies ferrées"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yumeya (kimono vintage à Yokogawa)", zone:"Yokogawa", desc:"Hole-in-the-wall : boutique minuscule de kimonos d'occasion et tissus japonais de qualité, coincée à côté d'un barbier au nord de la gare de Yokogawa près du viaduc ferroviaire. Pièces choisies à la main par la propriétaire, prix très accessibles vs Kyoto. Vraie pépite hors radar pour qui cherche un kimono, un haori ou des étoffes anciennes sans payer les tarifs touristiques", addr:"夢屋 (Yumeya) — sortie nord JR Yokogawa Station près du viaduc, Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:5000, price:"Variable", timeN:45, time:"30-60 min", info:"Petite boutique, ne pas hésiter à pousser la porte. Combinable avec Hon to jiyuu et le Yokogawa Cinema dans la même balade"},
+  {city:"Hiroshima", cat:"Shopping", name:"MUSASHI JAPAN (couteaux japonais)", zone:"Hondori", desc:"Boutique de couteaux japonais traditionnels ouverte le 1er décembre 2025 en plein Hondori. Architecture intérieure en forme de tambour (symbole de paix), courbes douces et rythme continu — pensée pour Hiroshima 'terre qui transmet la paix au futur'. Collaboration avec des artisans forgerons héritiers des techniques de fabrication des katana. Gamme allant des couteaux de chef polyvalents aux pièces Chokin gravées à l'or et aux couteaux Tsushima en plastique marin recyclé. Staff multilingue (42 nationalités), gravure du nom offerte, possibilité d'essayer chaque lame avant achat", addr:"MUSASHI JAPAN 広島本通店 (MUSASHI JAPAN Hiroshima Hondori) — Hondori Shopping Street, Naka-ku, Hiroshima 730-0035", priceN:15000, price:"Variable (15k-100k+ ¥)", timeN:60, time:"45-90 min", info:"~700m du Washington Hotel. Couteau transportable en soute (interdit en cabine). Service après-vente : aiguisage et inspections semestrielles/annuelles. Site : musashihamono.com"},
+  {city:"Hiroshima", cat:"Shopping", name:"Lashinbang (figurines, neuf + occasion)", zone:"Hondori", desc:"Spécialiste figurines au 4e étage du bâtiment animate Hiroshima, à 3 min à pied de Yellow Submarine. Mélange de figurines neuves et d'occasion : scale figures, prize figures de séries anciennes, nendoroids, character goods. Section seconde main souvent mieux fournie qu'à Tokyo en pièces rares. Service d'évaluation gratuite de collections le week-end (utile si tu veux vendre des doubles). Prix généralement plus bas qu'Akihabara. Coexiste dans le même immeuble avec animate (manga/anime), Melonbooks (doujinshi), Card Lab (TCG) et Namco (game center)", addr:"らしんばん広島店 (Lashinbang Hiroshima) — Hiroshima animate Building 4F, 4-1 Shintenchi, Naka-ku, Hiroshima 730-0034", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"Sur Hondori, ~800m du Washington Hotel. Combinable avec animate (1F-3F), JUMP SHOP (gare) et Volks (Sunmall) en un seul parcours otaku. Idéal pour fouiller One Piece anciennes gammes Banpresto/Megahouse"},
+  {city:"Hiroshima", cat:"Shopping", name:"Cha-no-wa (matcha & wagashi)", zone:"Naka-ku centre", desc:"Salon de thé et boutique de matcha à 5 min à pied du Peace Park, dans une ruelle calme de Kawaramachi. Maison spécialisée dans la mise en valeur du matcha à travers des wagashi (pâtisseries traditionnelles) et glaces : parfait au matcha, financiers, dorayaki, terrine, monaka. Possibilité d'acheter du matcha de qualité cérémoniale en boîte cadeau. Le sirop affogato au matcha versé devant toi sur la glace vanille est devenu signature de la maison. Boutique sur place, prise à emporter ou dégustation au comptoir", addr:"茶の環 本店 (Cha-no-wa Honten) — 2-1 Kawaramachi, Naka-ku, Hiroshima 730-0856", priceN:1200, price:"500-2000 ¥", timeN:45, time:"30-60 min", info:"Ouvert 10h-19h, fermé mercredi (sauf jours fériés). ~1,2 km du Washington Hotel, à combiner avec une visite du Peace Park. Site : cha-no-wa.com"},
+  {city:"Hiroshima", cat:"Shopping", name:"Carp Goods (baseball Hiroshima)", zone:"Gare Hiroshima", desc:"Hiroshima Toyo Carp = équipe de baseball professionnelle locale, fondée en 1949 (4 ans après la bombe) comme symbole de la reconstruction, financée à l'origine par la souscription des habitants. Casquette rouge à C calquée sur les Cincinnati Reds, mascotte Carp Boy reproduite sur les plaques d'égout de toute la ville. Boutique officielle au Mazda Stadium ou — plus pratique sans aller au stade — au 9e étage du Fukuya Hiroshima Ekimae (en face de la gare) : casquettes, maillots joueurs, porte-clés, peluches, plaids, tapis Carp Boy. Souvenir typiquement hiroshimien et politiquement chargé (renaissance de la ville)", addr:"福屋 広島駅前店 9F カープグッズコーナー (Fukuya Hiroshima Ekimae 9F — Carp Goods) — 6-26 Matsubara-cho, Minami-ku, Hiroshima 732-0822", priceN:2500, price:"800-8000 ¥", timeN:30, time:"30 min", info:"Face à la gare, 9e étage du Fukuya Ekimae. Alternative : boutique principale au Mazda Zoom-Zoom Stadium (10h-18h hors jours de match). Logo Carp Boy = la pièce signature pour Hiroshima"},
+  {city:"Miyajima", cat:"Shopping", name:"Omotesando Shopping Street", zone:"Omotesando", desc:"Rue commerçante principale entre le ferry et le sanctuaire, 4-5 blocs à arpenter : huîtres grillées (Hiroshima = 60% des huîtres du Japon), momiji manju (gâteaux feuille d'érable cuits sur place sous tes yeux par machine), Miyajima Brewery (bières artisanales), shamoji artisanaux, omamori, anago-meshi. Daims libres à éviter avec la nourriture", addr:"宮島表参道商店街 (Miyajima Omotesando Shotengai) — Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:1500, price:"Variable", timeN:60, time:"1h", info:"Ambiance vivante en journée, paisible le soir après le départ des day-trippers"},
+  
+  // === SPÉCIALITÉS ===
+  {city:"Miyajima", cat:"Spécialités", name:"Huîtres grillées (yaki-gaki)", zone:"Omotesando", desc:"LA spécialité de Miyajima. Hiroshima produit 60% des huîtres du Japon, cultivées depuis plus de 3 siècles. Servies grillées au charbon dans leur coquille (elles cuisent dans leur propre eau), à la sauce ponzu, panées (kaki-fry), en kakidon (bol de riz). Stands le long d'Omotesando, ~400-600 ¥ pièce. Yakigaki no Hayashi (1er stand de Miyajima à servir des huîtres grillées) reste la référence", addr:"焼がきのはやし (Yakigaki no Hayashi) — 505-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:500, price:"400-600 ¥ pièce", timeN:15, time:"10-15 min", info:"Toute l'année mais haute saison en hiver (huîtres plus charnues). Sans réservation, prendre au stand. Attention aux daims qui rôdent autour des stands"},
+  {city:"Miyajima", cat:"Spécialités", name:"Anago-meshi (riz au congre)", zone:"Omotesando", desc:"Plat-emblème de Miyajima : congre (anago, anguille de mer) grillé à la sauce sucrée-salée, posé en lamelles sur un lit de riz cuit dans un bouillon d'arêtes de congre. Plus délicat que l'unagi d'eau douce. Inventé à la fin du 19e par les vendeurs de bento à la gare de Miyajimaguchi. La référence historique est le restaurant Ueno (Miyajimaguchi, avant le ferry), mais Mametanuki sur l'île sert une version excellente en service du soir", addr:"まめたぬき / 上野 (Mametanuki / Anago-meshi Ueno) — Mametanuki: 1133 Miyajimacho, Hatsukaichi ; Ueno: 125-2 Miyajimaguchi, Hatsukaichi 739-0411", priceN:2200, price:"~2200 ¥", timeN:60, time:"45min-1h", info:"Mametanuki ouvert tard (jusqu'à 21h30) — rare sur l'île. Ueno fait aussi des bento à emporter sur le ferry"},
+  {city:"Miyajima", cat:"Spécialités", name:"Anago chikuwa (poisson sur bâton)", zone:"Omotesando", desc:"Chikuwa (pâte de poisson cuite en forme de tube) à base de congre local, vendue sur bâton chaud comme street food. ~300 ¥ pièce. Snack idéal en sortant du ferry — premiers stands juste après le débarquement. Version plus rustique et locale que les fishcakes industriels", addr:"宮島表参道商店街 stands (Omotesando stands near ferry) — Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:300, price:"~300 ¥", timeN:5, time:"5 min", info:"Plusieurs variantes : nature, au fromage, aux légumes, au bacon. À manger en marchant"},
+  {city:"Miyajima", cat:"Spécialités", name:"Momiji manju (gâteau feuille d'érable)", zone:"Omotesando", desc:"Pâtisserie-symbole de Miyajima inventée fin Meiji (~1907) par un wagashi-ya pour le ryokan Iwaso à Momijidani. Petit gâteau-éponge moelleux en forme de feuille d'érable, traditionnellement fourré à l'anko (haricot rouge azuki). Aujourd'hui : matcha, crème, chocolat, marron, fromage. À déguster chaud sortie du moule. Spectacle : la plupart des boutiques ont des machines automatiques visibles depuis la rue qui produisent les manju devant le client", addr:"紅葉堂 本店 (Momijidou Honten) — 448-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:90, price:"70-90 ¥ pièce", timeN:10, time:"5-10 min", info:"Boutiques de référence : Momijidou, Yamadaya, Miyatoyo (1er à proposer la version fromage). Acheter à l'unité (chaud) ou en boîte (souvenir, conservation 2 sem)"},
+  {city:"Miyajima", cat:"Spécialités", name:"Age-momiji (momiji frit sur bâton)", zone:"Omotesando", desc:"Version frite du momiji manju, marque déposée par Kouyoudou depuis le 1er janvier 2002 : le manju est embroché sur un pic en bambou, enrobé d'une pâte à tempura légère et frit à la commande. Croustillant dehors, garniture fondante dedans (anko, crème, fromage). Texture entièrement différente du momiji manju classique — 'une nouvelle catégorie de snack qui partage juste la forme'. ~200 ¥ pièce", addr:"紅葉堂 弐番屋 (Kouyoudou / Momijidou Nibanya) — 512-2 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:200, price:"~200 ¥", timeN:5, time:"5 min", info:"Kouyoudou Nibanya sur Omotesando (originaire). Autres adresses : Momijidou, Hakataya (qui l'appelle 'Miyajima Jakee'). Manger immédiatement — la garniture est BRÛLANTE"},
+  {city:"Miyajima", cat:"Spécialités", name:"Miyajima Beer (bière artisanale)", zone:"Omotesando", desc:"Brasserie artisanale de l'île, fondée 2009, eau de source du Mont Misen. 4 références phares : Weizen (blé), Pale Ale, Stout, Itsukushima Pilsner. Taproom-restaurant sur Omotesando avec dégustation et plateaux 4 verres pour comparer. Compatible avec les huîtres grillées (la Weizen surtout)", addr:"宮島ブルワリー (Miyajima Brewery) — 459-2 Miyajimacho, Hatsukaichi, Hiroshima 739-0556", priceN:600, price:"600-900 ¥ verre", timeN:30, time:"30 min-1h", info:"Miyajima Brewery (Omotesando), ouvert ~11h-20h. Bouteilles en souvenir à rapporter. Alternative locale au saké pour le déjeuner"},
+  {city:"Hiroshima", cat:"Spécialités", name:"Okonomiyaki style Hiroshima", zone:"Variable", desc:"Version hiroshimienne du okonomiyaki, en couches superposées (vs mélangées à Osaka) : crêpe fine, chou émincé, nouilles soba ou udon, viande de porc, œuf, sauce Otafuku. Cuisson sur teppan devant le client, dégustation directe sur la plaque chauffante avec une petite spatule (hera). Plat-emblème de la ville. Okonomimura (Nagarekawa) regroupe 25 stands sur 4 étages — choisir au feeling", addr:"お好み村 (Okonomimura) — 5-13 Shintenchi, Naka-ku, Hiroshima 730-0034", priceN:1200, price:"1000-1500 ¥", timeN:45, time:"45 min", info:"Okonomimura (4 étages, 25 stands) ou Hassei (Hatchobori, ouvert depuis 1957, file d'attente). Au comptoir teppan = expérience complète"},
+  {city:"Hiroshima", cat:"Spécialités", name:"Tsukemen Hiroshima (nouilles épicées trempées)", zone:"Variable", desc:"Variante locale du tsukemen née à Hiroshima : nouilles froides à tremper dans une sauce sucrée-piquante (sauce soja, vinaigre, huile de sésame, piment) — niveaux d'épice de 1 à 20+. Accompagné de chou, ciboulette, tranches de porc froides. Plat d'été par excellence. Réinventé en 1954 par le restaurant Bakudanya (toujours en activité). Diffère du tsukemen Tokyo (chaud, riche)", addr:"ばくだん屋 本店 (Bakudanya Honten) — 2-12 Shintenchi, Naka-ku, Hiroshima 730-0034", priceN:900, price:"800-1100 ¥", timeN:30, time:"30 min", info:"Bakudanya (chaîne locale, plusieurs adresses centre + Ekie). Demander le niveau d'épice : '2' est déjà bien relevé pour la plupart"},
+  {city:"Hiroshima", cat:"Spécialités", name:"Citrons et produits dérivés Setouchi", zone:"Variable", desc:"Hiroshima produit ~60% des citrons du Japon (Setouchi lemons), cultivés sans pesticides sur les îles ensoleillées de la mer intérieure. Déclinés en gâteaux (lemon cake d'Andersen), confitures, jus, sorbet, alcool de citron (chu-hi), bonbons, savons. Tester le 'Setouchi Lemon Cake' chez Andersen (boulangerie historique de la ville). Sucré peu acide, parfum naturel intense", addr:"広島アンデルセン (Hiroshima Andersen) — 7-1 Hondori, Naka-ku, Hiroshima 730-0035", priceN:500, price:"Variable", timeN:15, time:"10-15 min", info:"Boutiques souvenirs Ekie (gare) ou Hondori. Andersen Hiroshima : boulangerie pionnière du pain industriel au Japon, près Hondori"},
+  {city:"Iwakuni", cat:"Spécialités", name:"Iwakuni-zushi (sushi pressé carré multi-couches)", zone:"Kintaikyo", desc:"Sushi local créé à l'époque Edo comme rations pour les guerriers du château d'Iwakuni — pressé en moule de bois carré jusqu'à 50 cm de côté, découpé en parts comme un gâteau. Couches alternées de riz vinaigré et de garnitures colorées : poisson en fines tranches (sayori, anago), lotus root (renkon) local croquant en lamelles, omelette fine kinshi-tamago, shiitake mijotés, feuilles de chrysanthème, gambas. À déguster autour du pont Kintai-kyo dans les restaurants traditionnels qui en font une spécialité hereditaire", addr:"半月庵 (Hangetsuan) — 1-1-9 Iwakuni, Iwakuni-shi, Yamaguchi 741-0062", priceN:1500, price:"~1200-1800 ¥", timeN:45, time:"45 min", info:"Plusieurs restaurants autour du pont. Aussi vendu en boîte à emporter dans les boutiques de souvenirs du quartier Kintaikyo. Plat froid, parfait par temps chaud"}
+  
+
+];
+
+const $ = id => document.getElementById(id);
+const listEl = $('activityList');
+const empty = $('empty');
+const search = $('search');
+const searchClear = $('searchClear');
+const searchWrap = $('searchWrap');
+const searchBtn = $('searchBtn');
+const zoneBtn = $('zoneBtn');
+const catBtn = $('catBtn');
+const zoneBadge = $('zoneBadge');
+const catBadge = $('catBadge');
+const moreBtn = $('moreBtn');
+const morePanel = $('morePanel');
+const zoneSheet = $('zoneSheet');
+const catSheet = $('catSheet');
+const zoneSheetBody = $('zoneSheetBody');
+const catSheetBody = $('catSheetBody');
+const filterPrice = $('filterPrice');
+const filterDuration = $('filterDuration');
+const activeFilters = $('activeFilters');
+const tabCountTodo = $('tabCountTodo');
+const tabCountDone = $('tabCountDone');
+const resultCount = $('resultCount');
+const toast = $('toast');
+const toastMsg = $('toastMsg');
+const undoBtn = $('undoBtn');
+
+const STORAGE_DEL = 'hiro_v8_del';
+const STORAGE_DONE = 'hiro_v8_done';
+const STORAGE_CITIES = 'japon_v1_cities';
+const STORAGE_ORDER = 'japon_v1_order';
+const STORAGE_SORT  = 'japon_v1_sort';
+
+// Lecture de l'état initial embarqué dans le HTML (rempli par Claude).
+// Sert de fallback quand le localStorage est vide (typique sur Android avec content://).
+let embeddedInitialState = null;
+let embeddedStateUsed = false;  // true si on a chargé au moins un champ depuis l'embarqué
+try {
+  const el = document.getElementById('initial-state');
+  if (el) {
+    const txt = (el.textContent || '').trim();
+    if (txt && txt !== '{}') {
+      const parsed = JSON.parse(txt);
+      if (parsed && typeof parsed === 'object') embeddedInitialState = parsed;
+    }
+  }
+} catch(e) { console.warn('Initial state parse error:', e); }
+
+// Helper : lire une clé localStorage en JSON, sinon retomber sur l'état embarqué.
+function loadKey(lsKey, embKey, defaultVal) {
+  const raw = localStorage.getItem(lsKey);
+  if (raw !== null) {
+    try { return JSON.parse(raw); } catch(e){}
+  }
+  if (embeddedInitialState && Array.isArray(embeddedInitialState[embKey])) {
+    embeddedStateUsed = true;
+    return embeddedInitialState[embKey];
+  }
+  return defaultVal;
+}
+
+let deleted = new Set(loadKey(STORAGE_DEL,  'deleted', []));
+let done    = new Set(loadKey(STORAGE_DONE, 'done',    []));
+
+// Villes actives. Par défaut Hiroshima cochée (1re utilisation).
+// Si l'utilisateur a déjà fait un choix (même de tout décocher), on respecte.
+let selectedCities = new Set();
+const _savedCities = localStorage.getItem(STORAGE_CITIES);
+if (_savedCities === null) {
+  if (embeddedInitialState && Array.isArray(embeddedInitialState.cities)) {
+    selectedCities = new Set(embeddedInitialState.cities);
+    embeddedStateUsed = true;
+  } else {
+    selectedCities.add('Hiroshima');
+  }
+} else {
+  try { selectedCities = new Set(JSON.parse(_savedCities)); } catch(e) { selectedCities.add('Hiroshima'); }
+}
+
+const state = {
+  query:'', cats:new Set(), zones:new Set(), prices:new Set(), durations:new Set(),
+  sort:'default', tab:'todo', group:'none',
+  dateFilter:null,  // "YYYY-MM-DD" ou null. Filtre les entrées avec availability uniquement.
+  customOrder:[]    // Tableau ordonné de `name`. Appliqué quand sort==='manual'.
+};
+state.customOrder = loadKey(STORAGE_ORDER, 'order', []);
+try {
+  const s = localStorage.getItem(STORAGE_SORT);
+  if (s) state.sort = s;
+  else if (embeddedInitialState && typeof embeddedInitialState.sort === 'string') {
+    state.sort = embeddedInitialState.sort;
+    embeddedStateUsed = true;
+  }
+} catch(e){}
+
+// Si on a chargé depuis l'embarqué, on persiste tout de suite dans le localStorage
+// pour que les modifs suivantes soient bien enregistrées (et idempotent au reload).
+if (embeddedStateUsed) {
+  try {
+    localStorage.setItem(STORAGE_DEL,    JSON.stringify([...deleted]));
+    localStorage.setItem(STORAGE_DONE,   JSON.stringify([...done]));
+    localStorage.setItem(STORAGE_CITIES, JSON.stringify([...selectedCities]));
+    localStorage.setItem(STORAGE_ORDER,  JSON.stringify(state.customOrder));
+    localStorage.setItem(STORAGE_SORT,   state.sort);
+  } catch(e){}
+}
+
+let lastDeleted = null;
+let toastTimer = null;
+
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_DEL, JSON.stringify([...deleted]));
+    localStorage.setItem(STORAGE_DONE, JSON.stringify([...done]));
+    localStorage.setItem(STORAGE_CITIES, JSON.stringify([...selectedCities]));
+  } catch(e) {}
+}
+function saveOrder() {
+  try { localStorage.setItem(STORAGE_ORDER, JSON.stringify(state.customOrder)); } catch(e) {}
+}
+function saveSort() {
+  try { localStorage.setItem(STORAGE_SORT, state.sort); } catch(e) {}
+}
+
+function showToast(msg, withUndo) {
+  toastMsg.textContent = msg;
+  undoBtn.style.display = withUndo ? 'inline-block' : 'none';
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// === DATA AGGREGATES (catégories plates) ===
+// Rebuilt at each render from items that match ALL ACTIVE FILTERS except
+// the facet being aggregated (pattern de recherche à facettes).
+let zoneCounts = {};
+let catTree = {}; // { "Spectacle": 4, "Musée et expo": 8, ... } — flat counts
+
+// Aggregate-filtering: identique à matchesFilters MAIS skip le filtre passé
+// en argument (utile pour les facettes : "combien d'items dans cette catégorie
+// si je sélectionnais juste cette catégorie ?").
+// Note: cette fonction inclut tab/deleted/city contrairement à matchesFilters
+// car les agrégats sont reconstruits sur l'ensemble du dataset.
+function matchesAggregateFilters(r, skipType) {
+  if (deleted.has(r.name)) return false;
+  if (state.tab === 'todo' && done.has(r.name)) return false;
+  if (state.tab === 'done' && !done.has(r.name)) return false;
+  if (!selectedCities.has(r.city)) return false;
+  if (skipType !== 'cat' && state.cats.size && !state.cats.has(r.cat)) return false;
+  if (skipType !== 'zone' && state.zones.size && !state.zones.has(r.zone)) return false;
+  if (state.prices.size) {
+    const isFree = r.priceN === 0;
+    if (state.prices.has('free') && !state.prices.has('paid') && !isFree) return false;
+    if (state.prices.has('paid') && !state.prices.has('free') && isFree) return false;
+  }
+  if (state.durations.size) {
+    let bucket = 'medium';
+    if (r.timeN <= 60) bucket = 'short';
+    else if (r.timeN > 120) bucket = 'long';
+    if (!state.durations.has(bucket)) return false;
+  }
+  if (state.dateFilter && r.availability) {
+    if (!isAvailableOn(r.availability, state.dateFilter)) return false;
+  }
+  if (state.query && !Object.values(r).some(v => String(v).toLowerCase().includes(state.query))) return false;
+  return true;
+}
+
+function rebuildAggregates() {
+  zoneCounts = {};
+  catTree = {};
+  data.forEach(d => {
+    if (matchesAggregateFilters(d, 'zone')) {
+      zoneCounts[d.zone] = (zoneCounts[d.zone]||0)+1;
+    }
+    if (matchesAggregateFilters(d, 'cat')) {
+      catTree[d.cat] = (catTree[d.cat]||0)+1;
+    }
+  });
+}
+rebuildAggregates();
+
+// Helper: simple Unicode icons (more reliable than SVG for re-renders)
+const ICON_CHECK = '✓';
+const ICON_MINUS = '−';
+const ICON_CHEVRON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="100%" height="100%"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+// === BOTTOM SHEETS ===
+// Helper: build HTML for a single zone item
+function zoneItemHtml(val, count) {
+  const isActive = state.zones.has(val);
+  return `<button class="sheet-item ${isActive ? 'active' : ''}" data-val="${esc(val)}">
+    <span class="check">${ICON_CHECK}</span>
+    <span class="label">${esc(val)}</span>
+    <span class="count">${count}</span>
+  </button>`;
+}
+
+// Helper: build HTML for a parent category button
+function catParentHtml(cat, info, catState) {
+  const parentActive = catState === 'full' ? 'active' : '';
+  const checkIcon = catState === 'partial' ? ICON_MINUS : ICON_CHECK;
+  return `<button class="sheet-item sheet-parent ${parentActive} state-${catState}" data-cat="${esc(cat)}">
+    <span class="check">${checkIcon}</span>
+    <span class="label"><strong>${esc(cat)}</strong></span>
+    <span class="count">${info.count}</span>
+  </button>`;
+}
+
+// Helper: build HTML for a parent category button
+function catParentHtml(cat, count, isActive) {
+  return `<button class="sheet-item ${isActive ? 'active' : ''}" data-cat="${esc(cat)}">
+    <span class="check">${ICON_CHECK}</span>
+    <span class="label"><strong>${esc(cat)}</strong></span>
+    <span class="count">${count}</span>
+  </button>`;
+}
+
+// Helper: replace an element via outerHTML using a temp template (forces repaint)
+function replaceWithHtml(oldEl, html) {
+  const tmp = document.createElement('template');
+  tmp.innerHTML = html.trim();
+  const newEl = tmp.content.firstElementChild;
+  oldEl.replaceWith(newEl);
+  return newEl;
+}
+
+// Zone sheet (flat list)
+function buildZoneSheet() {
+  zoneSheetBody.innerHTML = Object.entries(zoneCounts)
+    .sort((a,b) => a[0].localeCompare(b[0], 'fr'))
+    .map(([val, count]) => zoneItemHtml(val, count)).join('');
+}
+
+// Single delegated click handler for zone sheet
+zoneSheetBody.addEventListener('click', e => {
+  const item = e.target.closest('.sheet-item');
+  if (!item) return;
+  e.stopPropagation();
+  const val = item.dataset.val;
+  if (state.zones.has(val)) state.zones.delete(val);
+  else state.zones.add(val);
+  buildZoneSheet();
+  render();
+});
+
+// Category sheet (flat — plus de hiérarchie sous-catégories)
+function buildCatSheet() {
+  // Tri custom : on respecte un ordre logique plutôt que purement alphabétique
+  const preferredOrder = ["Visites et excursions", "Musée et expo", "Atelier et découverte", "Spectacle", "Shopping", "Spécialités"];
+  const cats = Object.keys(catTree).sort((a, b) => {
+    const ia = preferredOrder.indexOf(a);
+    const ib = preferredOrder.indexOf(b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b, 'fr');
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+  catSheetBody.innerHTML = cats.map(cat => {
+    const count = catTree[cat];
+    const isActive = state.cats.has(cat);
+    return catParentHtml(cat, count, isActive);
+  }).join('');
+}
+
+// Single delegated click handler for category sheet
+catSheetBody.addEventListener('click', e => {
+  const item = e.target.closest('.sheet-item');
+  if (!item) return;
+  e.stopPropagation();
+  const cat = item.dataset.cat;
+  if (state.cats.has(cat)) state.cats.delete(cat);
+  else state.cats.add(cat);
+  buildCatSheet();
+  render();
+});
+
+function openSheet(type) {
+  if (type === 'zone') {
+    buildZoneSheet();
+    zoneSheet.classList.add('open');
+  } else {
+    buildCatSheet();
+    catSheet.classList.add('open');
+  }
+}
+
+zoneBtn.addEventListener('click', () => openSheet('zone'));
+catBtn.addEventListener('click', () => openSheet('cat'));
+
+// Close sheet on overlay or close button
+[zoneSheet, catSheet].forEach(sheet => {
+  sheet.addEventListener('click', e => {
+    if (e.target === sheet) sheet.classList.remove('open');
+  });
+});
+document.querySelectorAll('.sheet-close').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById(btn.dataset.sheet).classList.remove('open');
+  });
+});
+$('zoneClear').addEventListener('click', () => {
+  state.zones.clear();
+  buildZoneSheet();
+  render();
+});
+$('catClear').addEventListener('click', () => {
+  state.cats.clear();
+  buildCatSheet();
+  render();
+});
+
+// Price + duration chips
+document.querySelectorAll('#filterPrice .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const v = chip.dataset.price;
+    if (state.prices.has(v)) state.prices.delete(v);
+    else state.prices.add(v);
+    chip.classList.toggle('active');
+    render();
+  });
+});
+document.querySelectorAll('#filterDuration .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const v = chip.dataset.duration;
+    if (state.durations.has(v)) state.durations.delete(v);
+    else state.durations.add(v);
+    chip.classList.toggle('active');
+    render();
+  });
+});
+
+// === DATE FILTER (pour spectacles & événements programmés) ===
+const filterDate = $('filterDate');
+const filterDateClear = $('filterDateClear');
+function updateDateClearState() {
+  filterDateClear.classList.toggle('disabled', !state.dateFilter);
+}
+filterDate.addEventListener('change', e => {
+  state.dateFilter = e.target.value || null;
+  updateDateClearState();
+  render();
+});
+filterDateClear.addEventListener('click', () => {
+  state.dateFilter = null;
+  filterDate.value = '';
+  updateDateClearState();
+  render();
+});
+updateDateClearState();
+
+// ════════════════════════════════════════════════════════════════════════
+// === DRAG-AND-DROP TACTILE (mobile) ===
+// Architecture :
+// • Appui sur poignée .btn-drag → timer 220ms → drag actif (vibration légère)
+// • Pendant le drag :
+//    - La carte suit le doigt via transform (translateY + scale), compensée
+//      pour le scroll → reste collée sous le doigt même quand la page scrolle
+//    - Une boucle requestAnimationFrame (autoScrollLoop) scrolle la page tant
+//      que le doigt est dans la zone-bord, INDÉPENDAMMENT des touchmove
+//      (donc même quand le doigt est immobile en haut/bas)
+//    - Vitesse de scroll en rampe quadratique : doux près de la limite,
+//      très rapide collé au bord (~2400 px/s max)
+//    - Détection de cible et indicateur visuel mis à jour à chaque frame
+// • Au relâchement → commit dans state.customOrder, sort='manual', re-render
+// ════════════════════════════════════════════════════════════════════════
+let pressTimer = null;
+let pressStartY = 0;
+let pressStartX = 0;
+let pressedCard = null;
+let dragState = null;
+let autoScrollSpeed = 0;  // px par frame ; négatif = vers le haut
+let autoScrollRaf = null;
+
+function clearDropIndicators() {
+  document.querySelectorAll('.drop-target-before, .drop-target-after').forEach(el => {
+    el.classList.remove('drop-target-before', 'drop-target-after');
+  });
+}
+
+function startDrag(card, touch) {
+  if (navigator.vibrate) { try { navigator.vibrate(15); } catch(e){} }
+  // Précalcul des positions DOCUMENT-relative de toutes les autres cartes.
+  // Évite getBoundingClientRect() à chaque frame (le doc reste statique pendant le drag).
+  // Position viewport-relative se déduit : docTop - window.scrollY.
+  const scrollY = window.scrollY;
+  const otherCards = [];
+  const all = listEl.querySelectorAll('.act');
+  for (let i = 0; i < all.length; i++) {
+    const c = all[i];
+    if (c === card) continue;
+    const r = c.getBoundingClientRect();
+    otherCards.push({ el: c, docTop: r.top + scrollY, height: r.height });
+  }
+  dragState = {
+    card,
+    name: card.dataset.name,
+    startY: touch.clientY,
+    startScrollY: scrollY,
+    lastTouchY: touch.clientY,
+    otherCards,
+    targetCard: null,
+    targetPosition: null,
+  };
+  card.classList.add('dragging');
+  document.body.classList.add('drag-active');
+}
+
+// Applique la transformation visuelle : la carte suit le doigt en coords viewport.
+// dy = mouvement du doigt + delta de scroll → reste sous le doigt pendant l'auto-scroll.
+function applyDragTransform() {
+  if (!dragState) return;
+  const dy = (dragState.lastTouchY - dragState.startY) + (window.scrollY - dragState.startScrollY);
+  dragState.card.style.transform = `translate3d(0, ${dy}px, 0) scale(1.025)`;
+}
+
+function updateDropTarget() {
+  if (!dragState) return;
+  const y = dragState.lastTouchY;
+  const scrollY = window.scrollY;
+  let target = null;
+  let position = null;
+  const cards = dragState.otherCards;
+  for (let i = 0; i < cards.length; i++) {
+    const cr = cards[i];
+    const viewportTop = cr.docTop - scrollY;
+    if (y < viewportTop + cr.height / 2) {
+      target = cr.el;
+      position = 'before';
+      break;
+    }
+  }
+  if (!target && cards.length) {
+    target = cards[cards.length - 1].el;
+    position = 'after';
+  }
+  // Ne réécrire le DOM que si la cible change réellement (évite reflows inutiles)
+  if (target !== dragState.targetCard || position !== dragState.targetPosition) {
+    clearDropIndicators();
+    if (target) target.classList.add(position === 'before' ? 'drop-target-before' : 'drop-target-after');
+    dragState.targetCard = target;
+    dragState.targetPosition = position;
+  }
+}
+
+// Calcule la vitesse d'auto-scroll selon la position Y du doigt en viewport.
+// Rampe QUADRATIQUE : doux à 110px du bord, très rapide collé.
+function setAutoScrollSpeed(y) {
+  const margin = 110;
+  const vh = window.innerHeight;
+  const maxSpeed = 42; // px/frame → ~2520 px/s à 60fps
+  const minSpeed = 3;
+  if (y < margin) {
+    const prox = Math.max(0, Math.min(1, 1 - y / margin));
+    autoScrollSpeed = -Math.max(minSpeed, maxSpeed * prox * prox);
+  } else if (y > vh - margin) {
+    const prox = Math.max(0, Math.min(1, 1 - (vh - y) / margin));
+    autoScrollSpeed = Math.max(minSpeed, maxSpeed * prox * prox);
+  } else {
+    autoScrollSpeed = 0;
+  }
+  // Démarrer la boucle RAF si nécessaire
+  if (autoScrollSpeed !== 0 && !autoScrollRaf && dragState) {
+    autoScrollRaf = requestAnimationFrame(autoScrollLoop);
+  }
+}
+
+// Boucle RAF qui scrolle la page en continu pendant que le doigt est en zone-bord.
+// Indépendante des touchmove : fonctionne MÊME quand le doigt est immobile.
+function autoScrollLoop() {
+  autoScrollRaf = null;
+  if (autoScrollSpeed === 0 || !dragState) return;
+  // Clamp pour ne pas scroller au-delà des limites du document
+  const before = window.scrollY;
+  window.scrollBy(0, autoScrollSpeed);
+  const after = window.scrollY;
+  // Repositionner la carte (la translation doit compenser le scroll) + redétecter la cible
+  applyDragTransform();
+  updateDropTarget();
+  // Si on n'a pas pu scroller (atteint le haut ou le bas), on stoppe
+  if (after === before) { autoScrollSpeed = 0; return; }
+  autoScrollRaf = requestAnimationFrame(autoScrollLoop);
+}
+
+function updateDrag(touch) {
+  if (!dragState) return;
+  dragState.lastTouchY = touch.clientY;
+  applyDragTransform();
+  updateDropTarget();
+  setAutoScrollSpeed(touch.clientY);
+}
+
+function endDrag() {
+  if (!dragState) return;
+  autoScrollSpeed = 0;
+  if (autoScrollRaf) { cancelAnimationFrame(autoScrollRaf); autoScrollRaf = null; }
+
+  const movedName = dragState.name;
+  const target = dragState.targetCard;
+  const position = dragState.targetPosition;
+  const cardEl = dragState.card;
+
+  cardEl.classList.remove('dragging');
+  cardEl.style.transform = '';
+  document.body.classList.remove('drag-active');
+  clearDropIndicators();
+
+  if (target) {
+    const targetName = target.dataset.name;
+    commitDragReorder(movedName, targetName, position);
+    if (state.sort !== 'manual') {
+      state.sort = 'manual';
+      saveSort();
+      document.querySelectorAll('.more-item[data-sort]').forEach(i => {
+        i.classList.toggle('active', i.dataset.sort === 'manual');
+      });
+    }
+    render();
+  }
+  dragState = null;
+}
+
+function commitDragReorder(movedName, targetName, position) {
+  // 1. S'assurer que tous les noms visibles sont dans customOrder (stabilité)
+  const visibleNames = [...listEl.querySelectorAll('.act')].map(c => c.dataset.name);
+  visibleNames.forEach(n => {
+    if (!state.customOrder.includes(n)) state.customOrder.push(n);
+  });
+  // 2. Retirer movedName puis réinsérer avant/après targetName
+  state.customOrder = state.customOrder.filter(n => n !== movedName);
+  const tIdx = state.customOrder.indexOf(targetName);
+  if (tIdx === -1) {
+    state.customOrder.push(movedName);
+  } else {
+    const insertAt = position === 'before' ? tIdx : tIdx + 1;
+    state.customOrder.splice(insertAt, 0, movedName);
+  }
+  saveOrder();
+}
+
+// Écouteurs globaux (touchmove/touchend doivent voir le doigt même hors poignée)
+document.addEventListener('touchmove', e => {
+  if (e.touches.length !== 1) return;
+  const t = e.touches[0];
+  if (pressTimer && !dragState) {
+    // Avant activation : si on bouge trop, c'était un scroll, on annule
+    if (Math.abs(t.clientY - pressStartY) > 8 || Math.abs(t.clientX - pressStartX) > 8) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+      pressedCard = null;
+    }
+  } else if (dragState) {
+    e.preventDefault();
+    updateDrag(t);
+  }
+}, { passive: false });
+
+document.addEventListener('touchend', () => {
+  if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; pressedCard = null; }
+  if (dragState) endDrag();
+}, { passive: true });
+document.addEventListener('touchcancel', () => {
+  if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; pressedCard = null; }
+  if (dragState) endDrag();
+}, { passive: true });
+
+// Délégation sur le conteneur pour capter aussi les poignées des futurs renders
+listEl.addEventListener('touchstart', e => {
+  if (e.touches.length !== 1 || dragState) return;
+  const handle = e.target.closest('.btn-drag');
+  if (!handle) return;
+  const card = handle.closest('.act');
+  if (!card) return;
+  const t = e.touches[0];
+  pressStartY = t.clientY;
+  pressStartX = t.clientX;
+  pressedCard = card;
+  pressTimer = setTimeout(() => {
+    pressTimer = null;
+    if (pressedCard) startDrag(pressedCard, t);
+  }, 220);
+}, { passive: true });
+
+// Souris (desktop) — fallback de test
+listEl.addEventListener('mousedown', e => {
+  const handle = e.target.closest('.btn-drag');
+  if (!handle || dragState) return;
+  const card = handle.closest('.act');
+  if (!card) return;
+  e.preventDefault();
+  startDrag(card, { clientY: e.clientY });
+  const onMove = ev => updateDrag({ clientY: ev.clientY });
+  const onUp = () => {
+    endDrag();
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  };
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+});
+// ════════════════════════════════════════════════════════════════════════
+
+// === SEARCH (collapsible) ===
+searchBtn.addEventListener('click', () => {
+  const isCollapsed = searchWrap.classList.contains('collapsed');
+  searchWrap.classList.toggle('collapsed');
+  searchBtn.classList.toggle('has-active', isCollapsed);
+  if (isCollapsed) setTimeout(() => search.focus(), 150);
+});
+search.addEventListener('input', e => {
+  state.query = e.target.value.toLowerCase();
+  searchClear.classList.toggle('visible', !!e.target.value);
+  render();
+});
+searchClear.addEventListener('click', () => {
+  search.value='';state.query='';searchClear.classList.remove('visible');render();
+});
+
+// === MORE PANEL (tri + grouper + tarif + durée + export) ===
+moreBtn.addEventListener('click', () => {
+  morePanel.classList.toggle('open');
+  syncChipsToState();
+});
+
+document.querySelectorAll('.more-item[data-sort]').forEach(item => {
+  // Reflet de l'état initial chargé depuis localStorage
+  if (item.dataset.sort === state.sort) {
+    document.querySelectorAll('.more-item[data-sort]').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+  }
+  item.addEventListener('click', () => {
+    state.sort = item.dataset.sort;
+    saveSort();
+    document.querySelectorAll('.more-item[data-sort]').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    render();
+  });
+});
+
+document.querySelectorAll('.more-item[data-group]').forEach(item => {
+  item.addEventListener('click', () => {
+    state.group = item.dataset.group;
+    document.querySelectorAll('.more-item[data-group]').forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    render();
+  });
+});
+
+// === TABS ===
+document.querySelectorAll('.tab-mini').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab-mini').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    state.tab = tab.dataset.tab;
+    render();
+  });
+});
+
+// === ACTIONS ===
+undoBtn.addEventListener('click', () => {
+  if (lastDeleted) {
+    deleted.delete(lastDeleted);
+    lastDeleted = null;
+    persist();render();
+    toast.classList.remove('show');
+  }
+});
+
+function deleteItem(name) {
+  const row = listEl.querySelector(`[data-name="${CSS.escape(name)}"]`);
+  if (row) row.classList.add('deleting');
+  lastDeleted = name;
+  setTimeout(() => {
+    deleted.add(name);
+    persist();render();
+    showToast(`"${name}" supprimé`, true);
+  }, 250);
+}
+function toggleDone(name) {
+  if (done.has(name)) done.delete(name);
+  else done.add(name);
+  persist();render();
+}
+
+$('emptyReset').addEventListener('click', resetAll);
+function resetAll() {
+  state.query='';state.cats.clear();state.zones.clear();
+  state.prices.clear();state.durations.clear();
+  state.dateFilter=null;
+  search.value='';searchClear.classList.remove('visible');
+  if (typeof filterDate !== 'undefined' && filterDate) { filterDate.value=''; updateDateClearState(); }
+  syncChipsToState();
+  render();
+}
+
+// === FILTER/SORT LOGIC ===
+// === DATE AVAILABILITY ===
+// Vérifie si une entrée avec champ `availability` est disponible à une date donnée.
+// Retourne true si l'entrée n'a pas d'availability (toujours dispo).
+// dateStr : "YYYY-MM-DD"
+function isAvailableOn(avail, dateStr) {
+  if (!avail) return true;
+  // Parse en local-time pour éviter les décalages de fuseau
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const date = new Date(y, m - 1, d);
+  if (avail.recurring === 'daily') return true;
+  if (avail.recurring === 'weekly') {
+    return Array.isArray(avail.weekdays) && avail.weekdays.includes(date.getDay());
+  }
+  if (avail.recurring === 'annual') {
+    const mm = String(m).padStart(2, '0');
+    const dd = String(d).padStart(2, '0');
+    const md = `${mm}-${dd}`;
+    return Array.isArray(avail.dates) && avail.dates.includes(md);
+  }
+  if (avail.recurring === 'once') {
+    return Array.isArray(avail.dates) && avail.dates.includes(dateStr);
+  }
+  return true;
+}
+
+function matchesFilters(r) {
+  // Filtre ville : l'item doit appartenir à une ville sélectionnée
+  if (!selectedCities.has(r.city)) return false;
+  // state.cats contient désormais des noms de catégories directement
+  if (state.cats.size && !state.cats.has(r.cat)) return false;
+  if (state.zones.size && !state.zones.has(r.zone)) return false;
+  if (state.prices.size) {
+    const isFree = r.priceN === 0;
+    if (state.prices.has('free') && !state.prices.has('paid') && !isFree) return false;
+    if (state.prices.has('paid') && !state.prices.has('free') && isFree) return false;
+  }
+  if (state.durations.size) {
+    let bucket = 'medium';
+    if (r.timeN <= 60) bucket = 'short';
+    else if (r.timeN > 120) bucket = 'long';
+    if (!state.durations.has(bucket)) return false;
+  }
+  // Filtre date : ne s'applique qu'aux entrées AYANT un champ availability
+  // (les autres — musées, boutiques — restent visibles quelle que soit la date)
+  if (state.dateFilter && r.availability) {
+    if (!isAvailableOn(r.availability, state.dateFilter)) return false;
+  }
+  if (state.query && !Object.values(r).some(v => String(v).toLowerCase().includes(state.query))) return false;
+  return true;
+}
+
+function sortRows(rows) {
+  const s = state.sort;
+  const sorted = [...rows];
+  if (s === 'name') sorted.sort((a,b) => a.name.localeCompare(b.name, 'fr'));
+  else if (s === 'price-low') sorted.sort((a,b) => a.priceN - b.priceN);
+  else if (s === 'price-high') sorted.sort((a,b) => b.priceN - a.priceN);
+  else if (s === 'time-low') sorted.sort((a,b) => a.timeN - b.timeN);
+  else if (s === 'time-high') sorted.sort((a,b) => b.timeN - a.timeN);
+  else if (s === 'manual') {
+    // Trier par index dans state.customOrder. Items absents → en fin (ordre data).
+    const idx = new Map();
+    state.customOrder.forEach((n, i) => idx.set(n, i));
+    sorted.sort((a, b) => {
+      const ia = idx.has(a.name) ? idx.get(a.name) : Infinity;
+      const ib = idx.has(b.name) ? idx.get(b.name) : Infinity;
+      if (ia !== ib) return ia - ib;
+      // Pour les items absents : on conserve l'ordre du data array
+      return data.indexOf(a) - data.indexOf(b);
+    });
+  }
+  return sorted;
+}
+
+// === ACTIVE FILTER PILLS ===
+function syncChipsToState() {
+  // Price/Duration chips in More panel
+  document.querySelectorAll('#filterPrice .chip').forEach(c => {
+    c.classList.toggle('active', state.prices.has(c.dataset.price));
+  });
+  document.querySelectorAll('#filterDuration .chip').forEach(c => {
+    c.classList.toggle('active', state.durations.has(c.dataset.duration));
+  });
+  // Update sheet items if sheets are currently open.
+  // We rebuild the sheets entirely so hierarchical (cat/subcat) states stay
+  // consistent — toggling a single class on each .sheet-item via dataset.val
+  // doesn't work for sub-items which use data-cat/data-sub keys.
+  if (zoneSheet.classList.contains('open')) {
+    buildZoneSheet();
+  }
+  if (catSheet.classList.contains('open')) {
+    buildCatSheet();
+  }
+  // Update Zone/Cat button badges
+  if (state.zones.size > 0) {
+    zoneBadge.style.display = 'inline-block';
+    zoneBadge.textContent = state.zones.size;
+    zoneBtn.classList.add('has-active');
+  } else {
+    zoneBadge.style.display = 'none';
+    zoneBtn.classList.remove('has-active');
+  }
+  if (state.cats.size > 0) {
+    catBadge.style.display = 'inline-block';
+    catBadge.textContent = state.cats.size;
+    catBtn.classList.add('has-active');
+  } else {
+    catBadge.style.display = 'none';
+    catBtn.classList.remove('has-active');
+  }
+  // Update More button highlight when advanced filters are applied
+  const hasAdvanced = state.prices.size + state.durations.size > 0
+    || state.sort !== 'default' || state.group !== 'none';
+  moreBtn.classList.toggle('active', hasAdvanced || morePanel.classList.contains('open'));
+}
+
+function renderActiveFilters() {
+  activeFilters.innerHTML = '';
+  const labels = {
+    free:'Gratuit', paid:'Payant',
+    short:'≤ 1h', medium:'1-2h', long:'2h+'
+  };
+  const pills = [];
+  // Cats sont désormais plates : on affiche directement le nom
+  state.cats.forEach(v => {
+    pills.push({type:'cat', val:v, label: v});
+  });
+  state.zones.forEach(v => pills.push({type:'zone', val:v, label:v}));
+  state.prices.forEach(v => pills.push({type:'price', val:v, label:labels[v]}));
+  state.durations.forEach(v => pills.push({type:'duration', val:v, label:labels[v]}));
+  // Filtre date : un seul chip s'il est actif
+  if (state.dateFilter) {
+    // Format en JJ/MM/AAAA pour affichage
+    const [y, m, d] = state.dateFilter.split('-');
+    pills.push({type:'date', val:state.dateFilter, label:`📅 ${d}/${m}/${y}`});
+  }
+  
+  pills.forEach(p => {
+    const pill = document.createElement('span');
+    pill.className = 'filter-pill';
+    pill.innerHTML = `${esc(p.label)}<button aria-label="Retirer">×</button>`;
+    pill.querySelector('button').addEventListener('click', () => {
+      if (p.type === 'date') {
+        state.dateFilter = null;
+        filterDate.value = '';
+        updateDateClearState();
+      } else {
+        const setMap = {cat:state.cats, zone:state.zones, price:state.prices, duration:state.durations};
+        setMap[p.type].delete(p.val);
+        syncChipsToState();
+      }
+      render();
+    });
+    activeFilters.appendChild(pill);
+  });
+  
+  if (pills.length > 0) {
+    const clearAll = document.createElement('button');
+    clearAll.className = 'clear-all-pill';
+    clearAll.textContent = 'Tout effacer';
+    clearAll.addEventListener('click', resetAll);
+    activeFilters.appendChild(clearAll);
+    activeFilters.classList.add('has-items');
+  } else {
+    activeFilters.classList.remove('has-items');
+  }
+  
+  syncChipsToState();
+}
+
+// === RENDER ROW ===
+// Helper: build an optimized Google Maps URL from the addr field.
+// Strategy: extract the Japanese name (everything before " (" or " — ")
+// and append the JP postal code (XXX-XXXX) if present. This pinpoints
+// reliably because JP postal codes are very narrow.
+function buildMapsUrl(addr) {
+  const parenIdx = addr.indexOf(' (');
+  const sepIdx = addr.indexOf(' — ');
+  let nameEnd;
+  if (parenIdx > -1 && sepIdx > -1) nameEnd = Math.min(parenIdx, sepIdx);
+  else if (parenIdx > -1) nameEnd = parenIdx;
+  else if (sepIdx > -1) nameEnd = sepIdx;
+  else nameEnd = addr.length;
+  const namePart = addr.substring(0, nameEnd).trim();
+  const pcMatch = addr.match(/\d{3}-\d{4}/);
+  const query = pcMatch ? `${namePart} ${pcMatch[0]}` : namePart;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+function renderRow(r) {
+  const isDone = done.has(r.name);
+  // Build address block: split addr at first " — " into name + address parts
+  let addrHtml = '';
+  if (r.addr) {
+    const mapsUrl = buildMapsUrl(r.addr);
+    const sepIdx = r.addr.indexOf(' — ');
+    let addrInner;
+    if (sepIdx > -1) {
+      const placeName = r.addr.substring(0, sepIdx);
+      const addrText = r.addr.substring(sepIdx + 3);
+      addrInner = `<span class="addr-name">${esc(placeName)}</span><span class="addr-sep">·</span>${esc(addrText)}`;
+    } else {
+      addrInner = esc(r.addr);
+    }
+    addrHtml = `
+          <div class="act-addr">
+            <div class="act-addr-text">${addrInner}</div>
+            <a class="act-maps-btn" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir dans Google Maps" title="Ouvrir dans Google Maps">
+              <i data-lucide="map-pin"></i>
+            </a>
+          </div>`;
+  }
+  // Build "when" block for scheduled events (spectacles, scheduled tours)
+  let whenHtml = '';
+  if (r.when) {
+    whenHtml = `
+          <div class="act-when">
+            <i data-lucide="calendar-clock"></i>
+            <span>${esc(r.when)}</span>
+          </div>`;
+  }
+  return `
+    <div class="act ${isDone?'done':''}" data-name="${esc(r.name)}">
+      <div class="act-head">
+        <div class="act-info-wrap">
+          <div class="act-cat">
+            <span class="act-cat-sub">${esc(r.cat)}</span>
+          </div>
+          <div class="act-name">${esc(r.name)}</div>
+          <div class="act-desc">${esc(r.desc)}</div>${whenHtml}${addrHtml}
+          <div class="act-meta">
+            <span class="m-zone"><i data-lucide="map-pin"></i>${esc(r.zone)}</span>
+            <span class="m-price"><i data-lucide="coins"></i>${esc(r.price)}</span>
+            <span class="m-time"><i data-lucide="clock"></i>${esc(r.time)}</span>
+          </div>
+        </div>
+        <div class="act-actions">
+          <button class="act-btn btn-drag" aria-label="Glisser pour réordonner" title="Maintenir et glisser">
+            <i data-lucide="grip-vertical"></i>
+          </button>
+          <button class="act-btn btn-done" aria-label="${isDone?'Annuler':'Marquer fait'}" title="${isDone?'Annuler':'Marquer fait'}">
+            <i data-lucide="check"></i>
+          </button>
+          <button class="act-btn btn-del" aria-label="Supprimer" title="Supprimer">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// === MAIN RENDER ===
+function render() {
+  // Rebuild aggregates so sheet counts reflect currently available items
+  // (deleted items are excluded; restored items reappear).
+  rebuildAggregates();
+  // Available items (not deleted)
+  const available = data.filter(r => !deleted.has(r.name));
+  
+  // Counts per tab
+  const todoItems = available.filter(r => !done.has(r.name) && matchesFilters(r));
+  const doneItems = available.filter(r => done.has(r.name) && matchesFilters(r));
+  tabCountTodo.textContent = todoItems.length;
+  tabCountDone.textContent = doneItems.length;
+  
+  // Current rows
+  let rows = state.tab === 'todo' ? todoItems : doneItems;
+  rows = sortRows(rows);
+  
+  // Group?
+  let html = '';
+  if (state.group === 'none' || rows.length === 0) {
+    html = rows.map(renderRow).join('');
+  } else {
+    const groups = {};
+    const key = state.group === 'zone' ? 'zone' : 'cat';
+    rows.forEach(r => {
+      if (!groups[r[key]]) groups[r[key]] = [];
+      groups[r[key]].push(r);
+    });
+    const orderedKeys = Object.keys(groups).sort((a,b) => groups[b].length - groups[a].length);
+    html = orderedKeys.map(g => `
+      <div class="group-header">
+        <span class="group-name">${esc(g)}</span>
+        <span class="group-count">${groups[g].length}</span>
+      </div>
+      ${groups[g].map(renderRow).join('')}
+    `).join('');
+  }
+  
+  listEl.innerHTML = html;
+  
+  // Bind row actions
+  listEl.querySelectorAll('.act').forEach(act => {
+    const name = act.dataset.name;
+    act.querySelector('.btn-done').addEventListener('click', e => {
+      e.stopPropagation();
+      toggleDone(name);
+    });
+    act.querySelector('.btn-del').addEventListener('click', e => {
+      e.stopPropagation();
+      deleteItem(name);
+    });
+  });
+  
+  // Empty state
+  if (rows.length === 0) {
+    listEl.style.display = 'none';
+    empty.style.display = 'block';
+    const total = state.cats.size + state.zones.size + state.prices.size + state.durations.size;
+    if (state.tab === 'done' && doneItems.length === 0 && total === 0 && !state.query) {
+      $('emptyTitle').textContent = 'Rien de fait encore';
+      $('emptyMsg').textContent = 'Marque une activité avec ✓ pour la retrouver ici.';
+      $('emptyReset').style.display = 'none';
+    } else {
+      $('emptyTitle').textContent = 'Aucun résultat';
+      $('emptyMsg').textContent = 'Modifie tes filtres pour voir plus de résultats.';
+      $('emptyReset').style.display = 'inline-block';
+    }
+  } else {
+    listEl.style.display = 'block';
+    empty.style.display = 'none';
+  }
+  
+  // Counter + filters
+  resultCount.textContent = `${rows.length} affichée${rows.length>1?'s':''}`;
+  renderActiveFilters();
+  persist();
+  
+  if (window.lucide) lucide.createIcons();
+}
+
+// === EXPORT / IMPORT (file-based) ===
+const dataModal = $('dataModal');
+const modalStats = $('modalStats');
+const modalStatus = $('modalStatus');
+const fileInput = $('fileInput');
+
+function openDataModal() {
+  modalStats.textContent = `${deleted.size} supprimée${deleted.size>1?'s':''} · ${done.size} faite${done.size>1?'s':''}`;
+  modalStatus.textContent = '';
+  modalStatus.className = 'modal-status';
+  dataModal.classList.add('open');
+  if (window.lucide) lucide.createIcons();
+}
+
+function closeDataModal() {
+  dataModal.classList.remove('open');
+}
+
+$('exportBtn').addEventListener('click', openDataModal);
+$('modalClose').addEventListener('click', closeDataModal);
+dataModal.addEventListener('click', e => {
+  if (e.target === dataModal) closeDataModal();
+});
+
+// Download backup file
+$('downloadBtn').addEventListener('click', () => {
+  const payload = {
+    deleted: [...deleted],
+    done: [...done],
+    cities: [...selectedCities],
+    order: state.customOrder,
+    sort: state.sort,
+    exportedAt: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  a.download = `hiroshima-backup-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  modalStatus.textContent = `✓ Fichier téléchargé : ${a.download}`;
+  modalStatus.className = 'modal-status success';
+});
+
+// Import backup file via file picker
+$('importBtn').addEventListener('click', () => {
+  fileInput.value = '';
+  fileInput.click();
+});
+
+fileInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if (!parsed.deleted || !parsed.done || !Array.isArray(parsed.deleted) || !Array.isArray(parsed.done)) {
+        throw new Error('Format invalide');
+      }
+      deleted = new Set(parsed.deleted);
+      done = new Set(parsed.done);
+      // Champs optionnels (rétrocompatibilité avec anciennes sauvegardes)
+      if (Array.isArray(parsed.cities))  selectedCities = new Set(parsed.cities);
+      if (Array.isArray(parsed.order))   state.customOrder = parsed.order;
+      if (typeof parsed.sort === 'string') state.sort = parsed.sort;
+      persist();
+      saveOrder();
+      saveSort();
+      // Cacher la bannière de bienvenue si présente
+      const welcome = document.getElementById('welcomeBanner');
+      if (welcome) welcome.style.display = 'none';
+      render();
+      modalStats.textContent = `${deleted.size} supprimée${deleted.size>1?'s':''} · ${done.size} faite${done.size>1?'s':''}`;
+      const extras = [];
+      if (Array.isArray(parsed.cities)) extras.push(`${parsed.cities.length} ville${parsed.cities.length>1?'s':''}`);
+      if (Array.isArray(parsed.order) && parsed.order.length) extras.push(`ordre manuel`);
+      const extraTxt = extras.length ? ` (+${extras.join(', ')})` : '';
+      modalStatus.textContent = `✓ Sauvegarde restaurée depuis ${file.name}${extraTxt}`;
+      modalStatus.className = 'modal-status success';
+    } catch(err) {
+      modalStatus.textContent = `✗ Impossible de lire le fichier (${err.message})`;
+      modalStatus.className = 'modal-status error';
+    }
+  };
+  reader.onerror = () => {
+    modalStatus.textContent = '✗ Erreur de lecture du fichier';
+    modalStatus.className = 'modal-status error';
+  };
+  reader.readAsText(file);
+});
+
+// === DRAWER : sélecteur de villes ===
+const drawer = $('drawer');
+const drawerOverlay = $('drawerOverlay');
+const drawerBody = $('drawerBody');
+const drawerClose = $('drawerClose');
+const cityEdge = $('cityEdge');
+const cityEdgeBadge = $('cityEdgeBadge');
+const cityEdgeLabel = $('cityEdgeLabel');
+
+// Met à jour le badge de la lisière (nb villes actives) et son label
+function updateCityEdge() {
+  const n = selectedCities.size;
+  cityEdgeBadge.textContent = n;
+  if (n === 0) {
+    cityEdgeLabel.textContent = 'Choisir';
+  } else if (n === 1) {
+    // Affiche le nom de la ville
+    cityEdgeLabel.textContent = [...selectedCities][0];
+  } else {
+    cityEdgeLabel.textContent = `${n} villes`;
+  }
+}
+
+// Compte les items disponibles par ville (hors supprimés, tab actif)
+function countItemsByCity() {
+  const counts = {};
+  data.forEach(d => {
+    if (deleted.has(d.name)) return;
+    if (state.tab === 'todo' && done.has(d.name)) return;
+    if (state.tab === 'done' && !done.has(d.name)) return;
+    counts[d.city] = (counts[d.city]||0) + 1;
+  });
+  return counts;
+}
+
+// Construit le contenu du drawer (groupes région > villes)
+function buildDrawer() {
+  const counts = countItemsByCity();
+  // Grouper par région
+  const regions = {};
+  cities.forEach(c => {
+    if (!regions[c.region]) regions[c.region] = [];
+    regions[c.region].push(c);
+  });
+  const collapsedRegions = window._collapsedRegions || new Set();
+  let html = '';
+  Object.keys(regions).forEach(regionName => {
+    const isCollapsed = collapsedRegions.has(regionName);
+    const citiesInRegion = regions[regionName];
+    html += `<div class="region-group${isCollapsed?' collapsed':''}" data-region="${esc(regionName)}">`;
+    html += `  <div class="region-header" data-region-toggle="${esc(regionName)}">`;
+    html += `    <span>${esc(regionName)}</span>`;
+    html += `    <i data-lucide="chevron-down" class="region-chevron"></i>`;
+    html += `  </div>`;
+    html += `  <div class="region-cities">`;
+    citiesInRegion.forEach(c => {
+      const count = counts[c.key] || 0;
+      const isActive = selectedCities.has(c.key);
+      html += `<div class="city-item${isActive?' active':''}" data-city="${esc(c.key)}">`;
+      html += `  <div class="city-checkbox"><i data-lucide="check" class="city-checkbox-mark"></i></div>`;
+      html += `  <div class="city-name">${esc(c.label)}</div>`;
+      html += `  <div class="city-count">${count}</div>`;
+      html += `</div>`;
+    });
+    html += `  </div>`;
+    html += `</div>`;
+  });
+  drawerBody.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
+}
+
+function openDrawer() {
+  buildDrawer();
+  drawer.classList.add('open');
+  drawerOverlay.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+}
+function closeDrawer() {
+  drawer.classList.remove('open');
+  drawerOverlay.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+}
+
+cityEdge.addEventListener('click', openDrawer);
+drawerClose.addEventListener('click', closeDrawer);
+drawerOverlay.addEventListener('click', closeDrawer);
+
+// Click handler dans le drawer (event delegation)
+drawerBody.addEventListener('click', (e) => {
+  // Click sur l'en-tête d'un groupe région : déplier/replier
+  const regionToggle = e.target.closest('[data-region-toggle]');
+  if (regionToggle) {
+    const regionName = regionToggle.dataset.regionToggle;
+    if (!window._collapsedRegions) window._collapsedRegions = new Set();
+    if (window._collapsedRegions.has(regionName)) {
+      window._collapsedRegions.delete(regionName);
+    } else {
+      window._collapsedRegions.add(regionName);
+    }
+    buildDrawer();
+    return;
+  }
+  // Click sur un item ville : toggle
+  const cityItem = e.target.closest('[data-city]');
+  if (cityItem) {
+    const cityKey = cityItem.dataset.city;
+    if (selectedCities.has(cityKey)) selectedCities.delete(cityKey);
+    else selectedCities.add(cityKey);
+    persist();
+    buildDrawer();
+    updateCityEdge();
+    render();
+  }
+});
+
+// Auto-ouverture du drawer si aucune ville sélectionnée (état d'invitation)
+updateCityEdge();
+if (selectedCities.size === 0) {
+  openDrawer();
+}
+
+render();
+if (window.lucide) lucide.createIcons();
+
+// === BANNIÈRE DE BIENVENUE / CONFIRMATION ÉTAT EMBARQUÉ ===
+// 3 cas au démarrage :
+// 1. Aucun localStorage + aucun état embarqué utilisé → bannière "Restaure ta sauvegarde"
+// 2. Aucun localStorage + état embarqué chargé → mini-toast "Sauvegarde intégrée chargée"
+// 3. localStorage présent → rien (état persistant déjà en place)
+(function() {
+  const hasLocalState = localStorage.getItem(STORAGE_DEL) !== null
+                     || localStorage.getItem(STORAGE_DONE) !== null;
+  
+  if (embeddedStateUsed) {
+    // Cas 2 : on a chargé depuis l'embarqué. Petit toast discret.
+    const toastEl = document.getElementById('embeddedLoadedToast');
+    if (toastEl) {
+      toastEl.style.display = 'flex';
+      if (window.lucide) lucide.createIcons();
+      // Le toast se cache automatiquement via animation CSS, mais on retire du DOM après
+      setTimeout(() => { toastEl.style.display = 'none'; }, 4000);
+    }
+  } else if (!hasLocalState) {
+    // Cas 1 : rien à charger. Bannière proposant l'import.
+    const banner = document.getElementById('welcomeBanner');
+    if (banner) {
+      banner.style.display = 'block';
+      if (window.lucide) lucide.createIcons();
+    }
+  }
+  
+  // Câblage des boutons de la bannière
+  const importBtn = document.getElementById('welcomeImportBtn');
+  const closeBtn  = document.getElementById('welcomeCloseBtn');
+  if (importBtn) importBtn.addEventListener('click', () => {
+    fileInput.value = '';
+    fileInput.click();
+  });
+  if (closeBtn) closeBtn.addEventListener('click', () => {
+    const banner = document.getElementById('welcomeBanner');
+    if (banner) banner.style.display = 'none';
+  });
+})();
+</script>
+</body>
+</html>
