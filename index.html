@@ -359,14 +359,225 @@ body{
 .mode-activities .btn-signout{
   background:transparent;border:1px solid var(--rule);
   color:var(--ink-soft);
-  padding:6px 10px;border-radius:7px;
-  cursor:pointer;font-family:'Outfit',sans-serif;
-  font-size:11px;font-weight:500;
-  flex-shrink:0;
+  width:32px;height:32px;padding:0;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
 }
 .mode-activities .btn-signout:hover,
 .mode-activities .btn-signout:active{
   border-color:var(--pink);color:var(--pink);
+}
+.mode-activities .btn-signout i{width:14px;height:14px}
+
+/* === ESPACE PARTAGÉ — bloc dans le drawer === */
+.mode-activities .space-section{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(168,85,247,.06);
+  border:1px solid var(--rule-soft);
+}
+.mode-activities .space-loading{
+  font-size:11px;color:var(--ink-faint);text-align:center;padding:6px;
+}
+.mode-activities .space-header{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:10px;font-size:11px;
+  color:var(--cyan);font-weight:600;
+  text-transform:uppercase;letter-spacing:.08em;
+}
+.mode-activities .space-header i{width:13px;height:13px;flex-shrink:0}
+.mode-activities .space-name{
+  color:var(--ink);font-weight:700;
+  font-size:13px;letter-spacing:0;text-transform:none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex:1;min-width:0;
+}
+.mode-activities .space-members{
+  display:flex;flex-direction:column;gap:8px;
+  margin-bottom:10px;
+}
+.mode-activities .space-member{
+  display:flex;align-items:center;gap:9px;
+}
+.mode-activities .space-member-avatar{
+  width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:11px;
+  font-family:'Zen Maru Gothic',sans-serif;
+  flex-shrink:0;overflow:hidden;
+}
+.mode-activities .space-member-avatar img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.mode-activities .space-member-avatar.pending{
+  background:rgba(255,230,0,.10);
+  border:1px dashed rgba(255,230,0,.6);
+  color:var(--gold);
+}
+.mode-activities .space-member-avatar.pending i{width:13px;height:13px}
+.mode-activities .space-member-info{flex:1;min-width:0}
+.mode-activities .space-member-name{
+  font-size:12px;color:var(--ink);font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-activities .space-member-tag{
+  font-size:9px;color:var(--ink-faint);
+  background:rgba(255,255,255,.05);
+  padding:1px 5px;border-radius:5px;
+  font-weight:500;margin-left:3px;
+  text-transform:uppercase;letter-spacing:.05em;
+}
+.mode-activities .space-member-tag.tag-owner{
+  color:var(--gold);background:rgba(255,230,0,.08);
+}
+.mode-activities .space-member-email{
+  font-size:10px;color:var(--ink-faint);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-activities .space-member.pending .space-member-email{color:var(--gold)}
+.mode-activities .btn-revoke{
+  background:transparent;border:1px solid var(--rule);
+  color:var(--ink-faint);
+  width:24px;height:24px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+}
+.mode-activities .btn-revoke:hover,
+.mode-activities .btn-revoke:active{
+  border-color:var(--pink);color:var(--pink);
+}
+.mode-activities .btn-revoke i{width:12px;height:12px}
+.mode-activities .space-actions{display:flex;gap:8px}
+.mode-activities .btn-invite,
+.mode-activities .btn-leave{
+  flex:1;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 12px;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;
+}
+.mode-activities .btn-invite{
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  border:none;color:#fff;
+}
+.mode-activities .btn-invite:hover,
+.mode-activities .btn-invite:active{
+  box-shadow:0 0 14px rgba(168,85,247,.4);
+}
+.mode-activities .btn-invite i{width:13px;height:13px}
+.mode-activities .btn-leave{
+  background:transparent;border:1px solid var(--rule);color:var(--ink-soft);
+}
+.mode-activities .btn-leave:hover,
+.mode-activities .btn-leave:active{
+  border-color:var(--pink);color:var(--pink);
+}
+.mode-activities .btn-leave i{width:13px;height:13px}
+
+/* === BANDEAU D'INVITATION REÇUE (fixed top) === */
+.invite-banner{
+  display:none;
+  position:fixed;top:0;left:0;right:0;
+  z-index:9999;
+  background:linear-gradient(135deg,rgba(255,46,136,.95),rgba(168,85,247,.95));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:10px 14px;
+  border-bottom:1px solid rgba(255,255,255,.15);
+  box-shadow:0 4px 18px rgba(168,85,247,.35);
+  font-family:'Outfit',sans-serif;color:#fff;
+}
+.invite-banner.show{display:block}
+body.has-invite-banner{padding-top:84px}
+.invite-banner-content{
+  display:flex;align-items:center;gap:12px;
+  max-width:720px;margin:0 auto;flex-wrap:wrap;
+}
+.invite-banner-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.invite-banner-icon i{width:18px;height:18px}
+.invite-banner-text{flex:1;min-width:0}
+.invite-banner-title{font-size:13px;font-weight:700}
+.invite-banner-sub{font-size:11.5px;opacity:.9;margin-top:2px}
+.invite-banner-actions{display:flex;gap:8px}
+.invite-banner .btn-accept,
+.invite-banner .btn-decline{
+  padding:7px 14px;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;border:none;
+}
+.invite-banner .btn-accept{background:#fff;color:#a855f7}
+.invite-banner .btn-decline{
+  background:rgba(255,255,255,.15);color:#fff;
+  border:1px solid rgba(255,255,255,.3);
+}
+.invite-banner-more{
+  font-size:10.5px;opacity:.85;
+  width:100%;text-align:center;margin-top:4px;
+}
+
+/* === MODAL D'INVITATION === */
+.invite-modal{
+  display:none;
+  position:fixed;inset:0;z-index:10000;
+  align-items:center;justify-content:center;
+}
+.invite-modal.show{display:flex}
+.invite-modal-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.65);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+.invite-modal-content{
+  position:relative;
+  background:var(--bg);
+  border:1px solid var(--rule);
+  border-radius:14px;padding:18px;
+  width:calc(100% - 32px);max-width:380px;
+  font-family:'Outfit',sans-serif;color:var(--ink);
+}
+.invite-modal-content h3{
+  margin:0 0 8px;font-size:16px;font-weight:700;
+  font-family:'Zen Maru Gothic',sans-serif;
+}
+.invite-modal-content p{
+  font-size:12.5px;color:var(--ink-faint);
+  margin:0 0 12px;line-height:1.45;
+}
+.invite-modal-content input{
+  width:100%;padding:10px 12px;border-radius:8px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--rule);color:var(--ink);
+  font-family:'Outfit',sans-serif;font-size:13px;
+  box-sizing:border-box;
+}
+.invite-modal-content input:focus{
+  outline:none;border-color:var(--cyan);
+  box-shadow:0 0 0 3px rgba(6,214,240,.15);
+}
+.invite-modal-error{
+  margin-top:8px;font-size:11.5px;color:var(--pink);min-height:16px;
+}
+.invite-modal-actions{
+  display:flex;gap:8px;margin-top:14px;justify-content:flex-end;
+}
+.invite-modal .invite-btn-secondary,
+.invite-modal .invite-btn-primary{
+  padding:9px 16px;border-radius:8px;
+  font-family:'Outfit',sans-serif;font-size:12.5px;font-weight:600;
+  cursor:pointer;
+}
+.invite-modal .invite-btn-secondary{
+  background:transparent;border:1px solid var(--rule);color:var(--ink-soft);
+}
+.invite-modal .invite-btn-primary{
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+  border:none;color:#fff;
 }
 .mode-activities .account-status{
   margin-top:10px;font-size:10.5px;
@@ -2910,6 +3121,9 @@ body{
 
 <!-- DRAWER : sélecteur de villes -->
 <div class="drawer-overlay" id="drawerOverlay"></div>
+<!-- Bandeau d'invitation Firebase (rempli dynamiquement) -->
+<div id="inviteBanner" class="invite-banner" aria-live="polite"></div>
+
 <aside class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-header">
     <div class="drawer-title">日本 · Japon</div>
@@ -10088,7 +10302,8 @@ if (window.lucide) lucide.createIcons();
 
 
 <!-- ============================================================ -->
-<!-- FIREBASE AUTH (étape 1 : auth Google uniquement, pas de sync) -->
+<!-- FIREBASE (étape 2 : auth + espaces partagés + invitations)    -->
+<!-- L'étape 3 ajoutera la sync des activités elles-mêmes.         -->
 <!-- ============================================================ -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
@@ -10097,6 +10312,11 @@ import {
   signInWithPopup, signInWithRedirect, getRedirectResult,
   signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, deleteField,
+  collection, query, where, onSnapshot, getDocs, writeBatch, serverTimestamp,
+  arrayUnion, arrayRemove
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBv5xJOV1oDGsXjjwUW1ihggshnUn1rcT4",
@@ -10109,21 +10329,188 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db   = getFirestore(app);
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
 
-// Exposé pour les étapes suivantes (Firestore)
-window.japonFirebase = { app, auth };
+// Exposé pour l'étape 3 (sync des activités)
+window.japonFirebase = { app, auth, db };
 
+/* === Refs DOM === */
 const accountEl = document.getElementById('drawerAccount');
+const bannerEl  = document.getElementById('inviteBanner');
 
+/* === État === */
+let currentUser = null;            // FirebaseUser
+let currentUserData = null;        // doc users/{uid}
+let currentSpaceId = null;
+let currentSpace = null;           // doc spaces/{id} + .id
+let pendingInvitations = [];       // invitations adressées à moi (status==pending)
+let sentPendingInvitations = [];   // invitations envoyées sur l'espace courant (status==pending)
+let lastError = '';
+let busy = false;
+
+const unsub = { user:null, space:null, inbox:null, outbox:null };
+function unsubAll(){
+  for (const k of Object.keys(unsub)){
+    if (unsub[k]){ try { unsub[k](); } catch(e){} unsub[k] = null; }
+  }
+}
+
+/* === Helpers === */
 function esc(s){
   return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
+function inviteIdFor(spaceId, email){
+  return spaceId + '__' + String(email).toLowerCase();
+}
+function isValidEmail(e){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+}
+function shortName(s){
+  if (!s) return '';
+  return s.split(/\s+/)[0];
+}
 
-let lastError = '';
+/* === User doc & espace par défaut === */
+async function ensureUserDoc(user){
+  const ref = doc(db, 'users', user.uid);
+  const snap = await getDoc(ref);
+  const base = {
+    email:       user.email || '',
+    displayName: user.displayName || user.email || 'Utilisateur',
+    photoURL:    user.photoURL || '',
+    updatedAt:   serverTimestamp()
+  };
+  if (!snap.exists()){
+    await setDoc(ref, { ...base, currentSpaceId: null, createdAt: serverTimestamp() });
+  } else {
+    await updateDoc(ref, base);
+  }
+}
 
+async function ensureSpaceForUser(user, existingSpaceId){
+  // 1) Si l'espace stocké existe encore et que je suis membre : OK
+  if (existingSpaceId){
+    try {
+      const s = await getDoc(doc(db, 'spaces', existingSpaceId));
+      if (s.exists()){
+        const d = s.data();
+        if (Array.isArray(d.memberIds) && d.memberIds.includes(user.uid)){
+          return existingSpaceId;
+        }
+      }
+    } catch(e){ /* ignore */ }
+  }
+  // 2) Sinon, chercher n'importe quel espace dont je suis membre
+  try {
+    const qs = await getDocs(query(collection(db, 'spaces'),
+      where('memberIds', 'array-contains', user.uid)));
+    if (!qs.empty){
+      // Prendre le plus récemment mis à jour
+      let best = null, bestT = 0;
+      qs.forEach(d => {
+        const t = d.data().updatedAt ? d.data().updatedAt.toMillis() : 0;
+        if (t >= bestT){ best = d; bestT = t; }
+      });
+      const sid = best.id;
+      await updateDoc(doc(db, 'users', user.uid),
+        { currentSpaceId: sid, updatedAt: serverTimestamp() });
+      return sid;
+    }
+  } catch(e){ console.warn('Search spaces failed', e); }
+  // 3) Auto-créer un espace
+  const name = user.displayName
+    ? ('Voyage de ' + shortName(user.displayName))
+    : 'Mon voyage';
+  const spaceRef = await addDoc(collection(db, 'spaces'), {
+    ownerUid:  user.uid,
+    name:      name,
+    memberIds: [user.uid],
+    members: {
+      [user.uid]: {
+        email:       user.email || '',
+        displayName: user.displayName || '',
+        photoURL:    user.photoURL || '',
+        joinedAt:    serverTimestamp()
+      }
+    },
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  });
+  await updateDoc(doc(db, 'users', user.uid),
+    { currentSpaceId: spaceRef.id, updatedAt: serverTimestamp() });
+  return spaceRef.id;
+}
+
+/* === Listeners temps réel === */
+function subscribeUserDoc(uid){
+  if (unsub.user) unsub.user();
+  unsub.user = onSnapshot(doc(db, 'users', uid), (snap) => {
+    if (!snap.exists()) return;
+    currentUserData = snap.data();
+    const newSid = currentUserData.currentSpaceId || null;
+    if (newSid !== currentSpaceId){
+      currentSpaceId = newSid;
+      subscribeSpace(currentSpaceId);
+      subscribeOutbox(currentSpaceId);
+    }
+    renderAccount();
+  }, err => { console.error('user doc listen', err); });
+}
+
+function subscribeSpace(spaceId){
+  if (unsub.space) unsub.space();
+  unsub.space = null;
+  currentSpace = null;
+  renderAccount();
+  if (!spaceId) return;
+  unsub.space = onSnapshot(doc(db, 'spaces', spaceId), (snap) => {
+    if (snap.exists()){
+      currentSpace = { id: snap.id, ...snap.data() };
+    } else {
+      currentSpace = null;
+    }
+    renderAccount();
+  }, err => { console.error('space listen', err); });
+}
+
+function subscribeInbox(email){
+  if (unsub.inbox) unsub.inbox();
+  unsub.inbox = null;
+  pendingInvitations = [];
+  renderBanner();
+  if (!email) return;
+  const q = query(collection(db, 'invitations'),
+    where('inviteeEmail', '==', email.toLowerCase()),
+    where('status', '==', 'pending'));
+  unsub.inbox = onSnapshot(q, (qs) => {
+    pendingInvitations = [];
+    qs.forEach(d => pendingInvitations.push({ id: d.id, ...d.data() }));
+    renderBanner();
+  }, err => { console.error('inbox listen', err); });
+}
+
+function subscribeOutbox(spaceId){
+  if (unsub.outbox) unsub.outbox();
+  unsub.outbox = null;
+  sentPendingInvitations = [];
+  renderAccount();
+  if (!spaceId || !currentUser) return;
+  const q = query(collection(db, 'invitations'),
+    where('inviterUid', '==', currentUser.uid),
+    where('spaceId',    '==', spaceId),
+    where('status',     '==', 'pending'));
+  unsub.outbox = onSnapshot(q, (qs) => {
+    sentPendingInvitations = [];
+    qs.forEach(d => sentPendingInvitations.push({ id: d.id, ...d.data() }));
+    renderAccount();
+  }, err => { console.error('outbox listen', err); });
+}
+
+/* === Render : déconnecté === */
 function renderSignedOut(){
+  hideBanner();
   accountEl.innerHTML = `
     <div class="drawer-account-signedout">
       <p>Connecte-toi avec Google pour synchroniser tes activités et inviter d'autres voyageurs.</p>
@@ -10138,50 +10525,313 @@ function renderSignedOut(){
   if (window.lucide) lucide.createIcons();
 }
 
-function renderSignedIn(user){
-  const name = user.displayName || user.email || 'Utilisateur';
-  const initial = (user.displayName || user.email || 'U').trim().charAt(0).toUpperCase();
-  const avatarHTML = user.photoURL
-    ? `<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">`
+/* === Render : connecté === */
+function renderAccount(){
+  if (!currentUser){ renderSignedOut(); return; }
+  const u = currentUser;
+  const name = u.displayName || u.email || 'Utilisateur';
+  const initial = (u.displayName || u.email || 'U').trim().charAt(0).toUpperCase();
+  const avatarHTML = u.photoURL
+    ? `<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer" data-initial="${esc(initial)}">`
     : esc(initial);
+
+  let spaceHTML = '<div class="space-loading">Chargement de l\'espace…</div>';
+  if (currentSpace){
+    const isOwner = currentSpace.ownerUid === u.uid;
+    const memberIds = currentSpace.memberIds || [];
+    const members   = currentSpace.members   || {};
+    const memberList = memberIds.map(mid => {
+      const m = members[mid] || {};
+      const mInit = (m.displayName || m.email || '?').trim().charAt(0).toUpperCase();
+      const mAv = m.photoURL
+        ? `<img src="${esc(m.photoURL)}" alt="" referrerpolicy="no-referrer" data-initial="${esc(mInit)}">`
+        : esc(mInit);
+      const mName = m.displayName || m.email || mid;
+      const isMe = mid === u.uid;
+      const isOwn = mid === currentSpace.ownerUid;
+      const tags = [];
+      if (isMe) tags.push('<span class="space-member-tag">vous</span>');
+      if (isOwn) tags.push('<span class="space-member-tag tag-owner">owner</span>');
+      return `
+        <div class="space-member${isMe?' me':''}">
+          <div class="space-member-avatar">${mAv}</div>
+          <div class="space-member-info">
+            <div class="space-member-name">${esc(mName)} ${tags.join(' ')}</div>
+            ${m.email ? `<div class="space-member-email">${esc(m.email)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const pendingHTML = sentPendingInvitations.map(inv => `
+      <div class="space-member pending">
+        <div class="space-member-avatar pending"><i data-lucide="mail"></i></div>
+        <div class="space-member-info">
+          <div class="space-member-name">${esc(inv.inviteeEmail)}</div>
+          <div class="space-member-email">Invitation envoyée</div>
+        </div>
+        ${isOwner ? `<button class="btn-revoke" data-revoke-id="${esc(inv.id)}" aria-label="Annuler l'invitation"><i data-lucide="x"></i></button>` : ''}
+      </div>
+    `).join('');
+
+    spaceHTML = `
+      <div class="space-section">
+        <div class="space-header">
+          <i data-lucide="users"></i>
+          <span class="space-name">${esc(currentSpace.name || 'Mon espace')}</span>
+        </div>
+        <div class="space-members">
+          ${memberList}
+          ${pendingHTML}
+        </div>
+        <div class="space-actions">
+          ${isOwner
+            ? `<button class="btn-invite" id="btnInvite"><i data-lucide="user-plus"></i> Inviter</button>`
+            : `<button class="btn-leave"  id="btnLeave"><i data-lucide="log-out"></i> Quitter l'espace</button>`}
+        </div>
+      </div>
+    `;
+  }
+
   accountEl.innerHTML = `
     <div class="drawer-account-signedin">
-      <div class="account-avatar">${avatarHTML}</div>
+      <div class="account-avatar" data-initial="${esc(initial)}">${avatarHTML}</div>
       <div class="account-info">
         <div class="account-name">${esc(name)}</div>
-        <div class="account-email">${esc(user.email || '')}</div>
+        <div class="account-email">${esc(u.email || '')}</div>
       </div>
-      <button type="button" class="btn-signout" id="btnSignOut">Déconnexion</button>
+      <button type="button" class="btn-signout" id="btnSignOut" aria-label="Déconnexion"><i data-lucide="log-out"></i></button>
     </div>
+    ${spaceHTML}
     <div class="account-status">
       <span class="account-status-dot"></span>
-      <span>Connecté · synchro Firestore à venir</span>
+      <span>Connecté · sync activités à venir</span>
     </div>
+    ${lastError ? `<div class="auth-error">${esc(lastError)}</div>` : ''}
   `;
-  document.getElementById('btnSignOut').addEventListener('click', doSignOut);
-  // Fallback initiale si l'avatar échoue à charger
-  const img = accountEl.querySelector('.account-avatar img');
-  if (img) img.addEventListener('error', () => {
-    img.parentNode.textContent = initial;
+
+  // Wiring
+  const $ = (id) => document.getElementById(id);
+  $('btnSignOut') && $('btnSignOut').addEventListener('click', doSignOut);
+  $('btnInvite')  && $('btnInvite').addEventListener('click', showInviteModal);
+  $('btnLeave')   && $('btnLeave').addEventListener('click', doLeave);
+
+  // Avatar fallback (image cassée → initiale)
+  accountEl.querySelectorAll('img[data-initial]').forEach(img => {
+    img.addEventListener('error', () => {
+      const parent = img.parentNode;
+      if (parent){ parent.textContent = img.dataset.initial || '?'; }
+    });
   });
+
+  // Revoke buttons
+  accountEl.querySelectorAll('[data-revoke-id]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      doRevoke(btn.dataset.revokeId);
+    });
+  });
+
+  if (window.lucide) lucide.createIcons();
 }
 
+/* === Bandeau d'invitations reçues === */
+function renderBanner(){
+  if (!pendingInvitations.length){ hideBanner(); return; }
+  const inv = pendingInvitations[0];
+  bannerEl.innerHTML = `
+    <div class="invite-banner-content">
+      <div class="invite-banner-icon"><i data-lucide="mail"></i></div>
+      <div class="invite-banner-text">
+        <div class="invite-banner-title">${esc(inv.inviterName || inv.inviterEmail || 'Quelqu\'un')} t'invite</div>
+        <div class="invite-banner-sub">Rejoindre l'espace <strong>${esc(inv.spaceName || 'partagé')}</strong></div>
+      </div>
+      <div class="invite-banner-actions">
+        <button class="btn-decline" id="btnInvDecline">Refuser</button>
+        <button class="btn-accept"  id="btnInvAccept">Accepter</button>
+      </div>
+      ${pendingInvitations.length > 1
+        ? `<div class="invite-banner-more">+${pendingInvitations.length-1} autre(s) invitation(s)</div>` : ''}
+    </div>
+  `;
+  bannerEl.classList.add('show');
+  document.body.classList.add('has-invite-banner');
+  document.getElementById('btnInvAccept').addEventListener('click', () => doAccept(inv));
+  document.getElementById('btnInvDecline').addEventListener('click', () => doDecline(inv));
+  if (window.lucide) lucide.createIcons();
+}
+function hideBanner(){
+  bannerEl.classList.remove('show');
+  document.body.classList.remove('has-invite-banner');
+  bannerEl.innerHTML = '';
+}
+
+/* === Modal d'invitation === */
+function showInviteModal(){
+  let modal = document.getElementById('inviteModal');
+  if (!modal){
+    modal = document.createElement('div');
+    modal.id = 'inviteModal';
+    modal.className = 'invite-modal';
+    document.body.appendChild(modal);
+  }
+  modal.innerHTML = `
+    <div class="invite-modal-overlay"></div>
+    <div class="invite-modal-content">
+      <h3>Inviter par email</h3>
+      <p>Adresse Gmail de la personne à inviter dans <strong>${esc(currentSpace ? (currentSpace.name||'') : '')}</strong>.</p>
+      <input type="email" id="inviteEmailInput" placeholder="exemple@gmail.com"
+        autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div id="inviteModalError" class="invite-modal-error"></div>
+      <div class="invite-modal-actions">
+        <button id="inviteModalCancel" class="invite-btn-secondary">Annuler</button>
+        <button id="inviteModalSubmit" class="invite-btn-primary">Inviter</button>
+      </div>
+    </div>
+  `;
+  modal.classList.add('show');
+  const input = document.getElementById('inviteEmailInput');
+  setTimeout(() => input && input.focus(), 50);
+  document.getElementById('inviteModalCancel').addEventListener('click', hideInviteModal);
+  modal.querySelector('.invite-modal-overlay').addEventListener('click', hideInviteModal);
+  document.getElementById('inviteModalSubmit').addEventListener('click', doSendInvite);
+  input.addEventListener('keypress', (e) => { if (e.key === 'Enter') doSendInvite(); });
+}
+function hideInviteModal(){
+  const m = document.getElementById('inviteModal');
+  if (m) m.classList.remove('show');
+}
+function setInviteError(msg){
+  const el = document.getElementById('inviteModalError');
+  if (el) el.textContent = msg || '';
+}
+
+/* === Actions === */
+async function doSendInvite(){
+  if (!currentUser || !currentSpace) return;
+  const input = document.getElementById('inviteEmailInput');
+  const email = (input.value || '').trim().toLowerCase();
+  setInviteError('');
+  if (!isValidEmail(email)){ setInviteError("Adresse email invalide."); return; }
+  if (email === (currentUser.email || '').toLowerCase()){
+    setInviteError("Vous ne pouvez pas vous inviter vous-même."); return;
+  }
+  const members = currentSpace.members || {};
+  const alreadyMember = Object.values(members).some(m => (m.email || '').toLowerCase() === email);
+  if (alreadyMember){ setInviteError("Cette personne est déjà membre de l'espace."); return; }
+
+  try {
+    await setDoc(doc(db, 'invitations', inviteIdFor(currentSpace.id, email)), {
+      spaceId:      currentSpace.id,
+      spaceName:    currentSpace.name || '',
+      inviterUid:   currentUser.uid,
+      inviterEmail: currentUser.email || '',
+      inviterName:  currentUser.displayName || currentUser.email || '',
+      inviteeEmail: email,
+      status:       'pending',
+      createdAt:    serverTimestamp()
+    });
+    hideInviteModal();
+  } catch (err){
+    console.error('send invite failed', err);
+    setInviteError(err.message || String(err));
+  }
+}
+
+async function doRevoke(invitationId){
+  try {
+    await updateDoc(doc(db, 'invitations', invitationId), {
+      status: 'revoked', respondedAt: serverTimestamp()
+    });
+  } catch (err){ console.error('revoke failed', err); }
+}
+
+async function doAccept(inv){
+  if (!currentUser || busy) return;
+  busy = true;
+  try {
+    const batch = writeBatch(db);
+    const spaceRef  = doc(db, 'spaces', inv.spaceId);
+    const inviteRef = doc(db, 'invitations', inv.id);
+    const userRef   = doc(db, 'users', currentUser.uid);
+
+    batch.update(inviteRef, { status: 'accepted', respondedAt: serverTimestamp() });
+    batch.update(spaceRef, {
+      memberIds: arrayUnion(currentUser.uid),
+      ['members.' + currentUser.uid]: {
+        email:       currentUser.email || '',
+        displayName: currentUser.displayName || '',
+        photoURL:    currentUser.photoURL || '',
+        joinedAt:    serverTimestamp()
+      },
+      updatedAt: serverTimestamp()
+    });
+    batch.update(userRef, {
+      currentSpaceId: inv.spaceId,
+      updatedAt: serverTimestamp()
+    });
+    await batch.commit();
+  } catch (err){
+    console.error('accept failed', err);
+    alert("Impossible d'accepter l'invitation : " + (err.message || err));
+  } finally {
+    busy = false;
+  }
+}
+
+async function doDecline(inv){
+  try {
+    await updateDoc(doc(db, 'invitations', inv.id), {
+      status: 'declined', respondedAt: serverTimestamp()
+    });
+  } catch (err){ console.error('decline failed', err); }
+}
+
+async function doLeave(){
+  if (!currentUser || !currentSpace || busy) return;
+  if (currentSpace.ownerUid === currentUser.uid){
+    alert("Vous êtes propriétaire de cet espace, vous ne pouvez pas le quitter.");
+    return;
+  }
+  if (!confirm('Quitter l\'espace "' + (currentSpace.name||'') + '" ?')) return;
+  busy = true;
+  try {
+    const batch = writeBatch(db);
+    const spaceRef = doc(db, 'spaces', currentSpace.id);
+    const userRef  = doc(db, 'users', currentUser.uid);
+    batch.update(spaceRef, {
+      memberIds: arrayRemove(currentUser.uid),
+      ['members.' + currentUser.uid]: deleteField(),
+      updatedAt: serverTimestamp()
+    });
+    batch.update(userRef, { currentSpaceId: null, updatedAt: serverTimestamp() });
+    await batch.commit();
+    // ensureSpaceForUser repassera et recréera un espace perso
+    await ensureSpaceForUser(currentUser, null);
+  } catch (err){
+    console.error('leave failed', err);
+    alert("Impossible de quitter : " + (err.message || err));
+  } finally {
+    busy = false;
+  }
+}
+
+/* === Flux auth === */
 async function doSignIn(){
   lastError = '';
   const btn = document.getElementById('btnSignIn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Connexion...'; }
+  if (btn){ btn.disabled = true; btn.textContent = 'Connexion…'; }
   try {
     await signInWithPopup(auth, provider);
-  } catch (err) {
+  } catch (err){
     console.error('signInWithPopup failed', err);
     const code = err && err.code;
-    // Sur mobile, le popup peut être bloqué — on bascule sur redirect
-    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment'
-        || code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request'){
-      try {
-        await signInWithRedirect(auth, provider);
-        return; // navigation imminente
-      } catch (err2) {
+    if (code === 'auth/popup-blocked'
+        || code === 'auth/operation-not-supported-in-this-environment'
+        || code === 'auth/popup-closed-by-user'
+        || code === 'auth/cancelled-popup-request'){
+      try { await signInWithRedirect(auth, provider); return; }
+      catch (err2){
         console.error('signInWithRedirect failed', err2);
         lastError = err2.message || String(err2);
       }
@@ -10194,13 +10844,14 @@ async function doSignIn(){
 
 async function doSignOut(){
   try {
+    unsubAll();
+    currentUserData = null; currentSpace = null; currentSpaceId = null;
+    pendingInvitations = []; sentPendingInvitations = [];
+    hideBanner();
     await signOut(auth);
-  } catch (err) {
-    console.error('signOut failed', err);
-  }
+  } catch (err){ console.error('signOut failed', err); }
 }
 
-// Si on revient d'un signInWithRedirect, finaliser
 getRedirectResult(auth).catch(err => {
   console.warn('getRedirectResult', err);
   if (err && err.code !== 'auth/no-auth-event'){
@@ -10208,13 +10859,30 @@ getRedirectResult(auth).catch(err => {
   }
 });
 
-// Listener état auth — la vérité unique pour rendre l'UI
-onAuthStateChanged(auth, user => {
-  if (user) renderSignedIn(user);
-  else renderSignedOut();
+onAuthStateChanged(auth, async (user) => {
+  unsubAll();
+  if (!user){
+    currentUser = null;
+    renderSignedOut();
+    return;
+  }
+  currentUser = user;
+  renderAccount();
+  try {
+    await ensureUserDoc(user);
+    subscribeUserDoc(user.uid);
+    subscribeInbox(user.email || '');
+    const userSnap = await getDoc(doc(db, 'users', user.uid));
+    const ud = userSnap.exists() ? userSnap.data() : {};
+    await ensureSpaceForUser(user, ud.currentSpaceId);
+    // subscribeUserDoc se chargera d'abonner l'espace dès qu'il voit le nouveau currentSpaceId
+  } catch (err){
+    console.error('post-signin setup failed', err);
+    lastError = err.message || String(err);
+    renderAccount();
+  }
 });
 
-// Render initial avant que onAuthStateChanged ne se déclenche
 renderSignedOut();
 </script>
 
