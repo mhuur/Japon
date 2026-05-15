@@ -303,6 +303,87 @@ body{
 .mode-activities .city-item.active .city-count{
   background:rgba(168,85,247,.25);color:var(--ink);
 }
+/* === FIREBASE AUTH — Section compte dans le drawer === */
+.mode-activities .drawer-account{
+  padding:14px 14px 12px;
+  border-bottom:1px solid var(--rule-soft);
+  font-family:'Outfit',sans-serif;
+}
+.mode-activities .drawer-account:empty{display:none}
+.mode-activities .drawer-account-signedout{
+  display:flex;flex-direction:column;gap:10px;
+}
+.mode-activities .drawer-account-signedout p{
+  font-size:11.5px;color:var(--ink-faint);line-height:1.45;
+}
+.mode-activities .btn-google-signin{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:9px 14px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(6,214,240,.12));
+  border:1px solid var(--rule);color:var(--ink);
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .15s;width:100%;
+}
+.mode-activities .btn-google-signin:hover,
+.mode-activities .btn-google-signin:active{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(6,214,240,.25);
+}
+.mode-activities .btn-google-signin svg,
+.mode-activities .btn-google-signin i{width:15px;height:15px}
+.mode-activities .btn-google-signin:disabled{opacity:.5;cursor:wait}
+.mode-activities .drawer-account-signedin{
+  display:flex;align-items:center;gap:10px;
+}
+.mode-activities .account-avatar{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:14px;
+  font-family:'Zen Maru Gothic',sans-serif;
+  flex-shrink:0;overflow:hidden;
+  box-shadow:0 0 10px rgba(255,46,136,.35);
+}
+.mode-activities .account-avatar img{
+  width:100%;height:100%;object-fit:cover;display:block;
+}
+.mode-activities .account-info{flex:1;min-width:0}
+.mode-activities .account-name{
+  font-size:13px;font-weight:600;color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-activities .account-email{
+  font-size:10.5px;color:var(--ink-faint);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-activities .btn-signout{
+  background:transparent;border:1px solid var(--rule);
+  color:var(--ink-soft);
+  padding:6px 10px;border-radius:7px;
+  cursor:pointer;font-family:'Outfit',sans-serif;
+  font-size:11px;font-weight:500;
+  flex-shrink:0;
+}
+.mode-activities .btn-signout:hover,
+.mode-activities .btn-signout:active{
+  border-color:var(--pink);color:var(--pink);
+}
+.mode-activities .account-status{
+  margin-top:10px;font-size:10.5px;
+  color:var(--ink-faint);
+  display:flex;align-items:center;gap:6px;
+}
+.mode-activities .account-status-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);
+  box-shadow:0 0 6px rgba(255,230,0,.5);
+}
+.mode-activities .auth-error{
+  margin-top:8px;font-size:10.5px;
+  color:var(--pink);line-height:1.35;
+  word-break:break-word;
+}
+
 .mode-activities .drawer-footer{
   padding:14px 18px;
   border-top:1px solid var(--rule-soft);
@@ -2836,6 +2917,8 @@ body{
       <i data-lucide="x"></i>
     </button>
   </div>
+  <!-- Section compte (Firebase auth) — gérée par le script type=module en fin de page -->
+  <div class="drawer-account" id="drawerAccount"></div>
   <div class="drawer-body" id="drawerBody">
     <!-- Rempli dynamiquement par buildDrawer() -->
   </div>
@@ -3064,10 +3147,11 @@ const __root = document.querySelector('.mode-activities');
 // L'ordre détermine l'ordre d'affichage dans le drawer.
 const cities = [
   // Région Hiroshima
-  {key:"Hiroshima", label:"Hiroshima", region:"Hiroshima"},
-  {key:"Miyajima",  label:"Miyajima",  region:"Hiroshima", parent:"Hiroshima"},
+  {key:"Hiroshima",            label:"Hiroshima",            region:"Hiroshima"},
+  {key:"Miyajima",             label:"Miyajima",             region:"Hiroshima", parent:"Hiroshima"},
+  {key:"Périphérie Hiroshima", label:"Périphérie Hiroshima", region:"Hiroshima", parent:"Hiroshima"},
   // Région Yamaguchi
-  {key:"Iwakuni",   label:"Iwakuni",   region:"Yamaguchi"},
+  {key:"Iwakuni",              label:"Iwakuni",              region:"Yamaguchi"},
   // Futures villes/régions à ajouter ici (Kyoto, Tokyo, etc.)
 ];
 
@@ -3179,14 +3263,15 @@ const cities = [
                                      // jamais filtrée par la date.
    
    VALEURS POSSIBLES POUR `zone` :
-   • Zones intra-ville Hiroshima : "Peace Park", "Naka-ku centre",
-     "Hondori", "Gare Hiroshima", "Hijiyama", "Yokogawa", "Ekinishi",
-     "Nagarekawa", "Nishi-ku", "Futaba (Higashi-ku)"
-   • Zones périphérie/hors-ville : "Périphérie ouest", "Fuchu (Aki-gun)",
-     "Saijo (hors-ville)", "Kumano (hors-ville)", "Kure (hors-ville)"
-   • Zones Miyajima : "Miyajima centre", "Omotesando", "Momijidani",
-     "Mont Misen"
-   • Zones Iwakuni : "Kintaikyo" (pont, château, Kikko Park),
+   • Zones intra-ville Hiroshima (city:"Hiroshima") :
+     "Peace Park", "Naka-ku centre", "Gare & est", "Nishi-ku (ouest)"
+   • Zones Périphérie Hiroshima (city:"Périphérie Hiroshima") — chaque
+     zone = une localité distincte autour de Hiroshima :
+     "Onomichi", "Kure", "Saijo", "Kumano", "Fuchu"
+   • Zones Miyajima (city:"Miyajima") :
+     "Miyajima centre", "Omotesando", "Momijidani", "Mont Misen"
+   • Zones Iwakuni (city:"Iwakuni") :
+     "Kintaikyo" (pont, château, Kikko Park),
      "Centre Iwakuni" (autour gare JR Iwakuni)
    • "Variable" si l'item est itinérant ou multi-lieux
    
@@ -3215,20 +3300,20 @@ const data = [
   // === VISITES ET EXCURSIONS ===
   {city:"Hiroshima", cat:"Visites et excursions", name:"Dôme Genbaku (A-Bomb Dome)", zone:"Peace Park", desc:"Bâtiment survivant emblématique, ancienne Préfecture de Promotion Industrielle (1915, architecte Jan Letzel). Resté debout à 160m de l'hypocentre alors que la bombe a explosé à 600m au-dessus. Squelette de béton et acier préservé en l'état comme symbole universel de paix et de l'horreur nucléaire. UNESCO 1996", addr:"原爆ドーム (Atomic Bomb Dome) — 1-10 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:0, price:"Gratuit", timeN:30, time:"20-30 min", info:"Ne se visite pas à l'intérieur. Vue extérieure jour ET nuit (illuminé). Tram 2 ou 6, arrêt Genbaku Dome-mae"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Honkawa Peace Museum", zone:"Peace Park", desc:"École primaire survivante à 350m du dôme, témoignages d'élèves scenographiés", addr:"本川小学校平和資料館 (Honkawa Elementary School Peace Museum) — 1-5-39 Honkawa-cho, Naka-ku, Hiroshima 730-0802", priceN:0, price:"Gratuit", timeN:40, time:"30-45 min", info:"Peu visité, ambiance forte"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Fukuromachi Peace Museum", zone:"Hondori", desc:"École-mémorial avec messages des survivants au charbon sur les murs", addr:"袋町小学校平和資料館 (Fukuromachi Elementary School Peace Museum) — 6-36 Fukuromachi, Naka-ku, Hiroshima 730-0036", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"Quartier commerçant"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Fukuromachi Peace Museum", zone:"Naka-ku centre", desc:"École-mémorial avec messages des survivants au charbon sur les murs", addr:"袋町小学校平和資料館 (Fukuromachi Elementary School Peace Museum) — 6-36 Fukuromachi, Naka-ku, Hiroshima 730-0036", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"Quartier commerçant"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Hypocentre (plaque Shima)", zone:"Naka-ku centre", desc:"Le vrai point zéro à 160m du dôme, plaque sobre devant l'ancien hôpital Shima détruit avec ses 81 occupants", addr:"爆心地 / 島病院 (Hypocenter / Shima Hospital) — 1-5-25 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:0, price:"Gratuit", timeN:15, time:"10-15 min", info:"5 min du dôme. L'hôpital actuel est tenu par la même famille 80 ans après"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Pont Aioi (cible visée)", zone:"Peace Park", desc:"Pont en T qui était la cible visée par Enola Gay, reconstruit à l'identique en 1983 — forme unique reconnaissable du ciel", addr:"相生橋 (Aioi Bridge) — Otemachi/Motomachi, Naka-ku, Hiroshima", priceN:0, price:"Gratuit", timeN:10, time:"5-10 min", info:"Juste à côté du dôme, à pied"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Jizo à l'ombre nucléaire", zone:"Peace Park", desc:"Statue Jizo (gardienne des enfants) de l'ancien temple Sairen-ji. La bombe a explosé directement au-dessus : la partie exposée est rugueuse, celle protégée est restée lisse — créant une 'ombre nucléaire' visible sur la pierre", addr:"原爆被爆地蔵尊 (A-bombed Jizo Statue) — derrière le Dôme Genbaku, 1-10 Otemachi, Naka-ku, Hiroshima", priceN:0, price:"Gratuit", timeN:10, time:"5-10 min", info:"Derrière le Dôme, côté opposé du passage piéton, près de la porte d'un bâtiment blanc. Facile à manquer"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Parc Hijiyama", zone:"Hijiyama", desc:"Parc en colline boisée, sculptures outdoor, points de vue sur la ville. Le Skywalk (tapis roulant motorisé depuis Aeon Mall) évite la grimpette. Combinable avec MOCA et Manga Library qui sont dans le parc", addr:"比治山公園 (Hijiyama Park) — Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:90, time:"1h30", info:"Skywalk depuis Aeon Mall"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Parc Hijiyama", zone:"Gare & est", desc:"Parc en colline boisée, sculptures outdoor, points de vue sur la ville. Le Skywalk (tapis roulant motorisé depuis Aeon Mall) évite la grimpette. Combinable avec MOCA et Manga Library qui sont dans le parc", addr:"比治山公園 (Hijiyama Park) — Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:90, time:"1h30", info:"Skywalk depuis Aeon Mall"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Jardin Shukkei-en", zone:"Naka-ku centre", desc:"Jardin japonais 17e, étang à carpes, maison de thé. Chercher Chōzen-kyō : petite île secrète accessible en marchant dans le sens horaire, vues parfaites au coucher du soleil", addr:"縮景園 (Shukkei-en Garden) — 2-11 Kaminobori-cho, Naka-ku, Hiroshima 730-0014", priceN:350, price:"350 ¥", timeN:60, time:"1h", info:"Matcha ~500 ¥ supplémentaires"},
   {city:"Hiroshima", cat:"Visites et excursions", name:"Sento Ondo", zone:"Variable", desc:"Bain public de quartier, 4 bassins, sauna, tatouages OK", addr:"公衆浴場 (sentō de quartier — choisir un sentō traditionnel à Hiroshima centre, p. ex. Asahi-yu) — Naka-ku, Hiroshima", priceN:500, price:"~500 ¥", timeN:60, time:"1h", info:"Ouvre 13h, ambiance shōwa"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Yokogawa", zone:"Yokogawa", desc:"Quartier rétro local, live houses, friperies", addr:"横川駅周辺 (Yokogawa Station area) — Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:0, price:"Gratuit", timeN:90, time:"1-2h", info:"Tram depuis la gare, sans touristes"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Ekinishi", zone:"Ekinishi", desc:"Bar district rétro Shōwa à 3 min de la gare, tabearuki entre micro-izakaya (Maru sake debout, Baltan thaï, Tori no Kura yakitori, Garapago tequila+abats)", addr:"駅西エリア (Ekinishi bar district) — sortie ouest de la gare de Hiroshima, Wakakusa-cho, Higashi-ku, Hiroshima", priceN:2000, price:"Variable", timeN:180, time:"2-4h", info:"18h-23h, plein de petits izakaya"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Nagarekawa", zone:"Nagarekawa", desc:"Plus grand quartier nocturne, neon, clubs, izakaya. Inclut Okonomimura (bâtiment 4 étages, 25 stands okonomiyaki teppan)", addr:"流川 (Nagarekawa entertainment district) — Nagarekawa-cho, Naka-ku, Hiroshima 730-0028", priceN:3000, price:"Variable", timeN:240, time:"Soirée", info:"Tram Ebisucho, pic 21h"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Mont Futaba + Pagode", zone:"Futaba (Higashi-ku)", desc:"433 marches en forêt, torii rouges, ruines bunkers WW2, pagode, meilleure vue panoramique sur la ville", addr:"二葉の里歴史の散歩道 / 仏舎利塔 (Futaba-no-sato Historical Trail / Pagoda) — Futabanosato 2-chome, Higashi-ku, Hiroshima 732-0057", priceN:0, price:"Gratuit", timeN:90, time:"1h30 A/R", info:"Depuis la gare à pied"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Mitaki-dera", zone:"Périphérie ouest", desc:"Temple bouddhiste caché en forêt, 3 cascades, pagode rouge relogée de Wakayama en 1951 en mémorial des victimes A-bomb, statues moussues. Randonnée possible jusqu'au sommet. Spectaculaire en automne", addr:"三瀧寺 (Mitaki-dera Temple) — 411 Mitakiyama, Nishi-ku, Hiroshima 733-0805", priceN:200, price:"200 ¥", timeN:105, time:"1h30-2h", info:"30 min en bus, note 4.6/5"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"Onomichi + Cat Alley", zone:"Variable", desc:"Ville en collines face à la mer, départ du Shimanami Kaido (cycle route). Cat Alley (Neko no Hosomichi) : 200m de ruelles avec 'fukuishi neko' — chats peints à la main sur des pierres par Shunji Sonoyama. Cafés, galeries, sake bars", addr:"猫の細道 (Neko no Hosomichi / Cat Alley) — Higashitsuchidocho, Onomichi 722-0033", priceN:1500, price:"~1500 ¥ train", timeN:480, time:"Journée", info:"Train JR Sanyo via Onomichi (1h). Idéal en vélo (location en gare). Combinable avec Shimanami Kaido"},
-  {city:"Hiroshima", cat:"Visites et excursions", name:"sokoiko! Izakaya cycling", zone:"Yokogawa", desc:"Vélo électrique + bar-hopping nocturne, 3 izakayas hors guidebook", addr:"sokoiko! Yokogawa base — 1-7-3 Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:6000, price:"~6000 ¥", timeN:180, time:"2h30-3h30", info:"Départ Yokogawa, guide anglais"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Yokogawa", zone:"Nishi-ku (ouest)", desc:"Quartier rétro local, live houses, friperies", addr:"横川駅周辺 (Yokogawa Station area) — Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:0, price:"Gratuit", timeN:90, time:"1-2h", info:"Tram depuis la gare, sans touristes"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Ekinishi", zone:"Gare & est", desc:"Bar district rétro Shōwa à 3 min de la gare, tabearuki entre micro-izakaya (Maru sake debout, Baltan thaï, Tori no Kura yakitori, Garapago tequila+abats)", addr:"駅西エリア (Ekinishi bar district) — sortie ouest de la gare de Hiroshima, Wakakusa-cho, Higashi-ku, Hiroshima", priceN:2000, price:"Variable", timeN:180, time:"2-4h", info:"18h-23h, plein de petits izakaya"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Nagarekawa", zone:"Naka-ku centre", desc:"Plus grand quartier nocturne, neon, clubs, izakaya. Inclut Okonomimura (bâtiment 4 étages, 25 stands okonomiyaki teppan)", addr:"流川 (Nagarekawa entertainment district) — Nagarekawa-cho, Naka-ku, Hiroshima 730-0028", priceN:3000, price:"Variable", timeN:240, time:"Soirée", info:"Tram Ebisucho, pic 21h"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Mont Futaba + Pagode", zone:"Gare & est", desc:"433 marches en forêt, torii rouges, ruines bunkers WW2, pagode, meilleure vue panoramique sur la ville", addr:"二葉の里歴史の散歩道 / 仏舎利塔 (Futaba-no-sato Historical Trail / Pagoda) — Futabanosato 2-chome, Higashi-ku, Hiroshima 732-0057", priceN:0, price:"Gratuit", timeN:90, time:"1h30 A/R", info:"Depuis la gare à pied"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"Mitaki-dera", zone:"Nishi-ku (ouest)", desc:"Temple bouddhiste caché en forêt, 3 cascades, pagode rouge relogée de Wakayama en 1951 en mémorial des victimes A-bomb, statues moussues. Randonnée possible jusqu'au sommet. Spectaculaire en automne", addr:"三瀧寺 (Mitaki-dera Temple) — 411 Mitakiyama, Nishi-ku, Hiroshima 733-0805", priceN:200, price:"200 ¥", timeN:105, time:"1h30-2h", info:"30 min en bus, note 4.6/5"},
+  {city:"Périphérie Hiroshima", cat:"Visites et excursions", name:"Onomichi + Cat Alley", zone:"Onomichi", desc:"Ville en collines face à la mer, départ du Shimanami Kaido (cycle route). Cat Alley (Neko no Hosomichi) : 200m de ruelles avec 'fukuishi neko' — chats peints à la main sur des pierres par Shunji Sonoyama. Cafés, galeries, sake bars", addr:"猫の細道 (Neko no Hosomichi / Cat Alley) — Higashitsuchidocho, Onomichi 722-0033", priceN:1500, price:"~1500 ¥ train", timeN:480, time:"Journée", info:"Train JR Sanyo via Onomichi (1h). Idéal en vélo (location en gare). Combinable avec Shimanami Kaido"},
+  {city:"Hiroshima", cat:"Visites et excursions", name:"sokoiko! Izakaya cycling", zone:"Nishi-ku (ouest)", desc:"Vélo électrique + bar-hopping nocturne, 3 izakayas hors guidebook", addr:"sokoiko! Yokogawa base — 1-7-3 Yokogawa-cho, Nishi-ku, Hiroshima 733-0011", priceN:6000, price:"~6000 ¥", timeN:180, time:"2h30-3h30", info:"Départ Yokogawa, guide anglais"},
   {city:"Miyajima", cat:"Visites et excursions", name:"Sanctuaire Itsukushima (torii flottant)", zone:"Miyajima centre", desc:"Sanctuaire shintoïste UNESCO bâti sur pilotis au-dessus de la mer, fondé en 593, remodelé par Taira-no-Kiyomori en 1168. Grand torii de 16,6m vermillon en bois de camphrier (version actuelle de 1875) 'flottant' à marée haute, accessible à pied à marée basse. 6 Trésors Nationaux dont la seule scène Noh sur l'eau du Japon", addr:"厳島神社 (Itsukushima Jinja) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:300, price:"300 ¥", timeN:60, time:"1h", info:"Vérifier les marées avant. Parcours à sens unique. Couloirs sur pilotis sans clous, espaces entre planches pour laisser passer l'eau"},
   {city:"Miyajima", cat:"Visites et excursions", name:"Daisho-in", zone:"Miyajima centre", desc:"Temple bouddhiste Shingon de 1200 ans aux pieds du Mont Misen. Escalier bordé de roues à prières métalliques à faire tourner, 500 statues Rakan toutes différentes, sand mandala créé par des moines tibétains visiteurs, cloche centenaire. Foliage spectaculaire en automne, point de départ du sentier Daisho-in vers le Mont Misen", addr:"大聖院 (Daisho-in Temple) — 210 Miyajimacho, Hatsukaichi, Hiroshima 739-0592", priceN:0, price:"Gratuit", timeN:60, time:"1h", info:"5 min à pied du sanctuaire Itsukushima"},
   {city:"Miyajima", cat:"Visites et excursions", name:"Senjokaku + Pagode 5 étages", zone:"Miyajima centre", desc:"Grand hall en bois sans murs commissionné par Toyotomi Hideyoshi en 1587, laissé inachevé après sa mort — 'Hall des 1000 tatamis' avec poutres apparentes massives. Pagode rouge 5 étages adjacente (1407), 27,6m, mêlant styles japonais et chinois, Trésor National", addr:"豊国神社 千畳閣 + 五重塔 (Toyokuni Shrine Senjokaku + Five-Storied Pagoda) — 1-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:100, price:"100 ¥", timeN:30, time:"30 min", info:"Sur la colline à côté du sanctuaire Itsukushima"},
@@ -3247,21 +3332,21 @@ const data = [
   
   // === MUSÉE ET EXPO ===
   {city:"Hiroshima", cat:"Musée et expo", name:"Musée Mémorial Paix", zone:"Peace Park", desc:"Musée rénové 2019, immersif via objets et témoignages", addr:"広島平和記念資料館 (Hiroshima Peace Memorial Museum) — 1-2 Nakajima-cho, Naka-ku, Hiroshima 730-0811", priceN:200, price:"200 ¥", timeN:120, time:"2h min", info:"Ouvert 7h30-19h, réserver online"},
-  {city:"Hiroshima", cat:"Musée et expo", name:"MOCA Hijiyama (Art contemporain)", zone:"Hijiyama", desc:"Hiroshima City Museum of Contemporary Art : 1er musée public d'art contemporain du Japon. Architecture remarquable, collection axée sur l'art post-1945 et le thème de la paix, expos temporaires renouvelées 4×/an", addr:"広島市現代美術館 (Hiroshima City Museum of Contemporary Art) — 1-1 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:370, price:"370 ¥", timeN:90, time:"1h30", info:"Au sommet de Hijiyama, accès via Skywalk. Combinable avec le parc et la Manga Library"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"MOCA Hijiyama (Art contemporain)", zone:"Gare & est", desc:"Hiroshima City Museum of Contemporary Art : 1er musée public d'art contemporain du Japon. Architecture remarquable, collection axée sur l'art post-1945 et le thème de la paix, expos temporaires renouvelées 4×/an", addr:"広島市現代美術館 (Hiroshima City Museum of Contemporary Art) — 1-1 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:370, price:"370 ¥", timeN:90, time:"1h30", info:"Au sommet de Hijiyama, accès via Skywalk. Combinable avec le parc et la Manga Library"},
   {city:"Hiroshima", cat:"Musée et expo", name:"Ancienne Banque du Japon", zone:"Naka-ku centre", desc:"Bâtiment survivant, expos d'artistes dans les anciens coffres", addr:"旧日本銀行広島支店 (Former Bank of Japan Hiroshima Branch) — 5-21 Fukuromachi, Naka-ku, Hiroshima 730-0036", priceN:0, price:"Gratuit", timeN:40, time:"30-45 min", info:"Centre, proche Hondori"},
   {city:"Hiroshima", cat:"Musée et expo", name:"Expo Toulouse-Lautrec & Mucha", zone:"Naka-ku centre", desc:"Belle Époque parisienne, Montmartre + Art Nouveau", addr:"広島県立美術館 (Hiroshima Prefectural Art Museum) — 2-22 Kaminobori-cho, Naka-ku, Hiroshima 730-0014", priceN:1500, price:"~1500 ¥", timeN:90, time:"1h30", info:"Préf. Art Museum, jusqu'au 31/5"},
   {city:"Hiroshima", cat:"Musée et expo", name:"Expo Albert Marquet", zone:"Naka-ku centre", desc:"Rétrospective Fauves, 90 huiles, ami de Matisse", addr:"ひろしま美術館 (Hiroshima Museum of Art) — 3-2 Motomachi, Naka-ku, Hiroshima 730-0011", priceN:1500, price:"~1500 ¥", timeN:75, time:"1h-1h30", info:"Museum of Art, jusqu'au 31/5"},
-  {city:"Hiroshima", cat:"Musée et expo", name:"Mazda Museum", zone:"Fuchu (Aki-gun)", desc:"Tour gratuit 90-120 min : musée (collection 787B vainqueur Le Mans 1991, moteur rotatif, voitures historiques) + traversée en bus de l'usine avec vue sur la chaîne d'assemblage. Hiroshima est la ville natale de Mazda depuis 1920", addr:"マツダミュージアム (Mazda Museum) — 3-1 Shinchi, Fuchu-cho, Aki-gun, Hiroshima 730-8670", priceN:0, price:"Gratuit", timeN:120, time:"2h", info:"Tour EN 14h15 en semaine, réserver online à l'avance. Train JR vers Mukainada (8 min)"},
-  {city:"Hiroshima", cat:"Musée et expo", name:"Kure Iron Whale + Yamato", zone:"Kure (hors-ville)", desc:"Sous-marin Akishio JMSDF (76m) visitable de l'intérieur, le 'Iron Whale' — postes de contrôle, quartiers d'équipage. Musée du cuirassé Yamato à côté. 45 min en train de Hiroshima", addr:"てつのくじら館 + 大和ミュージアム (JMSDF Kure Museum & Yamato Museum) — 5-32 Takaramachi, Kure, Hiroshima 737-0029", priceN:500, price:"~500 ¥/musée", timeN:240, time:"Demi-journée", info:"45 min en train de Hiroshima"},
-  {city:"Hiroshima", cat:"Musée et expo", name:"Hiroshima City Manga Library", zone:"Hijiyama", desc:"Bibliothèque publique dédiée au manga : 150 000 volumes, classiques, magazines (Jump, Animage), section internationale incluant français. Lecture sur place gratuite, salle de lecture calme au 2e étage", addr:"広島市まんが図書館 (Hiroshima City Manga Library) — 1-4 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:60, time:"1h+", info:"Fermé lundi. À côté du MOCA dans le parc Hijiyama (combinable)"},
+  {city:"Périphérie Hiroshima", cat:"Musée et expo", name:"Mazda Museum", zone:"Fuchu", desc:"Tour gratuit 90-120 min : musée (collection 787B vainqueur Le Mans 1991, moteur rotatif, voitures historiques) + traversée en bus de l'usine avec vue sur la chaîne d'assemblage. Hiroshima est la ville natale de Mazda depuis 1920", addr:"マツダミュージアム (Mazda Museum) — 3-1 Shinchi, Fuchu-cho, Aki-gun, Hiroshima 730-8670", priceN:0, price:"Gratuit", timeN:120, time:"2h", info:"Tour EN 14h15 en semaine, réserver online à l'avance. Train JR vers Mukainada (8 min)"},
+  {city:"Périphérie Hiroshima", cat:"Musée et expo", name:"Kure Iron Whale + Yamato", zone:"Kure", desc:"Sous-marin Akishio JMSDF (76m) visitable de l'intérieur, le 'Iron Whale' — postes de contrôle, quartiers d'équipage. Musée du cuirassé Yamato à côté. 45 min en train de Hiroshima", addr:"てつのくじら館 + 大和ミュージアム (JMSDF Kure Museum & Yamato Museum) — 5-32 Takaramachi, Kure, Hiroshima 737-0029", priceN:500, price:"~500 ¥/musée", timeN:240, time:"Demi-journée", info:"45 min en train de Hiroshima"},
+  {city:"Hiroshima", cat:"Musée et expo", name:"Hiroshima City Manga Library", zone:"Gare & est", desc:"Bibliothèque publique dédiée au manga : 150 000 volumes, classiques, magazines (Jump, Animage), section internationale incluant français. Lecture sur place gratuite, salle de lecture calme au 2e étage", addr:"広島市まんが図書館 (Hiroshima City Manga Library) — 1-4 Hijiyama-koen, Minami-ku, Hiroshima 732-0815", priceN:0, price:"Gratuit", timeN:60, time:"1h+", info:"Fermé lundi. À côté du MOCA dans le parc Hijiyama (combinable)"},
   {city:"Iwakuni", cat:"Musée et expo", name:"Shirohebi Museum (musée des serpents blancs)", zone:"Kintaikyo", desc:"Petit musée consacré au serpent blanc d'Iwakuni, situé dans le parc Kikko juste après le pont Kintai-kyo. Enclos vitrés avec serpents albinos vivants observables de très près, panneaux didactiques sur l'écologie de l'espèce, l'albinisme génétique fixé (rare en nature : il ne dure normalement qu'une génération), la transmission héréditaire unique à Iwakuni, l'histoire du culte. Souvent plus animé que le Shirohebi Shrine, vraie pépite pour qui s'intéresse à la faune ou à la mythologie shintô", addr:"岩国シロヘビの館 (Iwakuni Shirohebi Museum) — 2-6-52 Yokoyama, Iwakuni-shi, Yamaguchi 741-0081", priceN:200, price:"~200 ¥", timeN:45, time:"30-60 min", info:"Dans Kikko Park, angle nord. Combinable avec le pont, le château et la résidence Mekata dans la même balade"},
   
   // === ATELIER ET DÉCOUVERTE ===
   {city:"Hiroshima", cat:"Atelier et découverte", name:"Atelier Koto", zone:"Variable", desc:"Apprendre à jouer du koto, instrument traditionnel, en anglais", addr:"Koto-Salon (cours itinérants) — réservation en ligne, sessions dans le centre de Hiroshima (Naka-ku)", priceN:5000, price:"~5000 ¥", timeN:60, time:"1h", info:"Hommage à la paix via la musique"},
-  {city:"Hiroshima", cat:"Atelier et découverte", name:"Wood Egg Okonomiyaki Museum (Otafuku)", zone:"Nishi-ku", desc:"Bâtiment-œuf en bois (architecte Sambuichi). Cours de cuisine sur teppan pro où on cuisine son propre okonomiyaki avec instructeur, + musée et visite usine de sauce Otafuku. Bouteille de sauce encore chaude offerte", addr:"オタフクソース Wood Egg お好み焼館 — 2-3-13 Shoko Center, Nishi-ku, Hiroshima 733-8567", priceN:1100, price:"1100 ¥ (cours)", timeN:90, time:"1h30", info:"Réservation requise (parfois en japonais). Tram rouge ligne 2 jusqu'à Inokuchi"},
+  {city:"Hiroshima", cat:"Atelier et découverte", name:"Wood Egg Okonomiyaki Museum (Otafuku)", zone:"Nishi-ku (ouest)", desc:"Bâtiment-œuf en bois (architecte Sambuichi). Cours de cuisine sur teppan pro où on cuisine son propre okonomiyaki avec instructeur, + musée et visite usine de sauce Otafuku. Bouteille de sauce encore chaude offerte", addr:"オタフクソース Wood Egg お好み焼館 — 2-3-13 Shoko Center, Nishi-ku, Hiroshima 733-8567", priceN:1100, price:"1100 ¥ (cours)", timeN:90, time:"1h30", info:"Réservation requise (parfois en japonais). Tram rouge ligne 2 jusqu'à Inokuchi"},
   {city:"Hiroshima", cat:"Atelier et découverte", name:"Orizuru Tower", zone:"Peace Park", desc:"On plie son propre origami pour l'ajouter au mur des cranes en hommage à Sadako Sasaki. Observatoire 13e étage en plein air avec vue directe sur le Dôme, fresques murales, descente par slide de 70m sur 9 étages", addr:"おりづるタワー (Orizuru Tower) — 1-2-1 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1700, price:"1700 ¥", timeN:90, time:"1-1h30", info:"Architecte Hiroshi Sambuichi. Magnifique au coucher de soleil. Sur passeport étranger : réduction"},
-  {city:"Hiroshima", cat:"Atelier et découverte", name:"Saijo Sake Town", zone:"Saijo (hors-ville)", desc:"7 brasseries de saké à pied depuis JR Saijo, dégustations guidées en anglais. Tour 3 brasseries (semaine 10h30) ou 7 brasseries (Lun/Ven 13h). Hiroshima saké = soft water method, style mellow umami 'women's sake'", addr:"JR西条駅 (Saijo Sake Town - JR Saijo Station) — Saijo-Honmachi, Higashi-Hiroshima 739-0011", priceN:5500, price:"5500-7700 ¥", timeN:240, time:"Demi-journée", info:"35 min en train. Kamotsuru (méthode ginjō-zukuri), Hakubotan, Saijotsuru, Kirei, Fukubijin. Réserver Viator"},
-  {city:"Hiroshima", cat:"Atelier et découverte", name:"Kumano (pinceaux calligraphie)", zone:"Kumano (hors-ville)", desc:"Village qui produit 80% des pinceaux de calligraphie du Japon. À Fude no Sato Kobo : musée + démos d'artisans en direct + atelier participatif où l'on fabrique soi-même un pinceau (2 étapes sur 12, ~3500 ¥, réservation requise). Possible engraving de son nom sur le manche. ~45 min en bus depuis Hiroshima", addr:"筆の里工房 Fude no Sato Kobo — 5-17-1 Nakamizo, Kumano-cho, Aki-gun, Hiroshima 731-4214", priceN:3500, price:"600 ¥ (musée) à 3500 ¥ (atelier)", timeN:180, time:"Demi-journée", info:"Fude no Sato Kobo, fermé lundi. Réserver l'atelier 1 semaine avant"},
+  {city:"Périphérie Hiroshima", cat:"Atelier et découverte", name:"Saijo Sake Town", zone:"Saijo", desc:"7 brasseries de saké à pied depuis JR Saijo, dégustations guidées en anglais. Tour 3 brasseries (semaine 10h30) ou 7 brasseries (Lun/Ven 13h). Hiroshima saké = soft water method, style mellow umami 'women's sake'", addr:"JR西条駅 (Saijo Sake Town - JR Saijo Station) — Saijo-Honmachi, Higashi-Hiroshima 739-0011", priceN:5500, price:"5500-7700 ¥", timeN:240, time:"Demi-journée", info:"35 min en train. Kamotsuru (méthode ginjō-zukuri), Hakubotan, Saijotsuru, Kirei, Fukubijin. Réserver Viator"},
+  {city:"Périphérie Hiroshima", cat:"Atelier et découverte", name:"Kumano (pinceaux calligraphie)", zone:"Kumano", desc:"Village qui produit 80% des pinceaux de calligraphie du Japon. À Fude no Sato Kobo : musée + démos d'artisans en direct + atelier participatif où l'on fabrique soi-même un pinceau (2 étapes sur 12, ~3500 ¥, réservation requise). Possible engraving de son nom sur le manche. ~45 min en bus depuis Hiroshima", addr:"筆の里工房 Fude no Sato Kobo — 5-17-1 Nakamizo, Kumano-cho, Aki-gun, Hiroshima 731-4214", priceN:3500, price:"600 ¥ (musée) à 3500 ¥ (atelier)", timeN:180, time:"Demi-journée", info:"Fude no Sato Kobo, fermé lundi. Réserver l'atelier 1 semaine avant"},
   {city:"Miyajima", cat:"Atelier et découverte", name:"Cuisson de son propre momiji manju (Yamadaya)", zone:"Omotesando", desc:"Atelier où l'on cuit soi-même ses momiji manju sur des moules en fonte chauffés au-dessus de la flamme : verser la pâte, déposer la garniture (azuki, matcha, crème, chocolat), refermer le moule, retourner — sortir un gâteau-feuille d'érable doré à manger chaud. Yamadaya propose au 2e étage l'expérience guidée. Une des rares 'wagashi participatives' du Japon", addr:"やまだ屋 おおのファクトリー / 紅葉堂 本店 (Yamadaya / Momijido for momiji-baking experience) — 448-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:1000, price:"~1000 ¥", timeN:45, time:"45 min", info:"Yamadaya sur Omotesando. Walk-in possible mais réservation conseillée le week-end. À comparer avec la version frite (age-momiji) du voisin Kouyoudou Nibanya"},
   {city:"Miyajima", cat:"Atelier et découverte", name:"Atelier shamoji personnalisé (Miyajima Tezukuri Koubou)", zone:"Omotesando", desc:"Miyajima est le berceau du shamoji, inventé vers 1800 par le moine ascète Seishin inspiré du biwa de Saraswati. Cette boutique imprime une photo de ton choix (depuis téléphone) sur un shamoji en bois en 10 min pour 600 ¥. Souvenir unique et personnalisé qui sort des sentiers battus", addr:"みやじま手づくり工房 (Miyajima Tezukuri Koubou) — Omotesando Shopping Street, Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:600, price:"~600 ¥", timeN:30, time:"30 min", info:"Sur Omotesando, à pied du ferry"},
   {city:"Miyajima", cat:"Atelier et découverte", name:"Okeiko : kimono + activités traditionnelles", zone:"Miyajima centre", desc:"Expérience immersive de la culture japonaise : on porte un kimono authentique et on participe à des activités encadrées (cérémonie du thé, calligraphie, ikebana selon l'option). Réservation requise. Photos sur l'île possibles", addr:"Okeiko Japan Miyajima — 459-1 Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:6000, price:"~6000 ¥", timeN:90, time:"1h30", info:"Plusieurs studios proposent l'expérience. Réserver online à l'avance"},
@@ -3276,27 +3361,27 @@ const data = [
   {city:"Iwakuni", cat:"Spectacle", name:"Ukai — pêche aux cormorans sur la Nishiki", zone:"Kintaikyo", desc:"Méthode de pêche traditionnelle vieille de 1300 ans (mentionnée dans le Kojiki), pratiquée ici depuis le début de l'époque Edo (~400 ans) avec le pont Kintai-kyo en toile de fond. Suspendue puis ressuscitée en 1952. Un usho (maître pêcheur) guide à la corde une dizaine de cormorans dressés à attraper l'ayu (poisson-doux) sous la lumière de braseros à la proue. Anneau au cou pour empêcher d'avaler les grosses prises. Embarquement sur yakatabune (bateau traditionnel couvert) à quelques mètres de l'action, ou observation gratuite depuis la berge ou le pont", addr:"錦帯橋 鵜飼 (Kintaikyo Ukai) — embarcadère face au pont Kintai-kyo, rive nord, Iwakuni-shi, Yamaguchi 741-0062", when:"Du 1er juin au 10 septembre · départs ~19h-21h", availability:{recurring:"annual", dates:["06-01","06-02","06-03","06-04","06-05","06-06","06-07","06-08","06-09","06-10","06-11","06-12","06-13","06-14","06-15","06-16","06-17","06-18","06-19","06-20","06-21","06-22","06-23","06-24","06-25","06-26","06-27","06-28","06-29","06-30","07-01","07-02","07-03","07-04","07-05","07-06","07-07","07-08","07-09","07-10","07-11","07-12","07-13","07-14","07-15","07-16","07-17","07-18","07-19","07-20","07-21","07-22","07-23","07-24","07-25","07-26","07-27","07-28","07-29","07-30","07-31","08-01","08-02","08-03","08-04","08-05","08-06","08-07","08-08","08-09","08-10","08-11","08-12","08-13","08-14","08-15","08-16","08-17","08-18","08-19","08-20","08-21","08-22","08-23","08-24","08-25","08-26","08-27","08-28","08-29","08-30","08-31","09-01","09-02","09-03","09-04","09-05","09-06","09-07","09-08","09-09","09-10"]}, priceN:3500, price:"~3500 ¥ (bateau)", timeN:120, time:"2h", info:"Réservation conseillée au 0827-28-2877. Fonctionne aussi sous la pluie. Bento livré à la commande possible. Observation gratuite depuis la berge ou le pont. PAS aujourd'hui (14/05/2026, hors saison) — saison ouvre le 01/06"},
   
   // === SHOPPING ===
-  {city:"Hiroshima", cat:"Shopping", name:"JUMP SHOP", zone:"Gare Hiroshima", desc:"Boutique officielle Shueisha : One Piece, Dragon Ball, Naruto, Demon Slayer. Bonbons Devil Fruit en boîtes-fruits", addr:"JUMP SHOP 広島駅店 — ekie 2F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:1500, price:"Variable", timeN:40, time:"30-45 min", info:"Minamoa, à la gare. Statue Goku Kamehameha à l'entrée"},
-  {city:"Hiroshima", cat:"Shopping", name:"Bâtiment animate", zone:"Hondori", desc:"Hub otaku 5 étages : animate (manga/goodies), Lashinbang (figurines occasion 4F), Melonbooks (doujinshi), arcade Namco", addr:"animate 広島本店 (animate Hiroshima Honten) — 8-8 Hatchobori, Naka-ku, Hiroshima 730-0013", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Kamiya-cho. Lashinbang : expertise figurines le week-end"},
-  {city:"Hiroshima", cat:"Shopping", name:"Pokémon Center", zone:"Gare Hiroshima", desc:"Goodies exclusifs Hiroshima (Red Gyarados, version Carp)", addr:"ポケモンセンターヒロシマ (Pokémon Center Hiroshima) — Hiroshima Station Minamoa 1F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"À la gare de Hiroshima"},
-  {city:"Hiroshima", cat:"Shopping", name:"Volks Showroom", zone:"Hondori", desc:"Le plus grand hobby store de la ville : figurines neuves, Gunpla, plastic models. Planque pour locaux", addr:"ボークス 広島ショールーム (Volks Hiroshima Showroom) — Hiroshima Sunmall 4F, 6-27 Kanayama-cho, Naka-ku, Hiroshima 730-0022", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"4F Hiroshima Sunmall, peu visible depuis l'extérieur"},
-  {city:"Hiroshima", cat:"Shopping", name:"Yellow Submarine", zone:"Hondori", desc:"Chaîne nationale : TCG (cartes), Gunpla, figurines, modèles plastiques", addr:"イエローサブマリン 広島本通り店 (Yellow Submarine Hiroshima Hondori) — 7-19 Hondori, Naka-ku, Hiroshima 730-0035", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Hondori Street, complément de Volks"},
-  {city:"Hiroshima", cat:"Shopping", name:"Hondori Arcade", zone:"Hondori", desc:"Galerie couverte 1 km, artisanat, cafés, poteries", addr:"本通り商店街 (Hondori Shopping Arcade) — Hondori, Naka-ku, Hiroshima 730-0035", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Centre, couverte si pluie"},
-  {city:"Hiroshima", cat:"Shopping", name:"Shareo souterrain", zone:"Hondori", desc:"Galerie sous Kamiyacho, enseignes locales, food court", addr:"シャレオ (Shareo Underground Mall) — sous Kamiyacho intersection, Naka-ku, Hiroshima 730-0031", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Moins touristique"},
-  {city:"Hiroshima", cat:"Shopping", name:"Ekie gare", zone:"Gare Hiroshima", desc:"Complexe shopping/food sous la gare, souvenirs, bento", addr:"ekie 広島駅 (ekie Hiroshima Station) — 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Pratique avant le shinkansen"},
-  {city:"Hiroshima", cat:"Shopping", name:"Dumb Records (vinyles punk + curry)", zone:"Nagarekawa", desc:"Disquaire punk perché au 4e étage d'un immeuble anonyme, tenu par Nass, vieux briscard de la scène rock japonaise. 1000+ vinyles pop/melodic punk dans l'esprit Ramones (énorme poster à l'entrée, logo stylisé façon CBGB's). Tient son propre label indépendant et organise des concerts en boutique. Originalité totale : un comptoir curry maison tourne en parallèle du digging — combinaison improbable, signature des lieux", addr:"DUMB RECORDS — 3F-A Dai-Ichi Shimizu Bldg, 5-15 Mikawacho, Naka-ku, Hiroshima 730-0029", priceN:2000, price:"Variable", timeN:60, time:"45-90 min", info:"À ~50m du Washington Hotel (même rue). Vérifier horaires sur dumbrecords.com — ouvre généralement l'après-midi"},
-  {city:"Hiroshima", cat:"Shopping", name:"Furugiya JAM (friperie vintage)", zone:"Nagarekawa", desc:"Friperie vintage japonaise au 2e étage, sélection ultra-curatée par les locaux : robes rétro, denim classique, accessoires kawaii, streetwear japonais années 90, sneakers de seconde main. Concept 'sustainable fashion' affiché, ambiance feutrée avec racks bien rangés. Une des meilleures adresses 'furugi' (vintage) du centre selon les habitués. Pièces uniques, prix corrects", addr:"古着屋JAM 広島店 (Furugiya JAM Hiroshimaten) — 3-16 Mikawacho, 2F, Naka-ku, Hiroshima 730-0029", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"À ~150m du Washington Hotel. Ouvert 11h-20h tous les jours. Plus calme en semaine"},
-  {city:"Hiroshima", cat:"Shopping", name:"Tayama Bungu (papeterie historique)", zone:"Hondori", desc:"Papeterie de Hiroshima de longue date, autrefois au pied de Hondori, désormais discrètement perchée au 3e étage de Hondori Hills. Spécialité maison : stylos plume Sailor — la manufacture historique est à Kure, à 30 min — avec modèles et encres exclusifs Tayama qu'on ne trouve nulle part ailleurs. Du frixion jetable au plume haut de gamme, gamme complète, conseils experts. Bonus même étage : Watanabe Ceramics pour combiner stylo + objet artisanal", addr:"田山文具店 (Tayama Bungu) — Hondori Hills 3F, 8-23 Hondori, Naka-ku, Hiroshima 730-0035", priceN:1500, price:"Variable", timeN:30, time:"30 min", info:"Repère extérieur : magasin Adidas au RDC d'angle au milieu de l'arcade. Site : tayama-bungu.net"},
+  {city:"Hiroshima", cat:"Shopping", name:"JUMP SHOP", zone:"Gare & est", desc:"Boutique officielle Shueisha : One Piece, Dragon Ball, Naruto, Demon Slayer. Bonbons Devil Fruit en boîtes-fruits", addr:"JUMP SHOP 広島駅店 — ekie 2F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:1500, price:"Variable", timeN:40, time:"30-45 min", info:"Minamoa, à la gare. Statue Goku Kamehameha à l'entrée"},
+  {city:"Hiroshima", cat:"Shopping", name:"Bâtiment animate", zone:"Naka-ku centre", desc:"Hub otaku 5 étages : animate (manga/goodies), Lashinbang (figurines occasion 4F), Melonbooks (doujinshi), arcade Namco", addr:"animate 広島本店 (animate Hiroshima Honten) — 8-8 Hatchobori, Naka-ku, Hiroshima 730-0013", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Kamiya-cho. Lashinbang : expertise figurines le week-end"},
+  {city:"Hiroshima", cat:"Shopping", name:"Pokémon Center", zone:"Gare & est", desc:"Goodies exclusifs Hiroshima (Red Gyarados, version Carp)", addr:"ポケモンセンターヒロシマ (Pokémon Center Hiroshima) — Hiroshima Station Minamoa 1F, 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Gratuit", timeN:30, time:"30 min", info:"À la gare de Hiroshima"},
+  {city:"Hiroshima", cat:"Shopping", name:"Volks Showroom", zone:"Naka-ku centre", desc:"Le plus grand hobby store de la ville : figurines neuves, Gunpla, plastic models. Planque pour locaux", addr:"ボークス 広島ショールーム (Volks Hiroshima Showroom) — Hiroshima Sunmall 4F, 6-27 Kanayama-cho, Naka-ku, Hiroshima 730-0022", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"4F Hiroshima Sunmall, peu visible depuis l'extérieur"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yellow Submarine", zone:"Naka-ku centre", desc:"Chaîne nationale : TCG (cartes), Gunpla, figurines, modèles plastiques", addr:"イエローサブマリン 広島本通り店 (Yellow Submarine Hiroshima Hondori) — 7-19 Hondori, Naka-ku, Hiroshima 730-0035", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Hondori Street, complément de Volks"},
+  {city:"Hiroshima", cat:"Shopping", name:"Hondori Arcade", zone:"Naka-ku centre", desc:"Galerie couverte 1 km, artisanat, cafés, poteries", addr:"本通り商店街 (Hondori Shopping Arcade) — Hondori, Naka-ku, Hiroshima 730-0035", priceN:0, price:"Variable", timeN:90, time:"1-2h", info:"Centre, couverte si pluie"},
+  {city:"Hiroshima", cat:"Shopping", name:"Shareo souterrain", zone:"Naka-ku centre", desc:"Galerie sous Kamiyacho, enseignes locales, food court", addr:"シャレオ (Shareo Underground Mall) — sous Kamiyacho intersection, Naka-ku, Hiroshima 730-0031", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Moins touristique"},
+  {city:"Hiroshima", cat:"Shopping", name:"Ekie gare", zone:"Gare & est", desc:"Complexe shopping/food sous la gare, souvenirs, bento", addr:"ekie 広島駅 (ekie Hiroshima Station) — 1-2 Matoba-cho, Minami-ku, Hiroshima 732-0822", priceN:0, price:"Variable", timeN:40, time:"30-45 min", info:"Pratique avant le shinkansen"},
+  {city:"Hiroshima", cat:"Shopping", name:"Dumb Records (vinyles punk + curry)", zone:"Naka-ku centre", desc:"Disquaire punk perché au 4e étage d'un immeuble anonyme, tenu par Nass, vieux briscard de la scène rock japonaise. 1000+ vinyles pop/melodic punk dans l'esprit Ramones (énorme poster à l'entrée, logo stylisé façon CBGB's). Tient son propre label indépendant et organise des concerts en boutique. Originalité totale : un comptoir curry maison tourne en parallèle du digging — combinaison improbable, signature des lieux", addr:"DUMB RECORDS — 3F-A Dai-Ichi Shimizu Bldg, 5-15 Mikawacho, Naka-ku, Hiroshima 730-0029", priceN:2000, price:"Variable", timeN:60, time:"45-90 min", info:"À ~50m du Washington Hotel (même rue). Vérifier horaires sur dumbrecords.com — ouvre généralement l'après-midi"},
+  {city:"Hiroshima", cat:"Shopping", name:"Furugiya JAM (friperie vintage)", zone:"Naka-ku centre", desc:"Friperie vintage japonaise au 2e étage, sélection ultra-curatée par les locaux : robes rétro, denim classique, accessoires kawaii, streetwear japonais années 90, sneakers de seconde main. Concept 'sustainable fashion' affiché, ambiance feutrée avec racks bien rangés. Une des meilleures adresses 'furugi' (vintage) du centre selon les habitués. Pièces uniques, prix corrects", addr:"古着屋JAM 広島店 (Furugiya JAM Hiroshimaten) — 3-16 Mikawacho, 2F, Naka-ku, Hiroshima 730-0029", priceN:3000, price:"Variable", timeN:45, time:"30-60 min", info:"À ~150m du Washington Hotel. Ouvert 11h-20h tous les jours. Plus calme en semaine"},
+  {city:"Hiroshima", cat:"Shopping", name:"Tayama Bungu (papeterie historique)", zone:"Naka-ku centre", desc:"Papeterie de Hiroshima de longue date, autrefois au pied de Hondori, désormais discrètement perchée au 3e étage de Hondori Hills. Spécialité maison : stylos plume Sailor — la manufacture historique est à Kure, à 30 min — avec modèles et encres exclusifs Tayama qu'on ne trouve nulle part ailleurs. Du frixion jetable au plume haut de gamme, gamme complète, conseils experts. Bonus même étage : Watanabe Ceramics pour combiner stylo + objet artisanal", addr:"田山文具店 (Tayama Bungu) — Hondori Hills 3F, 8-23 Hondori, Naka-ku, Hiroshima 730-0035", priceN:1500, price:"Variable", timeN:30, time:"30 min", info:"Repère extérieur : magasin Adidas au RDC d'angle au milieu de l'arcade. Site : tayama-bungu.net"},
   {city:"Hiroshima", cat:"Shopping", name:"COAST Board Game Café", zone:"Naka-ku centre", desc:"Pas une boutique mais un café-ludothèque insolite : 500+ jeux de plateau (production japonaise + import européen/US), location à la table sans achat obligatoire. Catalogue consultable en ligne avant de venir — utile pour repérer un titre précis. Horaires généreux le week-end, ambiance feutrée plutôt que bruyante. Boissons + petite restauration. Idéal après-midi pluvieuse ou soirée tranquille à plusieurs", addr:"COAST Board Game Cafe — 2-6-21 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1500, price:"~1000-1500 ¥/pers.", timeN:150, time:"2-3h", info:"Semaine 17h-23h · Week-end/fériés 10h-23h · Fermé lundi (si lundi férié, fermé le mardi). Pas de parking. Site : coast-bgcafe.com"},
-  {city:"Hiroshima", cat:"Shopping", name:"Yamato-ya (saké & shochu)", zone:"Nagarekawa", desc:"Caviste familial à l'extrémité nord de Yagenbori-dori, famille Oyama liée au brassage de saké depuis 2 siècles, boutique depuis 50+ ans. Sélection pointue de sakés Hiroshima (Saijo, Kure, Takehara), shochu, vins, fournit la majorité des grands restaurants et bars de la ville. Conseil expert pour cadeau ou découverte, livraison à domicile commandable en ligne. Alternative locale et concrète à un aller-retour à Saijo si on manque de temps", addr:"大和屋酒舗 (Yamato-ya Shuho) — 4-3 Ebisu-cho, Naka-ku, Hiroshima 730-0021", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Au nord de Yagenbori-dori, ~300m du Washington Hotel. Horaires longs en plein centre. Site : e-yamatoya.jp"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yamato-ya (saké & shochu)", zone:"Naka-ku centre", desc:"Caviste familial à l'extrémité nord de Yagenbori-dori, famille Oyama liée au brassage de saké depuis 2 siècles, boutique depuis 50+ ans. Sélection pointue de sakés Hiroshima (Saijo, Kure, Takehara), shochu, vins, fournit la majorité des grands restaurants et bars de la ville. Conseil expert pour cadeau ou découverte, livraison à domicile commandable en ligne. Alternative locale et concrète à un aller-retour à Saijo si on manque de temps", addr:"大和屋酒舗 (Yamato-ya Shuho) — 4-3 Ebisu-cho, Naka-ku, Hiroshima 730-0021", priceN:2000, price:"Variable", timeN:30, time:"30 min", info:"Au nord de Yagenbori-dori, ~300m du Washington Hotel. Horaires longs en plein centre. Site : e-yamatoya.jp"},
   {city:"Hiroshima", cat:"Shopping", name:"Bookoff Super Bazaar (Otemachi)", zone:"Naka-ku centre", desc:"Le plus gros bazar d'occasion du centre, 2000 m² : mangas, livres, vinyles/CD/DVD, jeux vidéo (consoles + softs), cartes à jouer (TCG), figurines et jouets, instruments de musique, électronique, vêtements et accessoires de marque. Tarifs très bas, stock énorme renouvelé en permanence. Détaxe touristes. Le bon plan pour fouiller manga d'occasion et tomber sur un objet introuvable ailleurs", addr:"BOOK・OFF SUPER BAZAAR 広島大手町店 — 2-7-6 Otemachi, Naka-ku, Hiroshima 730-0051", priceN:1500, price:"Variable", timeN:90, time:"1-2h", info:"Ouvert 10h-22h tous les jours. ~800m du Washington Hotel, 2 blocs de la station tram Hondori, proche Peace Park"},
-  {city:"Hiroshima", cat:"Shopping", name:"Groovin' Records (Kyobashi)", zone:"Gare Hiroshima", desc:"Disquaire spécialiste de la seconde main à Kyobashi-cho (sud de la gare), réputé chez les diggers étrangers pour son rayon rock/pop western et jazz. Achat-vente-curation : on peut y faire estimer une collection. Stock vaste, soigneusement trié et bien rangé, prix corrects. Complète Dumb Records (punk, Mikawacho) avec un spectre musical différent — les deux ensemble couvrent à peu près toute la planète vinyle de Hiroshima", addr:"GROOVIN' レコード 広島本店 (Groovin' Records Hiroshima) — 2-21 Kyobashi-cho, Minami-ku, Hiroshima 732-0828", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"~1,5 km du Washington Hotel, 5 min à pied au sud de la gare. Site : groovin-jp.co.jp. Vérifier horaires (jours de fermeture variables)"},
-  {city:"Hiroshima", cat:"Shopping", name:"Hon to jiyuu (livres + bar à Yokogawa)", zone:"Yokogawa", desc:"'Livres & Liberté' — librairie indépendante de Yokogawa qui vend du neuf et de l'occasion, avec une micro-cuisine où l'on peut prendre café, bière ou verre de vin en lisant sur place. Voisine immédiate du Yokogawa Cinema (cinéma d'auteur culte) et d'une fresque géante de l'artiste local SUIKO. Lieu emblématique de la scène alternative locale, à mille lieues du shopping mainstream de Hondori", addr:"本と自由 (Hon to Jiyuu) — 3-3-1 Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:1500, price:"Variable", timeN:60, time:"45-90 min", info:"~2,5 km du Washington Hotel, tram ou JR jusqu'à Yokogawa. À combiner avec le Yokogawa Cinema, les fresques SUIKO et les minuscules izakaya sous les voies ferrées"},
-  {city:"Hiroshima", cat:"Shopping", name:"Yumeya (kimono vintage à Yokogawa)", zone:"Yokogawa", desc:"Hole-in-the-wall : boutique minuscule de kimonos d'occasion et tissus japonais de qualité, coincée à côté d'un barbier au nord de la gare de Yokogawa près du viaduc ferroviaire. Pièces choisies à la main par la propriétaire, prix très accessibles vs Kyoto. Vraie pépite hors radar pour qui cherche un kimono, un haori ou des étoffes anciennes sans payer les tarifs touristiques", addr:"夢屋 (Yumeya) — sortie nord JR Yokogawa Station près du viaduc, Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:5000, price:"Variable", timeN:45, time:"30-60 min", info:"Petite boutique, ne pas hésiter à pousser la porte. Combinable avec Hon to jiyuu et le Yokogawa Cinema dans la même balade"},
-  {city:"Hiroshima", cat:"Shopping", name:"MUSASHI JAPAN (couteaux japonais)", zone:"Hondori", desc:"Boutique de couteaux japonais traditionnels ouverte le 1er décembre 2025 en plein Hondori. Architecture intérieure en forme de tambour (symbole de paix), courbes douces et rythme continu — pensée pour Hiroshima 'terre qui transmet la paix au futur'. Collaboration avec des artisans forgerons héritiers des techniques de fabrication des katana. Gamme allant des couteaux de chef polyvalents aux pièces Chokin gravées à l'or et aux couteaux Tsushima en plastique marin recyclé. Staff multilingue (42 nationalités), gravure du nom offerte, possibilité d'essayer chaque lame avant achat", addr:"MUSASHI JAPAN 広島本通店 (MUSASHI JAPAN Hiroshima Hondori) — Hondori Shopping Street, Naka-ku, Hiroshima 730-0035", priceN:15000, price:"Variable (15k-100k+ ¥)", timeN:60, time:"45-90 min", info:"~700m du Washington Hotel. Couteau transportable en soute (interdit en cabine). Service après-vente : aiguisage et inspections semestrielles/annuelles. Site : musashihamono.com"},
-  {city:"Hiroshima", cat:"Shopping", name:"Lashinbang (figurines, neuf + occasion)", zone:"Hondori", desc:"Spécialiste figurines au 4e étage du bâtiment animate Hiroshima, à 3 min à pied de Yellow Submarine. Mélange de figurines neuves et d'occasion : scale figures, prize figures de séries anciennes, nendoroids, character goods. Section seconde main souvent mieux fournie qu'à Tokyo en pièces rares. Service d'évaluation gratuite de collections le week-end (utile si tu veux vendre des doubles). Prix généralement plus bas qu'Akihabara. Coexiste dans le même immeuble avec animate (manga/anime), Melonbooks (doujinshi), Card Lab (TCG) et Namco (game center)", addr:"らしんばん広島店 (Lashinbang Hiroshima) — Hiroshima animate Building 4F, 4-1 Shintenchi, Naka-ku, Hiroshima 730-0034", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"Sur Hondori, ~800m du Washington Hotel. Combinable avec animate (1F-3F), JUMP SHOP (gare) et Volks (Sunmall) en un seul parcours otaku. Idéal pour fouiller One Piece anciennes gammes Banpresto/Megahouse"},
+  {city:"Hiroshima", cat:"Shopping", name:"Groovin' Records (Kyobashi)", zone:"Gare & est", desc:"Disquaire spécialiste de la seconde main à Kyobashi-cho (sud de la gare), réputé chez les diggers étrangers pour son rayon rock/pop western et jazz. Achat-vente-curation : on peut y faire estimer une collection. Stock vaste, soigneusement trié et bien rangé, prix corrects. Complète Dumb Records (punk, Mikawacho) avec un spectre musical différent — les deux ensemble couvrent à peu près toute la planète vinyle de Hiroshima", addr:"GROOVIN' レコード 広島本店 (Groovin' Records Hiroshima) — 2-21 Kyobashi-cho, Minami-ku, Hiroshima 732-0828", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"~1,5 km du Washington Hotel, 5 min à pied au sud de la gare. Site : groovin-jp.co.jp. Vérifier horaires (jours de fermeture variables)"},
+  {city:"Hiroshima", cat:"Shopping", name:"Hon to jiyuu (livres + bar à Yokogawa)", zone:"Nishi-ku (ouest)", desc:"'Livres & Liberté' — librairie indépendante de Yokogawa qui vend du neuf et de l'occasion, avec une micro-cuisine où l'on peut prendre café, bière ou verre de vin en lisant sur place. Voisine immédiate du Yokogawa Cinema (cinéma d'auteur culte) et d'une fresque géante de l'artiste local SUIKO. Lieu emblématique de la scène alternative locale, à mille lieues du shopping mainstream de Hondori", addr:"本と自由 (Hon to Jiyuu) — 3-3-1 Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:1500, price:"Variable", timeN:60, time:"45-90 min", info:"~2,5 km du Washington Hotel, tram ou JR jusqu'à Yokogawa. À combiner avec le Yokogawa Cinema, les fresques SUIKO et les minuscules izakaya sous les voies ferrées"},
+  {city:"Hiroshima", cat:"Shopping", name:"Yumeya (kimono vintage à Yokogawa)", zone:"Nishi-ku (ouest)", desc:"Hole-in-the-wall : boutique minuscule de kimonos d'occasion et tissus japonais de qualité, coincée à côté d'un barbier au nord de la gare de Yokogawa près du viaduc ferroviaire. Pièces choisies à la main par la propriétaire, prix très accessibles vs Kyoto. Vraie pépite hors radar pour qui cherche un kimono, un haori ou des étoffes anciennes sans payer les tarifs touristiques", addr:"夢屋 (Yumeya) — sortie nord JR Yokogawa Station près du viaduc, Yokogawacho, Nishi-ku, Hiroshima 733-0011", priceN:5000, price:"Variable", timeN:45, time:"30-60 min", info:"Petite boutique, ne pas hésiter à pousser la porte. Combinable avec Hon to jiyuu et le Yokogawa Cinema dans la même balade"},
+  {city:"Hiroshima", cat:"Shopping", name:"MUSASHI JAPAN (couteaux japonais)", zone:"Naka-ku centre", desc:"Boutique de couteaux japonais traditionnels ouverte le 1er décembre 2025 en plein Hondori. Architecture intérieure en forme de tambour (symbole de paix), courbes douces et rythme continu — pensée pour Hiroshima 'terre qui transmet la paix au futur'. Collaboration avec des artisans forgerons héritiers des techniques de fabrication des katana. Gamme allant des couteaux de chef polyvalents aux pièces Chokin gravées à l'or et aux couteaux Tsushima en plastique marin recyclé. Staff multilingue (42 nationalités), gravure du nom offerte, possibilité d'essayer chaque lame avant achat", addr:"MUSASHI JAPAN 広島本通店 (MUSASHI JAPAN Hiroshima Hondori) — Hondori Shopping Street, Naka-ku, Hiroshima 730-0035", priceN:15000, price:"Variable (15k-100k+ ¥)", timeN:60, time:"45-90 min", info:"~700m du Washington Hotel. Couteau transportable en soute (interdit en cabine). Service après-vente : aiguisage et inspections semestrielles/annuelles. Site : musashihamono.com"},
+  {city:"Hiroshima", cat:"Shopping", name:"Lashinbang (figurines, neuf + occasion)", zone:"Naka-ku centre", desc:"Spécialiste figurines au 4e étage du bâtiment animate Hiroshima, à 3 min à pied de Yellow Submarine. Mélange de figurines neuves et d'occasion : scale figures, prize figures de séries anciennes, nendoroids, character goods. Section seconde main souvent mieux fournie qu'à Tokyo en pièces rares. Service d'évaluation gratuite de collections le week-end (utile si tu veux vendre des doubles). Prix généralement plus bas qu'Akihabara. Coexiste dans le même immeuble avec animate (manga/anime), Melonbooks (doujinshi), Card Lab (TCG) et Namco (game center)", addr:"らしんばん広島店 (Lashinbang Hiroshima) — Hiroshima animate Building 4F, 4-1 Shintenchi, Naka-ku, Hiroshima 730-0034", priceN:2500, price:"Variable", timeN:60, time:"45-90 min", info:"Sur Hondori, ~800m du Washington Hotel. Combinable avec animate (1F-3F), JUMP SHOP (gare) et Volks (Sunmall) en un seul parcours otaku. Idéal pour fouiller One Piece anciennes gammes Banpresto/Megahouse"},
   {city:"Hiroshima", cat:"Shopping", name:"Cha-no-wa (matcha & wagashi)", zone:"Naka-ku centre", desc:"Salon de thé et boutique de matcha à 5 min à pied du Peace Park, dans une ruelle calme de Kawaramachi. Maison spécialisée dans la mise en valeur du matcha à travers des wagashi (pâtisseries traditionnelles) et glaces : parfait au matcha, financiers, dorayaki, terrine, monaka. Possibilité d'acheter du matcha de qualité cérémoniale en boîte cadeau. Le sirop affogato au matcha versé devant toi sur la glace vanille est devenu signature de la maison. Boutique sur place, prise à emporter ou dégustation au comptoir", addr:"茶の環 本店 (Cha-no-wa Honten) — 2-1 Kawaramachi, Naka-ku, Hiroshima 730-0856", priceN:1200, price:"500-2000 ¥", timeN:45, time:"30-60 min", info:"Ouvert 10h-19h, fermé mercredi (sauf jours fériés). ~1,2 km du Washington Hotel, à combiner avec une visite du Peace Park. Site : cha-no-wa.com"},
-  {city:"Hiroshima", cat:"Shopping", name:"Carp Goods (baseball Hiroshima)", zone:"Gare Hiroshima", desc:"Hiroshima Toyo Carp = équipe de baseball professionnelle locale, fondée en 1949 (4 ans après la bombe) comme symbole de la reconstruction, financée à l'origine par la souscription des habitants. Casquette rouge à C calquée sur les Cincinnati Reds, mascotte Carp Boy reproduite sur les plaques d'égout de toute la ville. Boutique officielle au Mazda Stadium ou — plus pratique sans aller au stade — au 9e étage du Fukuya Hiroshima Ekimae (en face de la gare) : casquettes, maillots joueurs, porte-clés, peluches, plaids, tapis Carp Boy. Souvenir typiquement hiroshimien et politiquement chargé (renaissance de la ville)", addr:"福屋 広島駅前店 9F カープグッズコーナー (Fukuya Hiroshima Ekimae 9F — Carp Goods) — 6-26 Matsubara-cho, Minami-ku, Hiroshima 732-0822", priceN:2500, price:"800-8000 ¥", timeN:30, time:"30 min", info:"Face à la gare, 9e étage du Fukuya Ekimae. Alternative : boutique principale au Mazda Zoom-Zoom Stadium (10h-18h hors jours de match). Logo Carp Boy = la pièce signature pour Hiroshima"},
+  {city:"Hiroshima", cat:"Shopping", name:"Carp Goods (baseball Hiroshima)", zone:"Gare & est", desc:"Hiroshima Toyo Carp = équipe de baseball professionnelle locale, fondée en 1949 (4 ans après la bombe) comme symbole de la reconstruction, financée à l'origine par la souscription des habitants. Casquette rouge à C calquée sur les Cincinnati Reds, mascotte Carp Boy reproduite sur les plaques d'égout de toute la ville. Boutique officielle au Mazda Stadium ou — plus pratique sans aller au stade — au 9e étage du Fukuya Hiroshima Ekimae (en face de la gare) : casquettes, maillots joueurs, porte-clés, peluches, plaids, tapis Carp Boy. Souvenir typiquement hiroshimien et politiquement chargé (renaissance de la ville)", addr:"福屋 広島駅前店 9F カープグッズコーナー (Fukuya Hiroshima Ekimae 9F — Carp Goods) — 6-26 Matsubara-cho, Minami-ku, Hiroshima 732-0822", priceN:2500, price:"800-8000 ¥", timeN:30, time:"30 min", info:"Face à la gare, 9e étage du Fukuya Ekimae. Alternative : boutique principale au Mazda Zoom-Zoom Stadium (10h-18h hors jours de match). Logo Carp Boy = la pièce signature pour Hiroshima"},
   {city:"Miyajima", cat:"Shopping", name:"Omotesando Shopping Street", zone:"Omotesando", desc:"Rue commerçante principale entre le ferry et le sanctuaire, 4-5 blocs à arpenter : huîtres grillées (Hiroshima = 60% des huîtres du Japon), momiji manju (gâteaux feuille d'érable cuits sur place sous tes yeux par machine), Miyajima Brewery (bières artisanales), shamoji artisanaux, omamori, anago-meshi. Daims libres à éviter avec la nourriture", addr:"宮島表参道商店街 (Miyajima Omotesando Shotengai) — Miyajimacho, Hatsukaichi, Hiroshima 739-0588", priceN:1500, price:"Variable", timeN:60, time:"1h", info:"Ambiance vivante en journée, paisible le soir après le départ des day-trippers"},
   
   // === SPÉCIALITÉS ===
@@ -9999,6 +10084,138 @@ if (window.lucide) lucide.createIcons();
   // Initialiser lucide une fois que tout est chargé
   if(window.lucide) lucide.createIcons();
 })();
+</script>
+
+
+<!-- ============================================================ -->
+<!-- FIREBASE AUTH (étape 1 : auth Google uniquement, pas de sync) -->
+<!-- ============================================================ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+import {
+  getAuth, GoogleAuthProvider,
+  signInWithPopup, signInWithRedirect, getRedirectResult,
+  signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBv5xJOV1oDGsXjjwUW1ihggshnUn1rcT4",
+  authDomain: "japon-a8e98.firebaseapp.com",
+  projectId: "japon-a8e98",
+  storageBucket: "japon-a8e98.firebasestorage.app",
+  messagingSenderId: "89123210294",
+  appId: "1:89123210294:web:db827f4dc982a13fc9c497"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+
+// Exposé pour les étapes suivantes (Firestore)
+window.japonFirebase = { app, auth };
+
+const accountEl = document.getElementById('drawerAccount');
+
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+}
+
+let lastError = '';
+
+function renderSignedOut(){
+  accountEl.innerHTML = `
+    <div class="drawer-account-signedout">
+      <p>Connecte-toi avec Google pour synchroniser tes activités et inviter d'autres voyageurs.</p>
+      <button type="button" class="btn-google-signin" id="btnSignIn">
+        <i data-lucide="log-in"></i>
+        Se connecter avec Google
+      </button>
+      ${lastError ? `<div class="auth-error">${esc(lastError)}</div>` : ''}
+    </div>
+  `;
+  document.getElementById('btnSignIn').addEventListener('click', doSignIn);
+  if (window.lucide) lucide.createIcons();
+}
+
+function renderSignedIn(user){
+  const name = user.displayName || user.email || 'Utilisateur';
+  const initial = (user.displayName || user.email || 'U').trim().charAt(0).toUpperCase();
+  const avatarHTML = user.photoURL
+    ? `<img src="${esc(user.photoURL)}" alt="" referrerpolicy="no-referrer">`
+    : esc(initial);
+  accountEl.innerHTML = `
+    <div class="drawer-account-signedin">
+      <div class="account-avatar">${avatarHTML}</div>
+      <div class="account-info">
+        <div class="account-name">${esc(name)}</div>
+        <div class="account-email">${esc(user.email || '')}</div>
+      </div>
+      <button type="button" class="btn-signout" id="btnSignOut">Déconnexion</button>
+    </div>
+    <div class="account-status">
+      <span class="account-status-dot"></span>
+      <span>Connecté · synchro Firestore à venir</span>
+    </div>
+  `;
+  document.getElementById('btnSignOut').addEventListener('click', doSignOut);
+  // Fallback initiale si l'avatar échoue à charger
+  const img = accountEl.querySelector('.account-avatar img');
+  if (img) img.addEventListener('error', () => {
+    img.parentNode.textContent = initial;
+  });
+}
+
+async function doSignIn(){
+  lastError = '';
+  const btn = document.getElementById('btnSignIn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Connexion...'; }
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (err) {
+    console.error('signInWithPopup failed', err);
+    const code = err && err.code;
+    // Sur mobile, le popup peut être bloqué — on bascule sur redirect
+    if (code === 'auth/popup-blocked' || code === 'auth/operation-not-supported-in-this-environment'
+        || code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request'){
+      try {
+        await signInWithRedirect(auth, provider);
+        return; // navigation imminente
+      } catch (err2) {
+        console.error('signInWithRedirect failed', err2);
+        lastError = err2.message || String(err2);
+      }
+    } else {
+      lastError = err.message || String(err);
+    }
+    renderSignedOut();
+  }
+}
+
+async function doSignOut(){
+  try {
+    await signOut(auth);
+  } catch (err) {
+    console.error('signOut failed', err);
+  }
+}
+
+// Si on revient d'un signInWithRedirect, finaliser
+getRedirectResult(auth).catch(err => {
+  console.warn('getRedirectResult', err);
+  if (err && err.code !== 'auth/no-auth-event'){
+    lastError = err.message || String(err);
+  }
+});
+
+// Listener état auth — la vérité unique pour rendre l'UI
+onAuthStateChanged(auth, user => {
+  if (user) renderSignedIn(user);
+  else renderSignedOut();
+});
+
+// Render initial avant que onAuthStateChanged ne se déclenche
+renderSignedOut();
 </script>
 
 </body>
