@@ -588,6 +588,29 @@ body.has-invite-banner{padding-top:84px}
   width:7px;height:7px;border-radius:50%;
   background:var(--gold);
   box-shadow:0 0 6px rgba(255,230,0,.5);
+  transition:background .25s, box-shadow .25s;
+}
+.mode-activities .status-synced  .account-status-dot{
+  background:#4ade80;
+  box-shadow:0 0 6px rgba(74,222,128,.6);
+}
+.mode-activities .status-syncing .account-status-dot{
+  background:#fbbf24;
+  box-shadow:0 0 8px rgba(251,191,36,.7);
+  animation: syncpulse 1.2s ease-in-out infinite;
+}
+.mode-activities .status-offline .account-status-dot{
+  background:#fb923c;
+  box-shadow:0 0 6px rgba(251,146,60,.5);
+}
+.mode-activities .status-error   .account-status-dot{
+  background:var(--pink);
+  box-shadow:0 0 8px rgba(255,46,136,.6);
+  animation: syncpulse 1.2s ease-in-out infinite;
+}
+@keyframes syncpulse{
+  0%,100%{opacity:1}
+  50%{opacity:.35}
 }
 .mode-activities .auth-error{
   margin-top:8px;font-size:10.5px;
@@ -4906,6 +4929,73 @@ if (window.lucide) lucide.createIcons();
     if (banner) banner.style.display = 'none';
   });
 })();
+
+/* ============================================================
+   API exposée pour la SYNC FIRESTORE (étape 3).
+   - getState() lit l'état local courant
+   - applyRemoteState() applique un état distant SANS retrigger un push
+   - onLocalChange : callback que le module Firebase câble pour
+     intercepter les mutations locales et les propager au cloud.
+   On wrappe persist/saveOrder/saveSort pour notifier `onLocalChange`.
+   ============================================================ */
+let _applyingRemote = false;
+const _persistOrig   = persist;
+const _saveOrderOrig = saveOrder;
+const _saveSortOrig  = saveSort;
+
+persist = function(){
+  _persistOrig.call(this);
+  if (!_applyingRemote && window.activitiesAPI && window.activitiesAPI.onLocalChange){
+    try { window.activitiesAPI.onLocalChange(); } catch(e){ console.warn(e); }
+  }
+};
+saveOrder = function(){
+  _saveOrderOrig.call(this);
+  if (!_applyingRemote && window.activitiesAPI && window.activitiesAPI.onLocalChange){
+    try { window.activitiesAPI.onLocalChange(); } catch(e){ console.warn(e); }
+  }
+};
+saveSort = function(){
+  _saveSortOrig.call(this);
+  if (!_applyingRemote && window.activitiesAPI && window.activitiesAPI.onLocalChange){
+    try { window.activitiesAPI.onLocalChange(); } catch(e){ console.warn(e); }
+  }
+};
+
+window.activitiesAPI = {
+  getState(){
+    return {
+      deleted: [...deleted],
+      done:    [...done],
+      cities:  [...selectedCities],
+      order:   Array.isArray(state.customOrder) ? [...state.customOrder] : [],
+      sort:    (typeof state.sort === 'string') ? state.sort : 'default'
+    };
+  },
+  applyRemoteState(s){
+    _applyingRemote = true;
+    try {
+      if (Array.isArray(s.deleted)) deleted = new Set(s.deleted);
+      if (Array.isArray(s.done))    done    = new Set(s.done);
+      if (Array.isArray(s.cities))  selectedCities = new Set(s.cities);
+      if (Array.isArray(s.order))   state.customOrder = [...s.order];
+      if (typeof s.sort === 'string') state.sort = s.sort;
+      // Persist côté localStorage (versions originales, sans re-trigger)
+      _persistOrig.call(this);
+      _saveOrderOrig.call(this);
+      _saveSortOrig.call(this);
+      if (typeof render === 'function') render();
+      if (typeof updateCityEdge === 'function') updateCityEdge();
+      const drw = document.getElementById('drawer');
+      if (drw && drw.classList.contains('open') && typeof buildDrawer === 'function'){
+        buildDrawer();
+      }
+    } finally {
+      _applyingRemote = false;
+    }
+  },
+  onLocalChange: null
+};
 
 })();
 </script>
@@ -10371,6 +10461,13 @@ function shortName(s){
   if (!s) return '';
   return s.split(/\s+/)[0];
 }
+function syncStatusLabel(s){
+  if (s === 'synced')  return 'Synchronisé';
+  if (s === 'syncing') return 'Synchronisation…';
+  if (s === 'offline') return 'Hors ligne · modifs en attente';
+  if (s === 'error')   return 'Erreur de sync';
+  return 'Connecté';
+}
 
 /* === User doc & espace par défaut === */
 async function ensureUserDoc(user){
@@ -10603,9 +10700,9 @@ function renderAccount(){
       <button type="button" class="btn-signout" id="btnSignOut" aria-label="Déconnexion"><i data-lucide="log-out"></i></button>
     </div>
     ${spaceHTML}
-    <div class="account-status">
+    <div class="account-status status-${esc(syncStatus)}">
       <span class="account-status-dot"></span>
-      <span>Connecté · sync activités à venir</span>
+      <span>${esc(syncStatusLabel(syncStatus))}</span>
     </div>
     ${lastError ? `<div class="auth-error">${esc(lastError)}</div>` : ''}
   `;
@@ -10859,6 +10956,288 @@ getRedirectResult(auth).catch(err => {
   }
 });
 
+/* ============================================================ */
+/* SYNC ACTIVITÉS (étape 3)                                     */
+/* ------------------------------------------------------------ */
+/* Synchronise deleted/done/cities/order/sort dans              */
+/*   spaces/{spaceId}/activities/state                          */
+/* - Bootstrap au premier sign-in : fusion local↔cloud         */
+/* - Push debouncé après chaque mutation locale                */
+/* - Listener onSnapshot pour appliquer les updates distants    */
+/* - Diff/arrayUnion/arrayRemove pour éviter écrasements         */
+/* ============================================================ */
+let activitiesUnsub = null;
+let lastSentState   = null;
+let pushTimer       = null;
+let syncStatus      = 'idle';   // idle | syncing | synced | offline | error
+const PUSH_DEBOUNCE_MS = 350;
+
+function setSyncStatus(s){
+  if (syncStatus === s) return;
+  syncStatus = s;
+  renderAccount();
+}
+
+function activitiesStateRef(sid){
+  return doc(db, 'spaces', sid, 'activities', 'state');
+}
+function diffArr(prev, next){
+  const p = new Set(prev || []);
+  const n = new Set(next || []);
+  return {
+    added:   (next || []).filter(x => !p.has(x)),
+    removed: (prev || []).filter(x => !n.has(x))
+  };
+}
+function arrEq(a, b){
+  if (!Array.isArray(a) || !Array.isArray(b)) return false;
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++){ if (a[i] !== b[i]) return false; }
+  return true;
+}
+function setEq(a, b){
+  const aa = (a||[]).slice().sort();
+  const bb = (b||[]).slice().sort();
+  return arrEq(aa, bb);
+}
+
+async function pushActivities(){
+  if (!currentSpaceId || !currentUser || !window.activitiesAPI) return;
+  const cur = window.activitiesAPI.getState();
+  setSyncStatus('syncing');
+  try {
+    if (!lastSentState){
+      // Premier push : full setDoc
+      await setDoc(activitiesStateRef(currentSpaceId), {
+        deleted: cur.deleted,
+        done:    cur.done,
+        cities:  cur.cities,
+        order:   cur.order,
+        sort:    cur.sort,
+        updatedBy: currentUser.uid,
+        updatedAt: serverTimestamp()
+      });
+    } else {
+      const dDone   = diffArr(lastSentState.done,    cur.done);
+      const dDel    = diffArr(lastSentState.deleted, cur.deleted);
+      const dCities = diffArr(lastSentState.cities,  cur.cities);
+
+      // Stage 1 : additions (arrayUnion)
+      const s1 = {};
+      if (dDone.added.length)   s1.done    = arrayUnion(...dDone.added);
+      if (dDel.added.length)    s1.deleted = arrayUnion(...dDel.added);
+      if (dCities.added.length) s1.cities  = arrayUnion(...dCities.added);
+      if (Object.keys(s1).length){
+        s1.updatedBy = currentUser.uid;
+        s1.updatedAt = serverTimestamp();
+        await updateDoc(activitiesStateRef(currentSpaceId), s1);
+      }
+
+      // Stage 2 : retraits (arrayRemove) + overwrite order/sort
+      const s2 = {};
+      if (dDone.removed.length)   s2.done    = arrayRemove(...dDone.removed);
+      if (dDel.removed.length)    s2.deleted = arrayRemove(...dDel.removed);
+      if (dCities.removed.length) s2.cities  = arrayRemove(...dCities.removed);
+      if (!arrEq(lastSentState.order, cur.order)) s2.order = cur.order;
+      if (lastSentState.sort !== cur.sort) s2.sort = cur.sort;
+      if (Object.keys(s2).length){
+        s2.updatedBy = currentUser.uid;
+        s2.updatedAt = serverTimestamp();
+        await updateDoc(activitiesStateRef(currentSpaceId), s2);
+      }
+    }
+    lastSentState = cur;
+    setSyncStatus(navigator.onLine ? 'synced' : 'offline');
+  } catch (err){
+    console.error('pushActivities failed', err);
+    setSyncStatus(navigator.onLine ? 'error' : 'offline');
+  }
+}
+
+function schedulePush(){
+  if (pushTimer) clearTimeout(pushTimer);
+  pushTimer = setTimeout(() => {
+    pushTimer = null;
+    pushActivities();
+  }, PUSH_DEBOUNCE_MS);
+}
+
+async function bootstrapActivities(spaceId){
+  // Détache l'ancien listener
+  if (activitiesUnsub){ activitiesUnsub(); activitiesUnsub = null; }
+  if (pushTimer){ clearTimeout(pushTimer); pushTimer = null; }
+  lastSentState = null;
+  if (window.activitiesAPI) window.activitiesAPI.onLocalChange = null;
+
+  if (!spaceId || !currentUser || !window.activitiesAPI) return;
+  setSyncStatus('syncing');
+
+  try {
+    const snap = await getDoc(activitiesStateRef(spaceId));
+    const local = window.activitiesAPI.getState();
+
+    if (!snap.exists()){
+      // Cloud vide → on uploade l'état local
+      await setDoc(activitiesStateRef(spaceId), {
+        deleted:  local.deleted,
+        done:     local.done,
+        cities:   local.cities,
+        order:    local.order,
+        sort:     local.sort,
+        updatedBy: currentUser.uid,
+        updatedAt: serverTimestamp()
+      });
+      lastSentState = local;
+    } else {
+      // Cloud a des données → fusion (union pour les sets ; cloud gagne pour order/sort)
+      const cloud = snap.data();
+      const merged = {
+        done:    Array.from(new Set([...(cloud.done    || []), ...local.done])),
+        deleted: Array.from(new Set([...(cloud.deleted || []), ...local.deleted])),
+        cities:  Array.from(new Set([...(cloud.cities  || []), ...local.cities])),
+        order:   Array.isArray(cloud.order) && cloud.order.length ? cloud.order : local.order,
+        sort:    typeof cloud.sort === 'string' ? cloud.sort : local.sort
+      };
+      window.activitiesAPI.applyRemoteState(merged);
+      lastSentState = {
+        done:    cloud.done    || [],
+        deleted: cloud.deleted || [],
+        cities:  cloud.cities  || [],
+        order:   Array.isArray(cloud.order) ? cloud.order : [],
+        sort:    cloud.sort || 'default'
+      };
+
+      // Si le local a des items que le cloud n'avait pas, push direct
+      const localChanged =
+        !setEq(merged.done,    cloud.done) ||
+        !setEq(merged.deleted, cloud.deleted) ||
+        !setEq(merged.cities,  cloud.cities) ||
+        !arrEq(merged.order,   lastSentState.order) ||
+        merged.sort !== lastSentState.sort;
+      if (localChanged){
+        await pushActivities();
+      }
+    }
+
+    // Listener temps réel
+    activitiesUnsub = onSnapshot(activitiesStateRef(spaceId), (snap2) => {
+      if (!snap2.exists()) return;
+      const remote = snap2.data();
+
+      // Si ce snapshot est notre propre écho, on rafraîchit juste lastSentState
+      if (remote.updatedBy === currentUser.uid){
+        const same =
+          setEq(remote.done,    lastSentState.done) &&
+          setEq(remote.deleted, lastSentState.deleted) &&
+          setEq(remote.cities,  lastSentState.cities) &&
+          arrEq(remote.order || [], lastSentState.order) &&
+          (remote.sort || 'default') === lastSentState.sort;
+        if (same){
+          setSyncStatus(navigator.onLine ? 'synced' : 'offline');
+          return;
+        }
+      }
+
+      // Appliquer le DIFF distant au local (préserve nos modifs non encore flushées)
+      const cur = window.activitiesAPI.getState();
+      const dDone   = diffArr(lastSentState.done    || [], remote.done    || []);
+      const dDel    = diffArr(lastSentState.deleted || [], remote.deleted || []);
+      const dCities = diffArr(lastSentState.cities  || [], remote.cities  || []);
+
+      const mDone = new Set(cur.done);
+      dDone.added.forEach(x => mDone.add(x));
+      dDone.removed.forEach(x => mDone.delete(x));
+      const mDel = new Set(cur.deleted);
+      dDel.added.forEach(x => mDel.add(x));
+      dDel.removed.forEach(x => mDel.delete(x));
+      const mCities = new Set(cur.cities);
+      dCities.added.forEach(x => mCities.add(x));
+      dCities.removed.forEach(x => mCities.delete(x));
+
+      window.activitiesAPI.applyRemoteState({
+        done:    [...mDone],
+        deleted: [...mDel],
+        cities:  [...mCities],
+        order:   Array.isArray(remote.order) ? remote.order : cur.order,
+        sort:    typeof remote.sort === 'string' ? remote.sort : cur.sort
+      });
+
+      lastSentState = {
+        done:    remote.done    || [],
+        deleted: remote.deleted || [],
+        cities:  remote.cities  || [],
+        order:   Array.isArray(remote.order) ? remote.order : [],
+        sort:    remote.sort || 'default'
+      };
+
+      // Si on a encore des modifs locales non synchronisées, on push
+      const after = window.activitiesAPI.getState();
+      const stillDirty =
+        !setEq(after.done,    lastSentState.done) ||
+        !setEq(after.deleted, lastSentState.deleted) ||
+        !setEq(after.cities,  lastSentState.cities) ||
+        !arrEq(after.order,   lastSentState.order) ||
+        after.sort !== lastSentState.sort;
+      if (stillDirty) schedulePush();
+      else setSyncStatus(navigator.onLine ? 'synced' : 'offline');
+    }, err => {
+      console.error('activities listener', err);
+      setSyncStatus('error');
+    });
+
+    // Hook sur les mutations locales
+    window.activitiesAPI.onLocalChange = () => schedulePush();
+    setSyncStatus(navigator.onLine ? 'synced' : 'offline');
+
+  } catch (err){
+    console.error('bootstrapActivities failed', err);
+    setSyncStatus('error');
+  }
+}
+
+function teardownActivitiesSync(){
+  if (activitiesUnsub){ activitiesUnsub(); activitiesUnsub = null; }
+  if (pushTimer){ clearTimeout(pushTimer); pushTimer = null; }
+  lastSentState = null;
+  if (window.activitiesAPI) window.activitiesAPI.onLocalChange = null;
+  syncStatus = 'idle';
+}
+
+// État réseau
+window.addEventListener('online',  () => {
+  if (syncStatus === 'offline') setSyncStatus('syncing');
+});
+window.addEventListener('offline', () => setSyncStatus('offline'));
+
+/* === Wiring : bootstrap quand l'espace courant change === */
+// On surveille les changements de currentSpaceId via le listener existant.
+// Plus simple : on patche subscribeUserDoc pour appeler bootstrap quand newSid change.
+const _subscribeUserDocOrig = subscribeUserDoc;
+subscribeUserDoc = function(uid){
+  if (unsub.user) unsub.user();
+  unsub.user = onSnapshot(doc(db, 'users', uid), (snap) => {
+    if (!snap.exists()) return;
+    currentUserData = snap.data();
+    const newSid = currentUserData.currentSpaceId || null;
+    if (newSid !== currentSpaceId){
+      currentSpaceId = newSid;
+      subscribeSpace(currentSpaceId);
+      subscribeOutbox(currentSpaceId);
+      // étape 3 : (re)bootstrap la sync activités
+      if (newSid) bootstrapActivities(newSid);
+      else        teardownActivitiesSync();
+    }
+    renderAccount();
+  }, err => { console.error('user doc listen', err); });
+};
+
+// Patch unsubAll pour aussi teardown la sync activités
+const _unsubAllOrig = unsubAll;
+unsubAll = function(){
+  _unsubAllOrig();
+  teardownActivitiesSync();
+};
+
 onAuthStateChanged(auth, async (user) => {
   unsubAll();
   if (!user){
@@ -10875,7 +11254,7 @@ onAuthStateChanged(auth, async (user) => {
     const userSnap = await getDoc(doc(db, 'users', user.uid));
     const ud = userSnap.exists() ? userSnap.data() : {};
     await ensureSpaceForUser(user, ud.currentSpaceId);
-    // subscribeUserDoc se chargera d'abonner l'espace dès qu'il voit le nouveau currentSpaceId
+    // subscribeUserDoc se chargera d'abonner l'espace ET la sync activités dès qu'il voit currentSpaceId
   } catch (err){
     console.error('post-signin setup failed', err);
     lastError = err.message || String(err);
