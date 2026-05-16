@@ -1184,6 +1184,10 @@ body.has-invite-banner{padding-top:84px}
 .mode-activities .act-btn.btn-done:hover, .mode-activities .act-btn.btn-done:active{background:rgba(170,255,0,.18);border-color:var(--lime);box-shadow:0 0 10px rgba(170,255,0,.4)}
 .mode-activities .act-btn.btn-del{color:var(--pink);border-color:rgba(255,46,136,.25)}
 .mode-activities .act-btn.btn-del:hover, .mode-activities .act-btn.btn-del:active{background:rgba(255,46,136,.18);border-color:var(--pink);box-shadow:0 0 10px rgba(255,46,136,.4)}
+.mode-activities .act-btn.btn-fav{color:var(--ink-faint);border-color:rgba(255,230,0,.18)}
+.mode-activities .act-btn.btn-fav:hover, .mode-activities .act-btn.btn-fav:active{color:var(--gold);background:rgba(255,230,0,.14);border-color:var(--gold);box-shadow:0 0 10px rgba(255,230,0,.35)}
+.mode-activities .act-btn.btn-fav.active{color:#0e0a1a;background:var(--gold);border-color:var(--gold);box-shadow:0 0 12px rgba(255,230,0,.55)}
+.mode-activities .act-btn.btn-fav.active svg{fill:#0e0a1a}
 .mode-activities .act-btn.btn-drag{
   color:var(--ink-faint);opacity:.55;
   border-color:transparent;background:transparent;
@@ -3254,6 +3258,12 @@ body.has-invite-banner{padding-top:84px}
         </div>
       </div>
       <div class="more-section">
+        <div class="more-section-title">Favoris</div>
+        <div class="more-chips" id="filterFavorites">
+          <button class="chip" data-fav="only"><i data-lucide="bookmark"></i> Seulement mes favoris</button>
+        </div>
+      </div>
+      <div class="more-section">
         <div class="more-section-title">Date (pour spectacles & événements programmés)</div>
         <div class="more-section-body">
           <div class="date-filter-row">
@@ -3851,6 +3861,7 @@ const undoBtn = $('undoBtn');
 
 const STORAGE_DEL = 'hiro_v8_del';
 const STORAGE_DONE = 'hiro_v8_done';
+const STORAGE_FAV  = 'hiro_v8_fav';
 const STORAGE_CITIES = 'japon_v1_cities';
 const STORAGE_ORDER = 'japon_v1_order';
 const STORAGE_SORT  = 'japon_v1_sort';
@@ -3883,8 +3894,9 @@ function loadKey(lsKey, embKey, defaultVal) {
   return defaultVal;
 }
 
-let deleted = new Set(loadKey(STORAGE_DEL,  'deleted', []));
-let done    = new Set(loadKey(STORAGE_DONE, 'done',    []));
+let deleted   = new Set(loadKey(STORAGE_DEL,  'deleted',   []));
+let done      = new Set(loadKey(STORAGE_DONE, 'done',      []));
+let favorites = new Set(loadKey(STORAGE_FAV,  'favorites', []));
 
 // Villes actives. Par défaut les 5 sous-villes Kyoto cochées (1re utilisation).
 // Si l'utilisateur a déjà fait un choix (même de tout décocher), on respecte.
@@ -3914,6 +3926,7 @@ if (selectedCities.size === 0) _defaultKyotoCities.forEach(c => selectedCities.a
 
 const state = {
   query:'', cats:new Set(), zones:new Set(), prices:new Set(), durations:new Set(), bookings:new Set(),
+  favoritesOnly: false,
   sort:'default', tab:'todo', group:'none',
   dateFilter:null,  // "YYYY-MM-DD" ou null. Filtre les entrées avec availability uniquement.
   customOrder:[]    // Tableau ordonné de `name`. Appliqué quand sort==='manual'.
@@ -3934,6 +3947,7 @@ if (embeddedStateUsed) {
   try {
     localStorage.setItem(STORAGE_DEL,    JSON.stringify([...deleted]));
     localStorage.setItem(STORAGE_DONE,   JSON.stringify([...done]));
+    localStorage.setItem(STORAGE_FAV,    JSON.stringify([...favorites]));
     localStorage.setItem(STORAGE_CITIES, JSON.stringify([...selectedCities]));
     localStorage.setItem(STORAGE_ORDER,  JSON.stringify(state.customOrder));
     localStorage.setItem(STORAGE_SORT,   state.sort);
@@ -3947,6 +3961,7 @@ function persist() {
   try {
     localStorage.setItem(STORAGE_DEL, JSON.stringify([...deleted]));
     localStorage.setItem(STORAGE_DONE, JSON.stringify([...done]));
+    localStorage.setItem(STORAGE_FAV, JSON.stringify([...favorites]));
     localStorage.setItem(STORAGE_CITIES, JSON.stringify([...selectedCities]));
   } catch(e) {}
 }
@@ -4003,6 +4018,7 @@ function matchesAggregateFilters(r, skipType) {
     if (state.bookings.has('yes') && !state.bookings.has('no') && !needsBooking) return false;
     if (state.bookings.has('no') && !state.bookings.has('yes') && needsBooking) return false;
   }
+  if (state.favoritesOnly && !favorites.has(r.name)) return false;
   if (state.dateFilter && r.availability) {
     if (!isAvailableOn(r.availability, state.dateFilter)) return false;
   }
@@ -4179,6 +4195,13 @@ document.querySelectorAll('#filterBooking .chip').forEach(chip => {
     if (state.bookings.has(v)) state.bookings.delete(v);
     else state.bookings.add(v);
     chip.classList.toggle('active');
+    render();
+  });
+});
+document.querySelectorAll('#filterFavorites .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    state.favoritesOnly = !state.favoritesOnly;
+    chip.classList.toggle('active', state.favoritesOnly);
     render();
   });
 });
@@ -4535,10 +4558,17 @@ function toggleDone(name) {
   persist();render();
 }
 
+function toggleFavorite(name) {
+  if (favorites.has(name)) favorites.delete(name);
+  else favorites.add(name);
+  persist();render();
+}
+
 $('emptyReset').addEventListener('click', resetAll);
 function resetAll() {
   state.query='';state.cats.clear();state.zones.clear();
   state.prices.clear();state.durations.clear();state.bookings.clear();
+  state.favoritesOnly=false;
   state.dateFilter=null;
   search.value='';searchClear.classList.remove('visible');
   if (typeof filterDate !== 'undefined' && filterDate) { filterDate.value=''; updateDateClearState(); }
@@ -4594,6 +4624,7 @@ function matchesFilters(r) {
     if (state.bookings.has('yes') && !state.bookings.has('no') && !needsBooking) return false;
     if (state.bookings.has('no') && !state.bookings.has('yes') && needsBooking) return false;
   }
+  if (state.favoritesOnly && !favorites.has(r.name)) return false;
   // Filtre date : ne s'applique qu'aux entrées AYANT un champ availability
   // (les autres — musées, boutiques — restent visibles quelle que soit la date)
   if (state.dateFilter && r.availability) {
@@ -4638,6 +4669,9 @@ function syncChipsToState() {
   document.querySelectorAll('#filterBooking .chip').forEach(c => {
     c.classList.toggle('active', state.bookings.has(c.dataset.booking));
   });
+  document.querySelectorAll('#filterFavorites .chip').forEach(c => {
+    c.classList.toggle('active', state.favoritesOnly);
+  });
   // Update sheet items if sheets are currently open.
   // We rebuild the sheets entirely so hierarchical (cat/subcat) states stay
   // consistent — toggling a single class on each .sheet-item via dataset.val
@@ -4667,6 +4701,7 @@ function syncChipsToState() {
   }
   // Update More button highlight when advanced filters are applied
   const hasAdvanced = state.prices.size + state.durations.size + state.bookings.size > 0
+    || state.favoritesOnly
     || state.sort !== 'default' || state.group !== 'none';
   moreBtn.classList.toggle('active', hasAdvanced || morePanel.classList.contains('open'));
 }
@@ -4687,6 +4722,9 @@ function renderActiveFilters() {
   state.prices.forEach(v => pills.push({type:'price', val:v, label:labels[v]}));
   state.durations.forEach(v => pills.push({type:'duration', val:v, label:labels[v]}));
   state.bookings.forEach(v => pills.push({type:'booking', val:v, label:labels[v]}));
+  if (state.favoritesOnly) {
+    pills.push({type:'favoritesOnly', val:'only', label:'★ Favoris seulement'});
+  }
   // Filtre date : un seul chip s'il est actif
   if (state.dateFilter) {
     // Format en JJ/MM/AAAA pour affichage
@@ -4703,6 +4741,9 @@ function renderActiveFilters() {
         state.dateFilter = null;
         filterDate.value = '';
         updateDateClearState();
+      } else if (p.type === 'favoritesOnly') {
+        state.favoritesOnly = false;
+        syncChipsToState();
       } else {
         const setMap = {cat:state.cats, zone:state.zones, price:state.prices, duration:state.durations, booking:state.bookings};
         setMap[p.type].delete(p.val);
@@ -4748,6 +4789,7 @@ function buildMapsUrl(addr) {
 
 function renderRow(r) {
   const isDone = done.has(r.name);
+  const isFav  = favorites.has(r.name);
   // Build address block: split addr at first " — " into name + address parts
   let addrHtml = '';
   if (r.addr) {
@@ -4805,6 +4847,9 @@ function renderRow(r) {
         <div class="act-actions">
           <button class="act-btn btn-drag" aria-label="Glisser pour réordonner" title="Maintenir et glisser">
             <i data-lucide="grip-vertical"></i>
+          </button>
+          <button class="act-btn btn-fav ${isFav?'active':''}" aria-label="${isFav?'Retirer des favoris':'Ajouter aux favoris'}" title="${isFav?'Retirer des favoris':'Ajouter aux favoris'}">
+            <i data-lucide="bookmark"></i>
           </button>
           <button class="act-btn btn-done" aria-label="${isDone?'Annuler':'Marquer fait'}" title="${isDone?'Annuler':'Marquer fait'}">
             <i data-lucide="check"></i>
@@ -4870,13 +4915,18 @@ function render() {
       e.stopPropagation();
       deleteItem(name);
     });
+    const favBtn = act.querySelector('.btn-fav');
+    if (favBtn) favBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      toggleFavorite(name);
+    });
   });
   
   // Empty state
   if (rows.length === 0) {
     listEl.style.display = 'none';
     empty.style.display = 'block';
-    const total = state.cats.size + state.zones.size + state.prices.size + state.durations.size + state.bookings.size;
+    const total = state.cats.size + state.zones.size + state.prices.size + state.durations.size + state.bookings.size + (state.favoritesOnly ? 1 : 0);
     if (state.tab === 'done' && doneItems.length === 0 && total === 0 && !state.query) {
       $('emptyTitle').textContent = 'Rien de fait encore';
       $('emptyMsg').textContent = 'Marque une activité avec ✓ pour la retrouver ici.';
@@ -4928,6 +4978,7 @@ $('downloadBtn').addEventListener('click', () => {
   const payload = {
     deleted: [...deleted],
     done: [...done],
+    favorites: [...favorites],
     cities: [...selectedCities],
     order: state.customOrder,
     sort: state.sort,
@@ -4967,6 +5018,7 @@ fileInput.addEventListener('change', e => {
       deleted = new Set(parsed.deleted);
       done = new Set(parsed.done);
       // Champs optionnels (rétrocompatibilité avec anciennes sauvegardes)
+      if (Array.isArray(parsed.favorites)) favorites = new Set(parsed.favorites);
       if (Array.isArray(parsed.cities))  selectedCities = new Set(parsed.cities);
       if (Array.isArray(parsed.order))   state.customOrder = parsed.order;
       if (typeof parsed.sort === 'string') state.sort = parsed.sort;
