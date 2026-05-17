@@ -2273,6 +2273,37 @@ body.has-invite-banner{padding-top:84px}
   padding:8px 12px;border-radius:6px;
   font-size:12px;color:var(--ink-soft);margin-top:8px;
 }
+/* Comparison block: "X vs Y" with test + table */
+.mode-japonais .review-rule-body .rule-vs{
+  background:rgba(236,72,153,.06);
+  border:1px solid rgba(236,72,153,.25);
+  border-left:3px solid var(--pink);
+  border-radius:8px;padding:10px 12px;margin:10px 0;
+}
+.mode-japonais .review-rule-body .rule-vs-title{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--pink);margin-bottom:6px;display:flex;align-items:center;gap:6px;
+}
+.mode-japonais .review-rule-body .rule-vs-test{
+  font-size:12px;color:var(--ink);background:var(--surface);
+  padding:8px 10px;border-radius:6px;margin:6px 0;line-height:1.5;
+}
+.mode-japonais .review-rule-body .rule-vs-test strong{color:var(--cyan)}
+.mode-japonais .review-rule-body .rule-vs-table{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;
+}
+.mode-japonais .review-rule-body .rule-vs-cell{
+  background:var(--surface);border-radius:6px;padding:7px 9px;
+  font-size:11.5px;line-height:1.5;border-top:2px solid var(--rule);
+}
+.mode-japonais .review-rule-body .rule-vs-cell.left{border-top-color:var(--cyan)}
+.mode-japonais .review-rule-body .rule-vs-cell.right{border-top-color:var(--violet)}
+.mode-japonais .review-rule-body .rule-vs-cell .vs-label{
+  font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:14px;
+  display:block;margin-bottom:3px;
+}
+.mode-japonais .review-rule-body .rule-vs-cell.left .vs-label{color:var(--cyan)}
+.mode-japonais .review-rule-body .rule-vs-cell.right .vs-label{color:var(--violet)}
 .mode-japonais .review-actions{
   width:100%;max-width:600px;margin:24px auto 0;
   display:flex;gap:10px;
@@ -5646,6 +5677,7 @@ const VOCAB = [
   {id:3, category:"essentiel", catLabel:"Indispensables", catNum:"壱",
     jp:"お願いします", romaji:"onegaishimasu", fr:"S'il vous plaît", frSub:"je vous le demande",
     note:"Se met à la fin de presque toutes les demandes. Plus poli que <em>kudasai</em>.",
+    rules:["kudasai_vs_onegaishimasu"],
     mnemo:"Construction : お (préfixe poli) + 願い (negai = souhait) + します (shimasu = je fais). Litt. « je formule un souhait poli ».",usage:{when:["<em>Mizu, onegaishimasu</em> — De l'eau s'il vous plaît (au resto)","<em>Kore onegaishimasu</em> — Ceci s'il vous plaît (en pointant)","<em>Yoroshiku onegaishimasu</em> — En première rencontre : « comptez sur moi »","<em>O-kaikei onegaishimasu</em> — L'addition s'il vous plaît"],avoid:["Pour remercier après coup → <em>arigatô gozaimasu</em>","Pour offrir/tendre un objet → <em>dôzo</em> (« je vous en prie, prenez »)","Comme « excusez-moi » d'introduction → <em>sumimasen</em>"],variants:[{form:"ください <em>kudasai</em>",when:"Plus direct, presque « donnez-moi ». Suit un objet : <em>mizu wo kudasai</em>."},{form:"よろしくお願いします <em>yoroshiku onegaishimasu</em>",when:"Variante « comptez sur moi / je compte sur vous » à la première rencontre."},{form:"お願い <em>onegai</em>",when:"Forme familière : « s'il te plaît ! ». Entre proches."}]}
   },
   {id:4, category:"essentiel", catLabel:"Indispensables", catNum:"壱",
@@ -5657,6 +5689,7 @@ const VOCAB = [
   {id:5, category:"essentiel", catLabel:"Indispensables", catNum:"壱",
     jp:"これ", romaji:"kore", fr:"Ceci", frSub:"",
     note:"Avec <em>onegaishimasu</em>, en pointant un menu : votre phrase magique au restaurant.",
+    rules:["kosoado"],
     mnemo:"Famille des démonstratifs ko-so-a-do : これ (kore = ceci, près de moi), それ (sore = près de toi), あれ (are = loin de nous deux), どれ (dore = lequel ?).",usage:{when:["<em>Kore wa nan desu ka?</em> — Qu'est-ce que c'est ? (en montrant)","<em>Kore onegaishimasu</em> — Ceci, s'il vous plaît (commande)","<em>Kore wa ikura desu ka?</em> — Combien ça coûte ?"],avoid:["Pour un objet près de votre interlocuteur → <em>sore wa nan desu ka?</em>","Pour un objet à distance → <em>are wa nan desu ka?</em>","Devant un nom (« ce ramen ») → utilisez <em>kono</em> : <em>kono ramen wa oishii desu</em>"],variants:[{form:"それ <em>sore</em>",when:"« Cela » près de l'interlocuteur. Si quelqu'un tient une carte : <em>sore wa nan desu ka?</em>"},{form:"あれ <em>are</em>",when:"« Cela là-bas », loin de vous deux."},{form:"この〜 <em>kono...</em>",when:"Forme adjectivale devant un nom : <em>kono ramen</em> = ce ramen."}]}
   },
   {id:6, category:"politesse", catLabel:"Politesses", catNum:"弐",
@@ -5803,7 +5836,7 @@ const VOCAB = [
   {id:32, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
     jp:"ください", romaji:"kudasai", fr:"Donnez-moi…", frSub:"s'il vous plaît",
     note:"Forme polie pour demander un objet. Toujours après une particule を : <em>X wo kudasai</em>.",
-    rules:["particle_wo","kudasai"],
+    rules:["particle_wo","kudasai","kudasai_vs_onegaishimasu"],
     mnemo:"Forme polie de くださる (kudasaru = daigner donner). Verbe humble. Toujours après une particule を : <em>X wo kudasai</em>.",usage:{when:["<em>Kore wo kudasai</em> — Ceci, s'il vous plaît","<em>Mizu wo kudasai</em> — De l'eau s'il vous plaît","<em>Matte kudasai</em> — Attendez (verbe en -te + kudasai)"],avoid:["Sans particule を avant un objet — la grammaire l'exige","Trop direct en contexte hyper-formel → <em>onegaishimasu</em>"],variants:[{form:"お願いします <em>onegaishimasu</em>",when:"Plus poli, plus enveloppant."},{form:"ちょうだい <em>chôdai</em>",when:"Familier, presque enfantin. Entre proches."}]}
   },
   {id:33, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
@@ -6029,6 +6062,7 @@ const VOCAB = [
   {id:79, category:"pratique", catLabel:"Mots utiles", catNum:"参",
     jp:"この", romaji:"kono", fr:"Ce / cette", frSub:"démonstratif",
     note:"Adjectif démonstratif : « ce X que je désigne ». Toujours suivi d'un nom. Différent de <em>kore</em> (pronom seul).",
+    rules:["kosoado"],
     mnemo:"Famille des démonstratifs « ko- » (près du locuteur) : これ (kore = ceci), この (kono = ce/cette + nom), ここ (koko = ici). <em>Kono kappu</em> = cette tasse-ci.",
     usage:{when:["<em>Kono kâdo wa daijôbu desu ka?</em> — Cette carte ça passe ?","<em>Kono densha wa Tokyo ni ikimasu ka?</em> — Ce train va à Tokyo ?","<em>Kono heya, onegaishimasu</em> — Cette chambre, s'il vous plaît"],avoid:["Quand on désigne sans nommer l'objet → <em>kore</em>","Pour un objet près de l'interlocuteur → <em>sono</em>","Pour un objet loin des deux → <em>ano</em>"],variants:[{form:"その <em>sono</em>",when:"« Ce/cette » près de l'interlocuteur."},{form:"あの <em>ano</em>",when:"« Ce/cette » loin des deux."}]}
   },
@@ -6082,7 +6116,7 @@ const VOCAB = [
   {id:87, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"あります", romaji:"arimasu", fr:"Il y a / avoir", frSub:"existence d'objet ou lieu",
     note:"Verbe d'existence pour les choses inanimées (objets, lieux). Pour les êtres vivants : <em>imasu</em>. S'utilise avec が (ga).",
-    rules:["potential_ga"],
+    rules:["potential_ga","arimasu"],
     mnemo:"De 有る (aru). Forme polie <em>arimasu</em>. Schéma : NOM + が + arimasu = « il y a NOM ». Avec ますか : question (« y a-t-il ? »).",
     usage:{when:["<em>Eigo no menyû ga arimasu ka?</em> — Avez-vous un menu en anglais ?","<em>Toire ga arimasu</em> — Il y a des toilettes","<em>Wifi ga arimasu ka?</em> — Y a-t-il du wifi ?"],avoid:["Pour les personnes ou animaux → <em>imasu</em>","Pour exprimer la possession « j'ai » → idem <em>arimasu</em> est OK, mais souvent <em>motte imasu</em>"],variants:[{form:"ありません <em>arimasen</em>",when:"« Il n'y a pas » (forme négative)."}]}
   },
@@ -6324,30 +6358,67 @@ const VOCAB_GROUP_LABELS = VOCAB_THEME_LABELS;
 const RULES = {
   particle_wa: {
     title: "La particule は (wa)",
-    short: "Marque le sujet/topic de la phrase",
-    body: `<p>La particule <strong>は</strong> (prononcée <em>wa</em> et non <em>ha</em>) marque le <strong>thème</strong> de la phrase — ce dont on parle.</p>
-<p>Structure : <span class="rule-formula">[Sujet] は [reste de la phrase]</span></p>
+    short: "Marque le thème de la phrase — ce dont on parle",
+    body: `<p>La particule <strong>は</strong> (prononcée <em>wa</em> et non <em>ha</em>) marque le <strong>thème</strong> de la phrase : ce dont on va parler ensuite. C'est l'équivalent du « quant à… » français.</p>
+<p>Structure : <span class="rule-formula">[Thème] は [ce qu'on en dit]</span></p>
 <p><strong>Exemples :</strong></p>
 <ul class="rule-examples">
-<li><span class="jp-inline">駅<strong>は</strong>どこですか</span> — Quant à la gare, c'est où ?</li>
-<li><span class="jp-inline">これ<strong>は</strong>何ですか</span> — Cette chose-ci, qu'est-ce que c'est ?</li>
-<li><span class="jp-inline">私<strong>は</strong>フランス人です</span> — Moi, je suis français.</li>
+<li><span class="jp-inline">駅<strong>は</strong>どこですか</span> — <em>eki wa doko desu ka</em> — Quant à la gare, c'est où ?</li>
+<li><span class="jp-inline">これ<strong>は</strong>何ですか</span> — <em>kore wa nan desu ka</em> — Cette chose-ci, qu'est-ce que c'est ?</li>
+<li><span class="jp-inline">私<strong>は</strong>フランス人です</span> — <em>watashi wa furansu-jin desu</em> — Moi, je suis français.</li>
 </ul>
-<p class="rule-tip">💡 <em>は</em> se prononce toujours <strong>wa</strong> quand c'est une particule, même si le caractère se lit normalement <em>ha</em>.</p>`
+<p class="rule-tip">💡 <em>は</em> se prononce toujours <strong>wa</strong> quand c'est une particule, même si le caractère se lit normalement <em>ha</em>.</p>
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : は vs を ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> y a-t-il une <strong>action transitive</strong> (qu'on fait <em>sur</em> quelque chose) dans la phrase ?<br>→ Oui (kudasai, tabemasu, mimasu…) : <strong>を</strong> sur l'objet de l'action.<br>→ Non (desu, daijôbu, doko, nan…) : <strong>は</strong> sur le sujet décrit.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">は (description)</span><span class="jp-inline">これ<strong>は</strong>水です</span> — Ceci, c'est de l'eau. <em>(je décris)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">を (action)</span><span class="jp-inline">これ<strong>を</strong>ください</span> — Ceci, donnez-le-moi. <em>(je demande)</em></div>
+<div class="rule-vs-cell left"><span class="vs-label">は</span><span class="jp-inline">お酒<strong>は</strong>大丈夫です</span> — L'alcool ça va (refus poli)</div>
+<div class="rule-vs-cell right"><span class="vs-label">を</span><span class="jp-inline">お酒<strong>を</strong>ください</span> — De l'alcool, s'il vous plaît</div>
+</div>
+</div>
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : は vs が ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> de quoi parle-t-on déjà ?<br>→ Sujet <strong>déjà connu / mis en thème</strong> ("quant à X…") : <strong>は</strong>.<br>→ Sujet <strong>nouveau ou souligné</strong> ("c'est X qui…") : <strong>が</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">は (connu)</span><span class="jp-inline">私<strong>は</strong>田中です</span> — Moi, je suis Tanaka. <em>(on parlait de moi)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">が (nouveau)</span><span class="jp-inline">田中さん<strong>が</strong>来ました</span> — C'est Tanaka qui est venu. <em>(info nouvelle)</em></div>
+<div class="rule-vs-cell left"><span class="vs-label">は</span><span class="jp-inline">英語<strong>は</strong>話せます</span> — L'anglais, je sais le parler. <em>(contraste implicite)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">が</span><span class="jp-inline">英語<strong>が</strong>話せます</span> — Je sais parler l'anglais. <em>(neutre, capacité)</em></div>
+</div>
+<p class="rule-tip">💡 Avec les verbes de capacité/goût/compréhension (<em>hanaseru, dekiru, wakaru, suki</em>), <strong>が</strong> est la forme par défaut. <strong>は</strong> apparaît si on veut souligner un contraste.</p>
+</div>`
   },
 
   particle_wo: {
     title: "La particule を (wo)",
-    short: "Marque l'objet direct du verbe",
-    body: `<p>La particule <strong>を</strong> (prononcée <em>wo</em> ou <em>o</em>) marque l'<strong>objet direct</strong> — ce qui subit l'action.</p>
-<p>Structure : <span class="rule-formula">[Objet] を [verbe]</span></p>
+    short: "Marque l'objet d'une action transitive",
+    body: `<p>La particule <strong>を</strong> (prononcée <em>wo</em> ou <em>o</em>) marque l'<strong>objet direct</strong> d'un verbe d'action : ce qui <strong>subit l'action</strong>.</p>
+<p>Structure : <span class="rule-formula">[Objet] を [verbe d'action]</span></p>
 <p><strong>Exemples :</strong></p>
 <ul class="rule-examples">
-<li><span class="jp-inline">水<strong>を</strong>ください</span> — De l'eau, s'il vous plaît. <em>(L'eau, c'est ce qu'on demande.)</em></li>
-<li><span class="jp-inline">これ<strong>を</strong>ください</span> — Ceci, s'il vous plaît.</li>
-<li><span class="jp-inline">写真<strong>を</strong>撮ります</span> — Je prends une photo.</li>
+<li><span class="jp-inline">水<strong>を</strong>ください</span> — <em>mizu wo kudasai</em> — De l'eau, s'il vous plaît.</li>
+<li><span class="jp-inline">これ<strong>を</strong>ください</span> — <em>kore wo kudasai</em> — Ceci, s'il vous plaît.</li>
+<li><span class="jp-inline">寿司<strong>を</strong>食べます</span> — <em>sushi wo tabemasu</em> — Je mange des sushis.</li>
+<li><span class="jp-inline">写真<strong>を</strong>撮ります</span> — <em>shashin wo torimasu</em> — Je prends une photo.</li>
 </ul>
-<p class="rule-tip">💡 Le caractère <em>を</em> n'apparaît quasiment qu'en tant que particule. Sa prononciation est en pratique très proche de <em>o</em>.</p>`
+<p class="rule-tip">💡 Le caractère <em>を</em> n'apparaît quasiment qu'en tant que particule. Sa prononciation est en pratique très proche de <em>o</em>.</p>
+<p class="rule-tip">💡 <em>を</em> peut être omis à l'oral familier : <em>kore kudasai</em>.</p>
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : を vs は ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> Y a-t-il une <strong>action transitive</strong> faite sur l'élément ?<br>→ Oui (on demande, on mange, on prend, on voit…) : <strong>を</strong>.<br>→ Non (on décrit, on dit ce que c'est) : <strong>は</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">を (action)</span><span class="jp-inline">これ<strong>を</strong>ください</span> — Donnez-moi ceci. <em>(action : donner)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">は (description)</span><span class="jp-inline">これ<strong>は</strong>水です</span> — Ceci, c'est de l'eau. <em>(je dis ce que c'est)</em></div>
+<div class="rule-vs-cell left"><span class="vs-label">を</span><span class="jp-inline">お酒<strong>を</strong>飲みたい</span> — Je veux boire de l'alcool</div>
+<div class="rule-vs-cell right"><span class="vs-label">は</span><span class="jp-inline">お酒<strong>は</strong>大丈夫</span> — L'alcool, ça va merci</div>
+</div>
+<p class="rule-tip">⚠ <strong>Piège</strong> : avec les verbes de <em>capacité</em> (<em>hanaseru, dekiru, wakaru</em>) et de <em>goût</em> (<em>suki</em>), on n'utilise <strong>ni を ni は</strong> mais <strong>が</strong>. Voir « が avec les verbes de capacité ».</p>
+</div>`
   },
 
   particle_no: {
@@ -6410,29 +6481,60 @@ const RULES = {
 
   arimasu: {
     title: "あります (arimasu)",
-    short: "« Il y a » / « avoir » (objets inanimés)",
-    body: `<p><strong>あります</strong> signifie <strong>« il y a »</strong> ou <strong>« avoir »</strong>, mais uniquement pour des <strong>objets inanimés</strong> ou des choses abstraites.</p>
-<p>Structure interrogative : <span class="rule-formula">[Chose] あります か</span> — « Avez-vous… ? »</p>
+    short: "« Il y a » / « avoir » — pour les choses inanimées",
+    body: `<p><strong>あります</strong> signifie <strong>« il y a »</strong> ou <strong>« avoir »</strong>, mais uniquement pour des <strong>objets inanimés</strong> ou des choses abstraites (réservation, temps, idée…).</p>
+<p>Structure : <span class="rule-formula">[Chose] が あります</span> — « il y a [chose] »<br>
+Interrogative : <span class="rule-formula">[Chose] が あります か</span> — « avez-vous… ? »</p>
 <p><strong>Exemples :</strong></p>
 <ul class="rule-examples">
-<li><span class="jp-inline">英語のメニュー<strong>ありますか</strong></span> — Avez-vous un menu en anglais ?</li>
-<li><span class="jp-inline">トイレ<strong>あります</strong></span> — Il y a des toilettes.</li>
-<li><span class="jp-inline">予約<strong>あります</strong></span> — J'ai une réservation.</li>
+<li><span class="jp-inline">英語のメニュー<strong>がありますか</strong></span> — Avez-vous un menu en anglais ?</li>
+<li><span class="jp-inline">トイレ<strong>があります</strong></span> — Il y a des toilettes.</li>
+<li><span class="jp-inline">予約<strong>があります</strong></span> — J'ai une réservation. (chose abstraite)</li>
+<li><span class="jp-inline">時間<strong>がありません</strong></span> — Je n'ai pas le temps. (négatif)</li>
 </ul>
-<p class="rule-tip">💡 Pour les êtres vivants (personnes, animaux), on utilise <em>imasu</em> à la place. Pour dire « je n'en ai pas » : <em>arimasen</em>.</p>`
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : あります vs います ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> ce dont je parle peut-il <strong>se déplacer de sa propre volonté</strong> ?<br>→ <strong>Non</strong> (objet, lieu, idée, plante) : <strong>あります</strong>.<br>→ <strong>Oui</strong> (personne, animal, insecte) : <strong>います</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">あります (inanimé)</span><span class="jp-inline">鍵<strong>があります</strong></span> — Il y a une clé.</div>
+<div class="rule-vs-cell right"><span class="vs-label">います (animé)</span><span class="jp-inline">犬<strong>がいます</strong></span> — Il y a un chien.</div>
+<div class="rule-vs-cell left"><span class="vs-label">あります</span><span class="jp-inline">レストラン<strong>があります</strong></span> — Il y a un restaurant.</div>
+<div class="rule-vs-cell right"><span class="vs-label">います</span><span class="jp-inline">子供<strong>がいます</strong></span> — J'ai des enfants. / Il y a des enfants.</div>
+</div>
+<p class="rule-tip">💡 <strong>Cas piège</strong> : les <strong>plantes</strong> et les <strong>poissons morts</strong> (dans un magasin par exemple) prennent <em>arimasu</em>. Les <strong>poissons vivants</strong> prennent <em>imasu</em>. Les <strong>voitures et trains</strong> prennent <em>arimasu</em> (objets), même si on les voit bouger.</p>
+<p class="rule-tip">💡 Forme négative : <em>arimasen</em> (« il n'y en a pas ») et <em>imasen</em> (« il n'y est pas »).</p>
+</div>`
   },
 
   particle_ga: {
     title: "La particule が (ga)",
-    short: "Marque le sujet grammatical (info nouvelle)",
-    body: `<p>La particule <strong>が</strong> marque le <strong>sujet grammatical</strong>. À distinguer de は (le topic) : が introduit une information nouvelle ou met l'accent sur le sujet.</p>
+    short: "Marque le sujet — info nouvelle ou capacité",
+    body: `<p>La particule <strong>が</strong> marque le <strong>sujet grammatical</strong>. Elle s'utilise dans deux grands cas :</p>
+<ol class="rule-examples">
+<li>Pour <strong>introduire une information nouvelle</strong> ou souligner qui/quoi fait quelque chose.</li>
+<li>Avec les verbes de <strong>capacité, goût, compréhension, existence</strong> (<em>hanaseru, dekiru, wakaru, suki, arimasu, imasu</em>) — voir règle dédiée.</li>
+</ol>
 <p><strong>Exemples :</strong></p>
 <ul class="rule-examples">
-<li><span class="jp-inline">頭<strong>が</strong>痛い</span> — J'ai mal à la tête. (litt. « la tête fait mal »)</li>
-<li><span class="jp-inline">お腹<strong>が</strong>すいた</span> — J'ai faim. (litt. « le ventre est vide »)</li>
+<li><span class="jp-inline">頭<strong>が</strong>痛い</span> — <em>atama ga itai</em> — J'ai mal à la tête. (litt. « la tête fait mal »)</li>
+<li><span class="jp-inline">お腹<strong>が</strong>すいた</span> — <em>onaka ga suita</em> — J'ai faim. (litt. « le ventre est vide »)</li>
+<li><span class="jp-inline">英語<strong>が</strong>分かります</span> — <em>eigo ga wakarimasu</em> — Je comprends l'anglais.</li>
+<li><span class="jp-inline">トイレ<strong>が</strong>あります</span> — <em>toire ga arimasu</em> — Il y a des toilettes. (existence)</li>
 </ul>
-<p class="rule-tip">💡 Différence subtile avec は : は présuppose le sujet (« quant à X »), が l'introduit (« c'est X qui »). Pour un débutant, retenez surtout les expressions toutes faites avec が.</p>
-<p class="rule-tip">⚠ Cas important : les verbes de <strong>capacité</strong>, <strong>goût</strong> et <strong>compréhension</strong> (<em>hanasemasu</em>, <em>dekimasu</em>, <em>wakaru</em>, <em>suki</em>) prennent <strong>が</strong> et non を. Voir la règle dédiée « が avec les verbes de capacité ».</p>`
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : が vs は ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> où est l'information importante ?<br>→ <strong>Avant</strong> la particule (« c'est <em>X</em> qui… ») : <strong>が</strong>.<br>→ <strong>Après</strong> la particule (« quant à X, on dit que… ») : <strong>は</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">が (info nouvelle)</span><span class="jp-inline">トイレ<strong>が</strong>あります</span> — Il y a des toilettes (j'annonce leur existence)</div>
+<div class="rule-vs-cell right"><span class="vs-label">は (info connue)</span><span class="jp-inline">トイレ<strong>は</strong>どこですか</span> — Les toilettes, où sont-elles ? (on sait qu'elles existent)</div>
+<div class="rule-vs-cell left"><span class="vs-label">が</span><span class="jp-inline">これ<strong>が</strong>いい</span> — C'est <em>celui-ci</em> qui me plaît (choix parmi plusieurs)</div>
+<div class="rule-vs-cell right"><span class="vs-label">は</span><span class="jp-inline">これ<strong>は</strong>いい</span> — Celui-ci, c'est bien (description simple)</div>
+</div>
+<p class="rule-tip">💡 <strong>Astuce questions</strong> : avec un mot interrogatif (<em>nani, dare, doko</em>), on emploie <strong>が</strong> avant le mot question, mais <strong>は</strong> sur le thème de la question. Ex : <em>kore <strong>wa</strong> nan desu ka?</em> (« ceci, qu'est-ce que c'est ? »), <em>dare <strong>ga</strong> kimashita ka?</em> (« qui est venu ? »).</p>
+<p class="rule-tip">⚠ Cas important : les verbes de <strong>capacité</strong>, <strong>goût</strong>, <strong>compréhension</strong> et <strong>existence</strong> prennent <strong>が</strong> et non を. Voir « が avec les verbes de capacité ».</p>
+</div>`
   },
 
   potential_ga: {
@@ -6481,7 +6583,7 @@ const RULES = {
   particle_ni: {
     title: "La particule に (ni)",
     short: "Destination, point dans le temps, destinataire",
-    body: `<p>La particule <strong>に</strong> indique un <strong>point</strong> : un lieu de destination, un moment précis dans le temps, ou la personne à qui s'adresse une action.</p>
+    body: `<p>La particule <strong>に</strong> indique un <strong>point</strong> précis : un lieu de destination, un moment précis dans le temps, ou la personne à qui s'adresse une action.</p>
 <p>Structure : <span class="rule-formula">[Lieu/Moment] に [verbe de mouvement/action]</span></p>
 <p><strong>Exemples :</strong></p>
 <ul class="rule-examples">
@@ -6490,12 +6592,23 @@ const RULES = {
 <li><span class="jp-inline">朝<strong>に</strong>起きます</span> — <em>asa ni okimasu</em> — Je me lève le matin. (moment)</li>
 <li><span class="jp-inline">右<strong>に</strong>曲がってください</span> — <em>migi ni magatte kudasai</em> — Tournez à droite.</li>
 </ul>
-<p class="rule-tip">💡 Différence avec で : に = le <strong>point d'arrivée</strong> ou <strong>l'instant précis</strong> ; で = le <strong>lieu où se déroule</strong> une action ou le <strong>moyen utilisé</strong>. <em>Tokyo <strong>ni</strong> ikimasu</em> (je vais à Tokyo) vs <em>Tokyo <strong>de</strong> tabemasu</em> (je mange à Tokyo).</p>`
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : に vs で ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> que représente le lieu/élément ?<br>→ <strong>Point d'arrivée</strong> d'un déplacement, ou <strong>moment précis</strong> : <strong>に</strong>.<br>→ <strong>Lieu où se déroule</strong> l'action, ou <strong>moyen utilisé</strong> : <strong>で</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">に (destination)</span><span class="jp-inline">レストラン<strong>に</strong>行きます</span> — Je vais au restaurant <em>(j'y vais)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">で (lieu d'action)</span><span class="jp-inline">レストラン<strong>で</strong>食べます</span> — Je mange au restaurant <em>(j'y suis et j'agis)</em></div>
+<div class="rule-vs-cell left"><span class="vs-label">に (point)</span><span class="jp-inline">東京<strong>に</strong>住んでいます</span> — J'habite à Tokyo <em>(localisation fixe)</em></div>
+<div class="rule-vs-cell right"><span class="vs-label">で (action)</span><span class="jp-inline">東京<strong>で</strong>働いています</span> — Je travaille à Tokyo <em>(action située)</em></div>
+</div>
+<p class="rule-tip">💡 <strong>Astuce</strong> : avec un verbe de <em>mouvement</em> (ikimasu, kimasu, kaerimasu), c'est presque toujours <strong>に</strong>. Avec un verbe d'<em>action</em> sur place (tabemasu, nomimasu, hatarakimasu), c'est <strong>で</strong>.</p>
+</div>`
   },
 
   particle_de: {
     title: "La particule で (de)",
-    short: "Moyen, lieu où se déroule une action",
+    short: "Moyen ou lieu où se déroule une action",
     body: `<p>La particule <strong>で</strong> indique le <strong>moyen</strong> par lequel une action est faite, ou le <strong>lieu où se déroule</strong> l'action (pas la destination).</p>
 <p>Structure : <span class="rule-formula">[Moyen/Lieu d'action] で [verbe]</span></p>
 <p><strong>Exemples — moyen :</strong></p>
@@ -6509,7 +6622,88 @@ const RULES = {
 <ul class="rule-examples">
 <li><span class="jp-inline">レストラン<strong>で</strong>食べます</span> — <em>resutoran de tabemasu</em> — Je mange au restaurant.</li>
 </ul>
-<p class="rule-tip">💡 À ne pas confondre avec に : に marque la <strong>destination d'un déplacement</strong> (<em>resutoran ni ikimasu</em> = je vais au restaurant), で marque l'endroit où se déroule l'action (<em>resutoran de tabemasu</em> = je mange au restaurant).</p>`
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : で vs に ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> est-ce une <strong>destination</strong> ou un <strong>lieu d'action</strong> ?<br>→ Je <strong>vais à</strong> / <strong>arrive à</strong> / <strong>habite à</strong> ce lieu : <strong>に</strong>.<br>→ Je <strong>fais quelque chose</strong> à ce lieu (manger, travailler, lire) : <strong>で</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">で (lieu d'action)</span><span class="jp-inline">レストラン<strong>で</strong>食べます</span> — Je mange au restaurant</div>
+<div class="rule-vs-cell right"><span class="vs-label">に (destination)</span><span class="jp-inline">レストラン<strong>に</strong>行きます</span> — Je vais au restaurant</div>
+<div class="rule-vs-cell left"><span class="vs-label">で (moyen)</span><span class="jp-inline">電車<strong>で</strong>行きます</span> — J'y vais en train</div>
+<div class="rule-vs-cell right"><span class="vs-label">に (destination)</span><span class="jp-inline">東京<strong>に</strong>行きます</span> — Je vais à Tokyo</div>
+</div>
+<p class="rule-tip">💡 <strong>Astuce</strong> : si tu peux remplacer par « au moyen de » ou « dans le lieu où », c'est <strong>で</strong>. Si tu peux remplacer par « vers » ou « jusqu'à », c'est <strong>に</strong>.</p>
+</div>`
+  },
+
+  kudasai_vs_onegaishimasu: {
+    title: "ください vs お願いします",
+    short: "Deux façons de demander poliment, mais pas interchangeables",
+    body: `<p>Les deux signifient « s'il vous plaît », mais ne sont <strong>pas équivalents</strong>. Le choix dépend de ce qu'on demande et du degré de politesse.</p>
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> demande-t-on un <strong>objet concret</strong> que la personne va te tendre, ou un <strong>service / action</strong> ?<br>→ Objet concret <strong>tangible</strong> : <strong>を ください</strong> est naturel.<br>→ Service, action, demande <strong>plus abstraite</strong> ou plus polie : <strong>お願いします</strong>.</p>
+<div class="rule-vs-table">
+<div class="rule-vs-cell left"><span class="vs-label">ください (objet)</span><span class="jp-inline">水<strong>をください</strong></span> — De l'eau, s'il vous plaît</div>
+<div class="rule-vs-cell right"><span class="vs-label">お願いします (service)</span><span class="jp-inline">タクシー<strong>お願いします</strong></span> — Un taxi, s'il vous plaît</div>
+<div class="rule-vs-cell left"><span class="vs-label">ください</span><span class="jp-inline">メニュー<strong>をください</strong></span> — Le menu, s'il vous plaît</div>
+<div class="rule-vs-cell right"><span class="vs-label">お願いします</span><span class="jp-inline">お会計<strong>お願いします</strong></span> — L'addition, s'il vous plaît</div>
+</div>
+</div>
+
+<p><strong>Cas où お願いします est obligatoire :</strong></p>
+<ul class="rule-examples">
+<li>Pour préciser un <strong>moyen</strong> : <span class="jp-inline">カードで<strong>お願いします</strong></span> — Par carte, s'il vous plaît. <em>(❌ kâdo de kudasai)</em></li>
+<li>Pour préciser une <strong>langue</strong> : <span class="jp-inline">英語で<strong>お願いします</strong></span> — En anglais, s'il vous plaît.</li>
+<li>Au <strong>téléphone / en réunion</strong> : <span class="jp-inline"><strong>よろしくお願いします</strong></span> — Comptez sur moi / merci d'avance.</li>
+</ul>
+
+<p><strong>Cas où ください est plus direct :</strong></p>
+<ul class="rule-examples">
+<li>Au resto, désigner un plat : <span class="jp-inline">これ<strong>をください</strong></span> — Ceci, s'il vous plaît.</li>
+<li>Demander qu'on patiente : <span class="jp-inline">ちょっと待って<strong>ください</strong></span> — Patientez un instant. <em>(forme en -te + kudasai pour une action)</em></li>
+</ul>
+
+<p class="rule-tip">💡 <strong>En pratique au Japon</strong> : si tu hésites, <em>onegaishimasu</em> passe partout sans choquer (juste un peu trop poli pour un simple verre d'eau). <em>Kudasai</em> sans contexte peut sembler un peu sec pour un service.</p>
+<p class="rule-tip">💡 <strong>Forme en -te + kudasai</strong> sert à demander une <strong>action</strong> (« faites ceci ») : <em>matte kudasai</em>, <em>mite kudasai</em>, <em>oshiete kudasai</em>. Là, <em>onegaishimasu</em> ne marche pas.</p>`
+  },
+
+  kosoado: {
+    title: "Le système ko-so-a-do (これ/それ/あれ/どれ)",
+    short: "Près de moi, près de toi, loin de nous, lequel ?",
+    body: `<p>Le japonais distingue <strong>trois zones de proximité</strong> + une forme question. Tous les mots de cette famille commencent par <strong>ko-</strong>, <strong>so-</strong>, <strong>a-</strong> ou <strong>do-</strong>.</p>
+
+<div class="rule-vs">
+<div class="rule-vs-title">⚖ Comment choisir : これ / それ / あれ ?</div>
+<p class="rule-vs-test"><strong>Le test :</strong> qui est <strong>proche</strong> de l'objet ?<br>→ Proche de <strong>moi</strong> (locuteur) : <strong>これ kore</strong>.<br>→ Proche de <strong>toi</strong> (interlocuteur) : <strong>それ sore</strong>.<br>→ <strong>Loin de nous deux</strong> : <strong>あれ are</strong>.<br>→ <strong>Question</strong> ("lequel ?") : <strong>どれ dore</strong>.</p>
+</div>
+
+<p><strong>Pronoms (utilisés seuls) :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline"><strong>これ</strong>は何ですか</span> — <em>kore wa nan desu ka</em> — Qu'est-ce que c'est (ce truc près de moi) ?</li>
+<li><span class="jp-inline"><strong>それ</strong>をください</span> — <em>sore wo kudasai</em> — Donnez-moi ça (ce qui est près de vous).</li>
+<li><span class="jp-inline"><strong>あれ</strong>は何ですか</span> — <em>are wa nan desu ka</em> — Qu'est-ce que c'est (cette chose là-bas) ?</li>
+</ul>
+
+<p><strong>Déterminants (devant un nom) — forme en -no :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline"><strong>この</strong>切符</span> — <em>kono kippu</em> — ce billet (que je tiens)</li>
+<li><span class="jp-inline"><strong>その</strong>本</span> — <em>sono hon</em> — ce livre (à toi)</li>
+<li><span class="jp-inline"><strong>あの</strong>店</span> — <em>ano mise</em> — ce magasin là-bas</li>
+<li><span class="jp-inline"><strong>どの</strong>電車</span> — <em>dono densha</em> — quel train ?</li>
+</ul>
+
+<p><strong>Tableau de famille :</strong></p>
+<div class="rule-vs-table" style="grid-template-columns:repeat(4,1fr);">
+<div class="rule-vs-cell left"><span class="vs-label">こ (près de moi)</span>これ kore<br>この kono<br>ここ koko (ici)</div>
+<div class="rule-vs-cell right"><span class="vs-label">そ (près de toi)</span>それ sore<br>その sono<br>そこ soko (là)</div>
+<div class="rule-vs-cell left"><span class="vs-label">あ (loin)</span>あれ are<br>あの ano<br>あそこ asoko (là-bas)</div>
+<div class="rule-vs-cell right"><span class="vs-label">ど (question)</span>どれ dore<br>どの dono<br>どこ doko (où ?)</div>
+</div>
+
+<p class="rule-tip">💡 <strong>Astuce mnémo</strong> : <em>ko</em> comme « <strong>k</strong>ôté-moi », <em>so</em> comme « <strong>s</strong>oi (l'autre) », <em>a</em> comme « <strong>a</strong>u loin », <em>do</em> comme « <strong>d</strong>oute / question ».</p>
+<p class="rule-tip">💡 <strong>Au téléphone</strong> ou quand l'objet n'est pas visible : <em>sore</em> = « ce dont tu parles », <em>are</em> = « ce dont nous parlons tous les deux et qu'on connaît ».</p>`
   }
 };
 
@@ -7052,7 +7246,7 @@ const PATTERNS = [
     templateFr: "Donnez-moi [X], s'il vous plaît",
     description: "Demander qu'on vous donne quelque chose (au resto, au guichet).",
     requires: [32, 71], // kudasai, を wo
-    rules: ["particle_wo", "kudasai"],
+    rules: ["particle_wo", "kudasai", "kudasai_vs_onegaishimasu"],
     slots: [{
       name: "X",
       // Objets / boissons / billets : kore, mizu, ocha, osake, bîru, kippu
@@ -7076,6 +7270,7 @@ const PATTERNS = [
     templateFr: "[X], s'il vous plaît",
     description: "Demander quelque chose poliment, sans particule (forme étoffée).",
     requires: [3], // onegaishimasu
+    rules: ["kudasai_vs_onegaishimasu"],
     slots: [{
       name: "X",
       // Tout objet, boisson, service, taxi, addition, baguettes, sac, eau, thé, alcool, bière
@@ -7312,7 +7507,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, donnez-moi [X], s'il vous plaît",
     description: "Version polie avec <em>sumimasen</em> en préfixe pour appeler le serveur poliment.",
     requires: [1, 32, 71], // sumimasen, kudasai, を
-    rules: ["particle_wo", "kudasai"],
+    rules: ["particle_wo", "kudasai", "kudasai_vs_onegaishimasu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([5, 18, 28, 29, 30, 43])
@@ -7335,7 +7530,7 @@ const PATTERNS = [
     templateFr: "[X], s'il vous plaît (forme avec particule)",
     description: "Forme plus complète avec la particule <em>を</em> avant <em>onegaishimasu</em>. Plus naturel à l'écrit ou en formel.",
     requires: [3, 71], // onegaishimasu, を
-    rules: ["particle_wo"],
+    rules: ["particle_wo", "kudasai_vs_onegaishimasu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([18, 20, 27, 28, 29, 30, 33, 39, 46, 58])
@@ -7616,7 +7811,7 @@ const PATTERNS = [
     templateFr: "Avez-vous [X] ?",
     description: "Demander si un service ou un objet est disponible.",
     requires: [73, 87], // が, arimasu
-    rules: ["potential_ga", "particle_ka"],
+    rules: ["potential_ga", "arimasu", "particle_ka"],
     slots: [{
       name: "X",
       // Choses qu'on cherche : menyû, eigo, kâdo, toire
@@ -7759,7 +7954,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, avez-vous [X] ?",
     description: "Version polie pour demander si un service ou objet existe.",
     requires: [1, 73, 87], // sumimasen, が, arimasu
-    rules: ["potential_ga", "particle_ka"],
+    rules: ["potential_ga", "arimasu", "particle_ka"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([14, 16, 27, 37])
@@ -7847,7 +8042,7 @@ const PATTERNS = [
     templateFr: "Avez-vous un menu en anglais ?",
     description: "Phrase figée. Le <em>no</em> rattache : « menu d'anglais ». Très utile au restaurant.",
     requires: [14, 27, 74, 87], // eigo, menyû, no, arimasu
-    rules: ["particle_no", "potential_ga", "particle_ka"],
+    rules: ["particle_no", "arimasu", "particle_ka"],
     slots: [],
     generate: () => ({
       jp: `英語のメニューありますか？`,
