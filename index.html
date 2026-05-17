@@ -11123,10 +11123,14 @@ function gradeWord(success){
   document.getElementById("reviewSuccess").textContent = reviewSession.success;
   document.getElementById("reviewFail").textContent = reviewSession.fail;
 
-  // Re-render whichever view is affected, and check if a row should unlock
+  // Re-render whichever view is affected, and check if a row should unlock.
+  // Only toast for pattern unlocks on success — a failure cannot legitimately
+  // unlock anything (it only demotes), so any toast fired here would be a
+  // stale-state artefact (e.g. desynced patternsNotified). Pass silent=true
+  // on failure to silently sync state without emitting a misleading message.
   reconcileUnlock(false);
   reconcileVocabUnlock(false);
-  reconcilePhrases(false);
+  reconcilePhrases(!success);
   reconcileNumbersUnlock(false);
   render();
   renderAlphabet();
