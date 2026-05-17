@@ -8412,6 +8412,23 @@ function gradePatternResult(patternId, success){
     if (pattern && pattern.isEvolution && stats.demoted) {
       stats.demoted = false;
     }
+    // Refresh the lastRevSuccess of every word this pattern uses (requires).
+    // Practicing a pattern that uses *kore* and *mizu* IS practicing those words
+    // in production direction (rev), so their decay timer should not run.
+    // Without this, words used heavily in patterns but rarely as standalone vocab
+    // would decay unfairly.
+    if (pattern && Array.isArray(pattern.requires)) {
+      const now = Date.now();
+      let touched = false;
+      for (const reqId of pattern.requires) {
+        const ld = getLevelDir(reqId);
+        if (ld.lastRevSuccess !== undefined) {
+          ld.lastRevSuccess = now;
+          touched = true;
+        }
+      }
+      if (touched) persistLevelDir();
+    }
   } else {
     stats.fail++;
     stats.consec = 0;
@@ -8795,7 +8812,15 @@ function loadLevelDir(){
               fwd: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.fwd,10) || 0)),
               rev: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.rev,10) || 0)),
               cleanFwd: Math.max(0, parseInt(d.cleanFwd,10) || 0),
-              cleanRev: Math.max(0, parseInt(d.cleanRev,10) || 0)
+              cleanRev: Math.max(0, parseInt(d.cleanRev,10) || 0),
+              lastCleanFwd: Math.max(0, parseInt(d.lastCleanFwd,10) || 0),
+              lastCleanRev: Math.max(0, parseInt(d.lastCleanRev,10) || 0),
+              lastFwdSuccess: Math.max(0, parseInt(d.lastFwdSuccess,10) || 0),
+              lastRevSuccess: Math.max(0, parseInt(d.lastRevSuccess,10) || 0),
+              nextDueFwd: Math.max(0, parseInt(d.nextDueFwd,10) || 0),
+              nextDueRev: Math.max(0, parseInt(d.nextDueRev,10) || 0),
+              srsIntervalFwd: Math.max(0, parseInt(d.srsIntervalFwd,10) || 0),
+              srsIntervalRev: Math.max(0, parseInt(d.srsIntervalRev,10) || 0)
             };
           }
         }
@@ -8809,11 +8834,26 @@ function persistLevelDir(){
 }
 
 function getLevelDir(id){
-  if (!levelDir[id]) levelDir[id] = { fwd: 0, rev: 0, cleanFwd: 0, cleanRev: 0 };
-  // Migrate old entries that don't have clean counters
+  if (!levelDir[id]) levelDir[id] = {
+    fwd: 0, rev: 0,
+    cleanFwd: 0, cleanRev: 0,
+    lastCleanFwd: 0, lastCleanRev: 0,
+    lastFwdSuccess: 0, lastRevSuccess: 0,
+    nextDueFwd: 0, nextDueRev: 0,
+    srsIntervalFwd: 0, srsIntervalRev: 0
+  };
+  // Migrate old entries that don't have the new fields
   const d = levelDir[id];
   if (d.cleanFwd === undefined) d.cleanFwd = 0;
   if (d.cleanRev === undefined) d.cleanRev = 0;
+  if (d.lastCleanFwd === undefined) d.lastCleanFwd = 0;
+  if (d.lastCleanRev === undefined) d.lastCleanRev = 0;
+  if (d.lastFwdSuccess === undefined) d.lastFwdSuccess = 0;
+  if (d.lastRevSuccess === undefined) d.lastRevSuccess = 0;
+  if (d.nextDueFwd === undefined) d.nextDueFwd = 0;
+  if (d.nextDueRev === undefined) d.nextDueRev = 0;
+  if (d.srsIntervalFwd === undefined) d.srsIntervalFwd = 0;
+  if (d.srsIntervalRev === undefined) d.srsIntervalRev = 0;
   return d;
 }
 
@@ -8841,6 +8881,67 @@ function bumpLevelDir(id, dir, delta){
   persistLevels();
   persistLevelDir();
   return newGlobal;
+}
+
+// Passive decay : a direction that hasn't been reviewed within its level-specific
+// timeout drops by one level. Calibrated for a ~1-month travel period :
+//   Maîtrisé (3) → demoted after 3 days without successful review
+//   Appris (2)   → demoted after 7 days
+//   En cours (1) → demoted after 14 days
+//   Nouveau (0)  → no decay (it's the floor)
+// Each direction (fwd/rev) decays independently. Runs at startup and at each grade.
+const DECAY_HOURS_BY_LEVEL = { 3: 3 * 24, 2: 7 * 24, 1: 14 * 24, 0: Infinity };
+function applyPassiveDecay(silent){
+  const now = Date.now();
+  let demotedCount = 0;
+  for (const idStr of Object.keys(levelDir)) {
+    const id = parseInt(idStr, 10);
+    const d = levelDir[id];
+    if (!d) continue;
+    for (const dir of ["fwd", "rev"]) {
+      const lvl = d[dir] || 0;
+      if (lvl === 0) continue;
+      const timeoutHours = DECAY_HOURS_BY_LEVEL[lvl];
+      if (!isFinite(timeoutHours)) continue;
+      const lastSuccessField = dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess";
+      const lastTs = d[lastSuccessField] || 0;
+      // If no timestamp recorded yet (old data, manual entry), seed it to now
+      // so decay starts from this moment rather than firing immediately.
+      if (lastTs === 0) {
+        d[lastSuccessField] = now;
+        continue;
+      }
+      const hoursSince = (now - lastTs) / (1000 * 60 * 60);
+      if (hoursSince >= timeoutHours) {
+        // Demote by 1 and reset the timer
+        d[dir] = lvl - 1;
+        d[lastSuccessField] = now;
+        // Reset clean streak and SRS state when demoting
+        d[dir === "fwd" ? "cleanFwd" : "cleanRev"] = 0;
+        d[dir === "fwd" ? "srsIntervalFwd" : "srsIntervalRev"] = 0;
+        d[dir === "fwd" ? "nextDueFwd" : "nextDueRev"] = 0;
+        demotedCount++;
+      }
+    }
+    // Re-sync the cached global level
+    const newGlobal = Math.min(d.fwd, d.rev);
+    if (newGlobal === 0) {
+      delete levels[id];
+      learnedSet.delete(id);
+    } else {
+      levels[id] = newGlobal;
+      if (newGlobal >= 2) learnedSet.add(id);
+      else learnedSet.delete(id);
+    }
+  }
+  if (demotedCount > 0) {
+    persistLevels();
+    persistLevelDir();
+    if (!silent) {
+      showToast(`⏳ ${demotedCount} niveau${demotedCount > 1 ? "x" : ""} rétrogradé${demotedCount > 1 ? "s" : ""} (mémoire à rafraîchir)`, "info");
+    }
+  }
+  return demotedCount;
 }
 
 function getLevel(id){ return levels[id] || 0; }
@@ -8872,18 +8973,32 @@ function highlightKana(text){
 
 function setLevel(id, lv){
   lv = Math.max(0, Math.min(MAX_LEVEL, lv|0));
+  const now = Date.now();
   if (lv === 0) {
     delete levels[id];
     learnedSet.delete(id);
-    // Manual reset also resets both directions and clean counters
-    levelDir[id] = { fwd: 0, rev: 0, cleanFwd: 0, cleanRev: 0 };
+    // Manual reset also resets both directions, clean counters, and SRS state
+    levelDir[id] = {
+      fwd: 0, rev: 0, cleanFwd: 0, cleanRev: 0,
+      lastCleanFwd: 0, lastCleanRev: 0,
+      lastFwdSuccess: 0, lastRevSuccess: 0,
+      nextDueFwd: 0, nextDueRev: 0,
+      srsIntervalFwd: 0, srsIntervalRev: 0
+    };
   } else {
     levels[id] = lv;
     if (lv >= 2) learnedSet.add(id);
     else learnedSet.delete(id);
-    // Manual click sets both directions to the same level (intent is binary)
-    // Clean counters are reset since we don't track them via manual changes
-    levelDir[id] = { fwd: lv, rev: lv, cleanFwd: 0, cleanRev: 0 };
+    // Manual click sets both directions to the same level (intent is binary).
+    // We record lastSuccess timestamps so decay timers start now (otherwise
+    // a word manually marked Appris would decay tomorrow via the timestamp=0 path).
+    levelDir[id] = {
+      fwd: lv, rev: lv, cleanFwd: 0, cleanRev: 0,
+      lastCleanFwd: 0, lastCleanRev: 0,
+      lastFwdSuccess: now, lastRevSuccess: now,
+      nextDueFwd: 0, nextDueRev: 0,
+      srsIntervalFwd: 0, srsIntervalRev: 0
+    };
   }
   persistLevels();
   persistLevelDir();
@@ -10452,14 +10567,21 @@ function persistStats(){
 
 // Returns a time-decayed failure score: recent failures count for ~2,
 // and the value decays by 10% per day. Old failures fade away naturally.
+// A "recovered" failure (followed by a success within 5 min) counts ×0.3 only,
+// because correcting your own mistake quickly is much weaker evidence of trouble
+// than a failure that wasn't immediately rescued.
 function getDecayedFailureScore(s){
   if (!s.failureLog || s.failureLog.length === 0) return 0;
   const now = Date.now();
   const dayMs = 24 * 60 * 60 * 1000;
   let score = 0;
-  for (const ts of s.failureLog) {
+  for (const entry of s.failureLog) {
+    // Backward compat : entry may be a raw timestamp number or {ts, recovered}
+    const ts = typeof entry === "number" ? entry : entry.ts;
+    const recovered = typeof entry === "object" && entry.recovered;
     const ageDays = (now - ts) / dayMs;
-    score += 2 * Math.pow(0.9, ageDays);
+    const baseWeight = 2 * Math.pow(0.9, ageDays);
+    score += recovered ? baseWeight * 0.3 : baseWeight;
   }
   return score;
 }
@@ -10505,6 +10627,7 @@ let reviewPool = VOCAB;
 
 function pickNextWord(){
   // Weighted random selection over the active pool
+  const now = Date.now();
   const weighted = reviewPool.map(v => {
     const s = getStats(v.id);
     const lv = getLevel(v.id);
@@ -10525,6 +10648,21 @@ function pickNextWord(){
     // Anti-repeat: heavy penalty if word appears in recent buffer
     if (reviewSession.recentIds.includes(v.id)) {
       w *= 0.01;
+    }
+
+    // SRS gating : if BOTH directions are Maîtrisé and not yet due, weight≈0.
+    // We only pull Maîtrisé words once they hit their next-due timestamp.
+    // (If only one direction is Maîtrisé, the other still drives the pick normally.)
+    if (reviewScope === "vocab") {
+      const ld = getLevelDir(v.id);
+      const fwdMastered = (ld.fwd || 0) >= 3;
+      const revMastered = (ld.rev || 0) >= 3;
+      if (fwdMastered && revMastered) {
+        const fwdDue = (ld.nextDueFwd || 0) <= now;
+        const revDue = (ld.nextDueRev || 0) <= now;
+        if (!fwdDue && !revDue) w *= 0.02;
+        // If at least one is due, keep normal weight — pickDirection picks the due one.
+      }
     }
 
     return { v, w };
@@ -10634,7 +10772,18 @@ function pickDirection(){
     return Math.random() < 0.5 ? "fwd" : "rev";
   }
 
-  // Vocab: keep the existing failure-biased logic
+  // Vocab: keep the existing failure-biased logic, BUT first check SRS due-state :
+  // if one direction is Maîtrisé and not yet due, while the other still needs work,
+  // strongly prefer the one that's not in SRS slumber.
+  const ld = getLevelDir(w.id);
+  const now = Date.now();
+  const fwdMastered = (ld.fwd || 0) >= 3;
+  const revMastered = (ld.rev || 0) >= 3;
+  const fwdDue = (ld.nextDueFwd || 0) <= now;
+  const revDue = (ld.nextDueRev || 0) <= now;
+  if (fwdMastered && !fwdDue && (!revMastered || revDue)) return "rev";
+  if (revMastered && !revDue && (!fwdMastered || fwdDue)) return "fwd";
+
   const s = getStats(w.id);
   const fFwd = (s.failuresByDir && s.failuresByDir.fwd) || 0;
   const fRev = (s.failuresByDir && s.failuresByDir.rev) || 0;
@@ -11069,16 +11218,41 @@ function gradeWord(success){
       if (ld[dir] < 2) {
         // Levels 0 → 1 → 2 : standard progression with romaji shown
         bumpLevelDir(w.id, dir, +1);
+        // Track the timestamp of this direction's success for decay calculations
+        ld[dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess"] = now;
+        persistLevelDir();
       } else if (ld[dir] === 2) {
         if (useCleanMode) {
-          // Vocab: Level 2 → 3 requires 2 consecutive successes WITHOUT romaji
+          // Vocab: Level 2 → 3 requires 2 consecutive successes WITHOUT romaji,
+          // AND a minimum 24h gap between them (24h memory test, à la SRS).
+          // Without the gap, two clicks 30s apart shouldn't promote to Maîtrisé.
           if (wasCleanMode) {
-            ld[cleanField] = (ld[cleanField] || 0) + 1;
-            if (ld[cleanField] >= 2) {
-              // Promote to level 3 (Maîtrisé)
+            const lastCleanField = dir === "fwd" ? "lastCleanFwd" : "lastCleanRev";
+            const lastCleanTs = ld[lastCleanField] || 0;
+            const hoursSinceLastClean = (now - lastCleanTs) / (1000 * 60 * 60);
+            const MIN_CLEAN_GAP_HOURS = 20; // allow a bit of slack vs strict 24h
+            const prevCleanCount = ld[cleanField] || 0;
+            if (prevCleanCount === 0) {
+              // First clean success — record timestamp, start the streak
+              ld[cleanField] = 1;
+              ld[lastCleanField] = now;
+              ld[dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess"] = now;
+              persistLevelDir();
+            } else if (hoursSinceLastClean >= MIN_CLEAN_GAP_HOURS) {
+              // Second clean success after enough time → promote to level 3
               ld[cleanField] = 0;
+              ld[lastCleanField] = now;
+              ld[dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess"] = now;
               bumpLevelDir(w.id, dir, +1);
+              // Initialize SRS interval for this newly-mastered direction
+              ld[dir === "fwd" ? "srsIntervalFwd" : "srsIntervalRev"] = 1; // 1 day initial
+              ld[dir === "fwd" ? "nextDueFwd" : "nextDueRev"] = now + 24 * 3600 * 1000;
+              persistLevelDir();
             } else {
+              // Too soon since first clean — count success but don't promote
+              // and don't restart the timer (otherwise repeated tries within 24h
+              // would forever block promotion). Just track lastSuccess for decay.
+              ld[dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess"] = now;
               persistLevelDir();
             }
           }
@@ -11087,14 +11261,43 @@ function gradeWord(success){
           // Non-vocab (alphabet/kanji/numbers): simple progression — one success at level 2 promotes to 3
           bumpLevelDir(w.id, dir, +1);
         }
+      } else if (ld[dir] === 3) {
+        // Already Maîtrisé — apply SRS interval extension (each success doubles the interval)
+        const intervalField = dir === "fwd" ? "srsIntervalFwd" : "srsIntervalRev";
+        const dueField = dir === "fwd" ? "nextDueFwd" : "nextDueRev";
+        const lastSuccessField = dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess";
+        const prevInterval = ld[intervalField] || 1;
+        // Double, but cap at 30 days (long enough for a 1-month trip)
+        const newInterval = Math.min(30, prevInterval * 2);
+        ld[intervalField] = newInterval;
+        ld[dueField] = now + newInterval * 24 * 3600 * 1000;
+        ld[lastSuccessField] = now;
+        persistLevelDir();
       }
-      // Already at level 3: stay there on success
     }
 
     if (s.failures > 0) s.failures = Math.max(0, s.failures - 1);
     s.consecutiveSuccesses = (s.consecutiveSuccesses || 0) + 1;
     if (dir && s.failuresByDir && s.failuresByDir[dir] > 0) {
       s.failuresByDir[dir] = Math.max(0, s.failuresByDir[dir] - 0.5);
+    }
+    // If a failure on this same word happened within the last 5 minutes,
+    // mark it as "recovered" — a quick self-correction is weaker evidence
+    // of trouble than an unrescued failure. getDecayedFailureScore will
+    // weight recovered failures at 30 % of their normal value.
+    const RECOVERY_WINDOW_MS = 5 * 60 * 1000;
+    if (Array.isArray(s.failureLog)) {
+      for (let i = s.failureLog.length - 1; i >= 0; i--) {
+        const entry = s.failureLog[i];
+        const ts = typeof entry === "number" ? entry : entry.ts;
+        if (now - ts > RECOVERY_WINDOW_MS) break; // older than 5 min : stop scanning
+        if (typeof entry === "number") {
+          // Migrate-in-place to object form so we can mark recovery
+          s.failureLog[i] = { ts: ts, recovered: true };
+        } else {
+          entry.recovered = true;
+        }
+      }
     }
     flashFeedback("success");
   } else {
@@ -11104,13 +11307,21 @@ function gradeWord(success){
       const cleanField = dir === "fwd" ? "cleanFwd" : "cleanRev";
       // Reset clean-mode streak on any failure
       ld[cleanField] = 0;
+      // Reset SRS state when a Maîtrisé word fails (it's no longer mastered)
+      const intervalField = dir === "fwd" ? "srsIntervalFwd" : "srsIntervalRev";
+      const dueField = dir === "fwd" ? "nextDueFwd" : "nextDueRev";
+      ld[intervalField] = 0;
+      ld[dueField] = 0;
+      persistLevelDir();
       // Demote one level (but not below 0)
       bumpLevelDir(w.id, dir, -1);
     }
     s.failures += 1;
     s.consecutiveSuccesses = 0;
-    // Log the failure timestamp (keep last 5 only)
-    s.failureLog.push(now);
+    // Log the failure with shape {ts, recovered:false} so a later success in the
+    // same session can mark it as "recovered" (and thus less heavily weighted).
+    // Backward-compat : older entries may be raw timestamps — getDecayedFailureScore handles both.
+    s.failureLog.push({ ts: now, recovered: false });
     if (s.failureLog.length > 5) s.failureLog.shift();
     if (dir && s.failuresByDir) {
       s.failuresByDir[dir] = (s.failuresByDir[dir] || 0) + 1;
@@ -11174,12 +11385,31 @@ function getDifficultyScore(id){
   const asymmetry = Math.abs(fwdFails - revFails) * 0.5;
   // Low level adds difficulty
   const lvDeficit = (3 - lv) * 0.5;
-  return failureScore + lvDeficit + asymmetry;
+  // Time staleness : a word not seen in a while is more due for review.
+  // Add up to +1 score per direction past its level-specific decay timeout.
+  let stalenessBonus = 0;
+  const ld = getLevelDir(id);
+  const now = Date.now();
+  for (const dir of ["fwd", "rev"]) {
+    const dlvl = ld[dir] || 0;
+    if (dlvl === 0) continue;
+    const timeoutHours = DECAY_HOURS_BY_LEVEL[dlvl];
+    if (!isFinite(timeoutHours)) continue;
+    const lastTs = ld[dir === "fwd" ? "lastFwdSuccess" : "lastRevSuccess"] || 0;
+    if (lastTs === 0) continue;
+    const hoursSince = (now - lastTs) / (1000 * 60 * 60);
+    const ratio = hoursSince / timeoutHours; // 1.0 means right at the decay threshold
+    stalenessBonus += Math.min(1, Math.max(0, ratio - 0.5)); // kicks in past 50 % of decay window
+  }
+  return failureScore + lvDeficit + asymmetry + stalenessBonus;
 }
 
 function openReview(scope, intense){
   reviewScope = scope || "vocab";
   reviewIntense = !!intense;
+  // Run silent decay before computing the pool — ensures that level changes from
+  // long idle periods (e.g. user came back after 1 week) are reflected in this session.
+  applyPassiveDecay(true);
   let basePool;
   if (reviewScope === "vocab") {
     basePool = getVisibleVocab();
@@ -11294,6 +11524,10 @@ document.addEventListener("keydown", (e) => {
 });
 
 render();
+// Apply passive decay first : any direction that hasn't been reviewed within
+// its level-specific timeout is demoted by one. Must run BEFORE reconciles
+// because demoting can change what's available / unlocked.
+applyPassiveDecay(false);
 reconcileVocabUnlock(true);
       reconcilePhrases(true);
 reconcileUnlock(true);
