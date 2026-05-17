@@ -2199,6 +2199,80 @@ body.has-invite-banner{padding-top:84px}
 .mode-japonais .review-answer .ans-note .jp-inline{
   font-family:'Zen Maru Gothic',sans-serif;font-style:normal;color:var(--ink);
 }
+/* Inline grammar rules in review card */
+.mode-japonais .review-rules{
+  display:none;width:100%;max-width:600px;margin:14px auto 0;
+  flex-direction:column;gap:8px;
+}
+.mode-japonais .review-rules.shown{display:flex}
+.mode-japonais .review-rules-header{
+  font-family:'Outfit',sans-serif;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);
+  display:flex;align-items:center;gap:6px;margin-bottom:2px;
+}
+.mode-japonais .review-rules-header svg{width:13px;height:13px;color:var(--gold)}
+.mode-japonais .review-rule-card{
+  background:var(--surface-2);border:1px solid var(--rule);
+  border-left:3px solid var(--gold);border-radius:10px;
+  overflow:hidden;transition:border-color .2s;
+}
+.mode-japonais .review-rule-card.open{border-left-color:var(--cyan)}
+.mode-japonais .review-rule-toggle{
+  width:100%;background:transparent;border:none;cursor:pointer;
+  padding:10px 14px;display:flex;align-items:center;gap:10px;
+  font-family:'Outfit',sans-serif;color:var(--ink);text-align:left;
+}
+.mode-japonais .review-rule-toggle:hover{background:rgba(255,255,255,.02)}
+.mode-japonais .review-rule-toggle .chev{
+  width:14px;height:14px;color:var(--ink-soft);transition:transform .2s;
+  flex-shrink:0;
+}
+.mode-japonais .review-rule-card.open .review-rule-toggle .chev{transform:rotate(90deg)}
+.mode-japonais .review-rule-toggle .rule-jp{
+  font-family:'Zen Maru Gothic',sans-serif;font-size:18px;font-weight:600;
+  color:var(--pink);min-width:24px;text-align:center;flex-shrink:0;
+}
+.mode-japonais .review-rule-toggle .rule-titles{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.mode-japonais .review-rule-toggle .rule-title-main{
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+.mode-japonais .review-rule-toggle .rule-title-short{
+  font-size:11px;color:var(--ink-soft);line-height:1.4;
+}
+.mode-japonais .review-rule-body{
+  display:none;padding:0 14px 14px 14px;
+  font-family:'Outfit',sans-serif;font-size:13px;line-height:1.6;
+  color:var(--ink);border-top:1px solid var(--rule);
+}
+.mode-japonais .review-rule-card.open .review-rule-body{display:block;padding-top:12px}
+.mode-japonais .review-rule-body p{margin-bottom:8px}
+.mode-japonais .review-rule-body strong{color:var(--pink);font-weight:600}
+.mode-japonais .review-rule-body em{color:var(--cyan);font-style:normal;font-weight:500}
+.mode-japonais .review-rule-body .jp-inline{
+  font-family:'Zen Maru Gothic',sans-serif;font-weight:600;
+  font-style:normal;color:var(--ink);font-size:14px;
+}
+.mode-japonais .review-rule-body .jp-inline strong{color:var(--pink);font-weight:700}
+.mode-japonais .review-rule-body .rule-formula{
+  display:inline-block;background:var(--surface);
+  padding:5px 12px;border-radius:8px;
+  font-family:'Space Grotesk',sans-serif;font-weight:500;
+  color:var(--cyan);border-left:3px solid var(--cyan);font-size:12px;
+}
+.mode-japonais .review-rule-body .rule-examples{
+  list-style:none;padding:0;margin:6px 0 10px;
+}
+.mode-japonais .review-rule-body .rule-examples li{
+  padding:6px 10px;background:var(--surface);
+  border-left:2px solid var(--violet);border-radius:6px;
+  margin-bottom:5px;font-size:12px;
+}
+.mode-japonais .review-rule-body .rule-tip{
+  background:rgba(255,230,0,.06);
+  border-left:2px solid var(--gold);
+  padding:8px 12px;border-radius:6px;
+  font-size:12px;color:var(--ink-soft);margin-top:8px;
+}
 .mode-japonais .review-actions{
   width:100%;max-width:600px;margin:24px auto 0;
   display:flex;gap:10px;
@@ -5530,6 +5604,11 @@ window.activitiesAPI = {
       </div>
     </div>
 
+    <div class="review-rules" id="reviewRules">
+      <div class="review-rules-header"><i data-lucide="book-open"></i> Règles de grammaire</div>
+      <div id="reviewRulesList"></div>
+    </div>
+
     <div class="review-actions" id="reviewActions">
       <button class="review-action-btn review-reveal-btn" id="revealBtn">
         <i data-lucide="eye"></i> Voir la réponse
@@ -5608,21 +5687,25 @@ const VOCAB = [
   {id:11, category:"pratique", catLabel:"Pour se débrouiller", catNum:"参",
     jp:"いくらですか", romaji:"ikura desu ka", fr:"Combien ça coûte ?", frSub:"",
     note:"<em>Ikura</em> = combien, <em>desu ka</em> = marqueur de question poli.",
+    rules:["particle_ka","desu"],
     mnemo:"Construction : いくら (ikura = combien, en argent) + ですか (desu ka = est-ce ?). Distinct de いくつ (ikutsu = combien d'objets).",usage:{when:["<em>Kore wa ikura desu ka?</em> — Ceci, combien ça coûte ?","<em>Zenbu de ikura desu ka?</em> — Combien pour le tout ?"],avoid:["Pour demander une durée → <em>dono kurai kakarimasu ka?</em>","Pour demander un nombre d'unités → <em>ikutsu desu ka?</em>"],variants:[{form:"おいくらですか <em>o-ikura desu ka</em>",when:"Avec préfixe poli <em>o-</em>, plus respectueux. Resto un peu chic."}]}
   },
   {id:12, category:"pratique", catLabel:"Pour se débrouiller", catNum:"参",
     jp:"どこですか", romaji:"doko desu ka", fr:"C'est où ?", frSub:"",
     note:"Avec un nom : <em>toire wa doko desu ka</em> = où sont les toilettes ?",
+    rules:["particle_wa","particle_ka","desu"],
     mnemo:"Famille « do- » des interrogatifs : どこ (où ?), どれ (lequel ?), どう (comment ?), どの (quel + nom).",usage:{when:["<em>Toire wa doko desu ka?</em> — Où sont les toilettes ?","<em>Eki wa doko desu ka?</em> — Où est la gare ?","<em>Hoteru wa doko desu ka?</em> — Où est l'hôtel ?"],avoid:["Pour demander un chemin (« comment y aller ») → <em>dô yatte ikimasu ka?</em>"],variants:[{form:"どちらですか <em>dochira desu ka</em>",when:"Forme polie/honorifique. Hôtel, personne âgée."}]}
   },
   {id:13, category:"pratique", catLabel:"Pour se débrouiller", catNum:"参",
     jp:"わかりません", romaji:"wakarimasen", fr:"Je ne comprends pas", frSub:"",
     note:"Renforcement : <em>nihongo ga wakarimasen</em> = je ne comprends pas le japonais.",
+    rules:["potential_ga"],
     mnemo:"Forme négative polie de わかる (wakaru = comprendre, saisir). わかります (positif) → わかりません (négatif). ません = terminaison négative polie.",usage:{when:["<em>Sumimasen, wakarimasen</em> — Désolé, je ne comprends pas","<em>Nihongo ga wakarimasen</em> — Je ne parle pas japonais","<em>Yoku wakarimasen</em> — Je ne saisis pas bien (plus doux)"],avoid:["Pour dire « je ne sais pas » (information ignorée) → <em>shirimasen</em>","Pour signaler qu'on n'entend pas bien → <em>mô ichido onegaishimasu</em> (« encore une fois »)"],variants:[{form:"わからない <em>wakaranai</em>",when:"Familier, entre amis."},{form:"よくわかりません <em>yoku wakarimasen</em>",when:"« Je ne saisis pas bien » — plus doux."}]}
   },
   {id:14, category:"pratique", catLabel:"Pour se débrouiller", catNum:"参",
     jp:"英語", romaji:"eigo", fr:"Anglais", frSub:"la langue",
     note:"<em>Eigo ga hanasemasu ka</em> = parlez-vous anglais ?",
+    rules:["potential_ga","particle_no"],
     mnemo:"Construction : 英 (ei = brillant, choisi pour transcrire « England ») + 語 (go = langue). Tous les noms de langues finissent par 語.",usage:{when:["<em>Eigo ga hanasemasu ka?</em> — Parlez-vous anglais ?","<em>Eigo no menyû arimasu ka?</em> — Avez-vous un menu en anglais ?","<em>Eigo de onegaishimasu</em> — En anglais s'il vous plaît"],avoid:["Pour le pays Angleterre → <em>igirisu</em>","Pour les Anglais (les gens) → <em>igirisu-jin</em>"],variants:[{form:"フランス語 <em>furansugo</em>",when:"« Le français »."},{form:"日本語 <em>nihongo</em>",when:"« Le japonais »."}]}
   },
   {id:15, category:"pratique", catLabel:"Pour se débrouiller", catNum:"参",
@@ -5890,42 +5973,42 @@ const VOCAB = [
   {id:71, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"を", romaji:"wo", fr:"(particule d'objet)", frSub:"marque le complément d'objet",
     note:"Se prononce <em>o</em> (le « w » est muet en japonais moderne). Toujours après un objet, avant un verbe d'action.",
-    rules:["wo-particle"],
+    rules:["particle_wo"],
     mnemo:"Hiragana spécifique aux particules d'objet. Écrit を mais prononcé /o/. Schéma : OBJET + を + VERBE. Ex : <em>mizu wo kudasai</em> = de l'eau s'il vous plaît.",
     usage:{when:["<em>Mizu <strong>wo</strong> kudasai</em> — De l'eau s'il vous plaît","<em>Kore <strong>wo</strong> kudasai</em> — Ceci, s'il vous plaît","<em>Kippu <strong>wo</strong> ni-mai kudasai</em> — Deux billets s'il vous plaît"],avoid:["Ne s'utilise pas avec <em>arimasu/imasu</em> (présence) → utiliser <em>ga</em>","Ne s'utilise pas avec <em>desu</em> (être) → pas de particule"],variants:[]}
   },
   {id:72, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"は", romaji:"wa", fr:"(particule de thème)", frSub:"introduit le sujet/thème",
     note:"Se prononce <em>wa</em> (et non <em>ha</em>). Marque ce dont on parle : « quant à X… ».",
-    rules:["wa-particle"],
+    rules:["particle_wa"],
     mnemo:"Hiragana は normalement prononcé <em>ha</em>, mais comme particule de thème, prononcé <em>wa</em>. Schéma : THÈME + は + COMMENTAIRE. Ex : <em>toire wa doko desu ka</em> = quant aux toilettes, où sont-elles ?",
     usage:{when:["<em>Toire <strong>wa</strong> doko desu ka?</em> — Où sont les toilettes ?","<em>Kore <strong>wa</strong> nan desu ka?</em> — Qu'est-ce que c'est ?","<em>O-cha <strong>wa</strong> daijôbu desu</em> — Pas de thé pour moi"],avoid:["Avec un nouveau sujet introduit pour la première fois → souvent <em>ga</em>","Avec un objet d'action → <em>wo</em>"],variants:[]}
   },
   {id:73, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"が", romaji:"ga", fr:"(particule de sujet)", frSub:"marque le sujet précis",
     note:"Souvent confondue avec <em>wa</em>. <em>Ga</em> identifie/présente, <em>wa</em> commente.",
-    rules:["ga-particle"],
+    rules:["particle_ga","potential_ga"],
     mnemo:"Particule plus « pointée » que <em>wa</em>. Avec <em>arimasu/imasu</em> (existence/présence), <em>itai</em> (douleur), <em>wakarimasen</em> (compréhension), c'est toujours <em>ga</em>.",
     usage:{when:["<em>Eigo <strong>ga</strong> wakarimasen</em> — Je ne comprends pas l'anglais","<em>Onaka <strong>ga</strong> itai desu</em> — J'ai mal au ventre","<em>Eigo <strong>ga</strong> hanasemasu ka?</em> — Parlez-vous anglais ?"],avoid:["Pour un thème déjà connu → <em>wa</em>","Pour un objet d'action → <em>wo</em>"],variants:[]}
   },
   {id:74, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"の", romaji:"no", fr:"(particule de liaison)", frSub:"« de » entre deux noms",
     note:"Lie deux noms : NOM1 の NOM2 = « NOM2 de NOM1 ». Ordre inverse du français.",
-    rules:["no-particle"],
+    rules:["particle_no"],
     mnemo:"Schéma : POSSESSEUR + の + POSSÉDÉ. Ex : <em>watashi no hon</em> = mon livre. <em>Eigo no menyû</em> = un menu en anglais (litt. menu de l'anglais).",
     usage:{when:["<em>Eigo <strong>no</strong> menyû</em> — Un menu en anglais","<em>Heya <strong>no</strong> kagi</em> — La clé de chambre","<em>Tsugi <strong>no</strong> densha</em> — Le prochain train"],avoid:["Ne s'utilise pas comme verbe « être » → <em>desu</em>"],variants:[]}
   },
   {id:75, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"に", romaji:"ni", fr:"(particule de destination/temps)", frSub:"« à / vers / dans »",
     note:"Indique une destination, un point dans le temps, un destinataire.",
-    rules:[],
+    rules:["particle_ni"],
     mnemo:"Schéma : LIEU/TEMPS + に + VERBE. Ex : <em>Tokyo ni ikimasu</em> = je vais à Tokyo. <em>Asa ni okimasu</em> = je me lève le matin.",
     usage:{when:["<em>Byôin <strong>ni</strong> ikitai desu</em> — Je veux aller à l'hôpital","<em>Migi <strong>ni</strong> magatte kudasai</em> — Tournez à droite","<em>Asa <strong>ni</strong> okimasu</em> — Je me lève le matin"],avoid:["Pour un moyen de transport → <em>de</em>","Pour un objet d'action → <em>wo</em>"],variants:[]}
   },
   {id:76, category:"particules", catLabel:"Particules", catNum:"弐",
     jp:"で", romaji:"de", fr:"(particule de moyen/lieu d'action)", frSub:"« par / en / à »",
     note:"Indique le moyen (par lequel) ou le lieu où une action se produit.",
-    rules:[],
+    rules:["particle_de"],
     mnemo:"Schéma : MOYEN/LIEU + で + VERBE. Ex : <em>kâdo de</em> = par carte. <em>densha de</em> = en train. <em>resutoran de tabemasu</em> = je mange au restaurant.",
     usage:{when:["<em>Kâdo <strong>de</strong> onegaishimasu</em> — Par carte s'il vous plaît","<em>Genkin <strong>de</strong> onegaishimasu</em> — En espèces s'il vous plaît","<em>Densha <strong>de</strong> ikimasu</em> — J'y vais en train"],avoid:["Pour une destination (le but du déplacement) → <em>ni</em>","Pour un thème → <em>wa</em>"],variants:[]}
   },
@@ -5972,18 +6055,21 @@ const VOCAB = [
   {id:83, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"食べたい", romaji:"tabetai", fr:"(je) veux manger", frSub:"forme désidérative",
     note:"Forme désidérative du verbe 食べる (taberu = manger). À apprendre comme une expression.",
+    rules:["particle_wo"],
     mnemo:"Construction : 食べ (tabe-, racine de manger) + たい (tai = vouloir). S'utilise avec la particule を (wo) : <em>sushi wo tabetai desu</em> = je veux manger des sushis.",
     usage:{when:["<em>Sushi wo tabetai desu</em> — Je veux manger des sushis","<em>Râmen wo tabetai desu</em> — Je veux manger des râmen","<em>Nani wo tabetai desu ka?</em> — Que voulez-vous manger ?"],avoid:["Pour l'action en cours → <em>tabemasu</em> (je mange)","Pour le passé → <em>tabemashita</em> (j'ai mangé)"],variants:[{form:"食べたいです <em>tabetai desu</em>",when:"Forme polie complète."}]}
   },
   {id:84, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"飲みたい", romaji:"nomitai", fr:"(je) veux boire", frSub:"forme désidérative",
     note:"Forme désidérative du verbe 飲む (nomu = boire). Comme <em>tabetai</em> mais pour les boissons.",
+    rules:["particle_wo"],
     mnemo:"Construction : 飲み (nomi-, racine de boire) + たい (tai = vouloir). S'utilise avec を (wo).",
     usage:{when:["<em>Bîru wo nomitai desu</em> — Je veux boire une bière","<em>O-cha wo nomitai desu</em> — Je veux boire du thé","<em>Mizu wo nomitai desu</em> — Je veux boire de l'eau"],avoid:[],variants:[]}
   },
   {id:85, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"見たい", romaji:"mitai", fr:"(je) veux voir / visiter", frSub:"forme désidérative",
     note:"Forme désidérative du verbe 見る (miru = voir, regarder, visiter). S'utilise aussi pour visiter un lieu (regarder de près).",
+    rules:["particle_wo"],
     mnemo:"Le kanji 見 montre un œil 目 sur des jambes 儿 — quelqu'un qui regarde. + たい (vouloir) = vouloir voir.",
     usage:{when:["<em>Jinja wo mitai desu</em> — Je veux voir un sanctuaire","<em>Tôkyô wo mitai desu</em> — Je veux visiter Tokyo","<em>Menyû wo mitai desu</em> — Je veux voir le menu"],avoid:["Pour habiter dans un endroit → <em>sumitai</em>","Pour aller à un endroit (déplacement) → <em>ikitai</em>"],variants:[]}
   },
@@ -5996,12 +6082,14 @@ const VOCAB = [
   {id:87, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"あります", romaji:"arimasu", fr:"Il y a / avoir", frSub:"existence d'objet ou lieu",
     note:"Verbe d'existence pour les choses inanimées (objets, lieux). Pour les êtres vivants : <em>imasu</em>. S'utilise avec が (ga).",
+    rules:["potential_ga"],
     mnemo:"De 有る (aru). Forme polie <em>arimasu</em>. Schéma : NOM + が + arimasu = « il y a NOM ». Avec ますか : question (« y a-t-il ? »).",
     usage:{when:["<em>Eigo no menyû ga arimasu ka?</em> — Avez-vous un menu en anglais ?","<em>Toire ga arimasu</em> — Il y a des toilettes","<em>Wifi ga arimasu ka?</em> — Y a-t-il du wifi ?"],avoid:["Pour les personnes ou animaux → <em>imasu</em>","Pour exprimer la possession « j'ai » → idem <em>arimasu</em> est OK, mais souvent <em>motte imasu</em>"],variants:[{form:"ありません <em>arimasen</em>",when:"« Il n'y a pas » (forme négative)."}]}
   },
   {id:88, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"できます", romaji:"dekimasu", fr:"(je) peux / c'est possible", frSub:"capacité, possibilité",
     note:"Forme polie de できる (dekiru). Indique la possibilité ou la capacité. S'utilise avec が (ga) pour ce qui est possible.",
+    rules:["potential_ga"],
     mnemo:"De 出来る (dekiru = être capable, advenir). Souvent en question : « est-ce possible ? ».",
     usage:{when:["<em>Kâdo ga dekimasu ka?</em> — La carte, c'est possible ?","<em>Eigo ga dekimasu</em> — Je peux parler anglais","<em>Chekkuin wa dekimasu ka?</em> — Le check-in est possible ?"],avoid:["Pour dire « j'ai fini » → <em>dekimashita</em>"],variants:[{form:"できません <em>dekimasen</em>",when:"« Je ne peux pas / impossible »."}]}
   },
@@ -6014,6 +6102,7 @@ const VOCAB = [
   {id:90, category:"pratique", catLabel:"Verbes", catNum:"肆",
     jp:"分かりました", romaji:"wakarimashita", fr:"(j')ai compris", frSub:"passé de wakarimasu",
     note:"Forme passée polie de <em>wakaru</em> (comprendre). Réponse standard pour confirmer qu'on a saisi.",
+    rules:["potential_ga"],
     mnemo:"Construction : 分かり (wakari, racine de comprendre) + ました (mashita = passé poli). Au présent on dit <em>wakarimasu</em>, mais à la confirmation on emploie le passé : « j'ai compris ».",
     usage:{when:["<em>Hai, wakarimashita</em> — Oui, j'ai compris","<em>Wakarimashita, arigatô gozaimasu</em> — Compris, merci","(après explication) <em>Wakarimashita</em> — D'accord, c'est noté"],avoid:["Pour signaler une compréhension partielle → <em>chotto wakarimashita</em>","Pour dire qu'on n'a pas compris → <em>wakarimasen</em> (toujours au présent)"],variants:[{form:"了解です <em>ryôkai desu</em>",when:"« Bien reçu / compris » plus militaire ou pro."}]}
   },
@@ -6342,7 +6431,34 @@ const RULES = {
 <li><span class="jp-inline">頭<strong>が</strong>痛い</span> — J'ai mal à la tête. (litt. « la tête fait mal »)</li>
 <li><span class="jp-inline">お腹<strong>が</strong>すいた</span> — J'ai faim. (litt. « le ventre est vide »)</li>
 </ul>
-<p class="rule-tip">💡 Différence subtile avec は : は présuppose le sujet (« quant à X »), が l'introduit (« c'est X qui »). Pour un débutant, retenez surtout les expressions toutes faites avec が.</p>`
+<p class="rule-tip">💡 Différence subtile avec は : は présuppose le sujet (« quant à X »), が l'introduit (« c'est X qui »). Pour un débutant, retenez surtout les expressions toutes faites avec が.</p>
+<p class="rule-tip">⚠ Cas important : les verbes de <strong>capacité</strong>, <strong>goût</strong> et <strong>compréhension</strong> (<em>hanasemasu</em>, <em>dekimasu</em>, <em>wakaru</em>, <em>suki</em>) prennent <strong>が</strong> et non を. Voir la règle dédiée « が avec les verbes de capacité ».</p>`
+  },
+
+  potential_ga: {
+    title: "が avec les verbes de capacité (hanasemasu, dekimasu, wakaru…)",
+    short: "Pourquoi « eigo ga hanasemasu » et non « eigo wo »",
+    body: `<p>En japonais, les verbes qui expriment une <strong>capacité</strong>, un <strong>goût</strong> ou une <strong>compréhension</strong> ne sont pas vus comme des actions transitives, mais comme des <strong>états</strong>. Leur « objet » prend donc <strong>が</strong> au lieu de を.</p>
+<p>Structure : <span class="rule-formula">[Chose] が [verbe d'état/capacité]</span></p>
+<p><strong>Avec un verbe d'action classique (を) :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline">英語<strong>を</strong>話します</span> — <em>eigo wo hanashimasu</em> — Je parle anglais. (action transitive)</li>
+</ul>
+<p><strong>Avec un verbe potentiel/d'état (が) :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline">英語<strong>が</strong>話せます</span> — <em>eigo ga hanasemasu</em> — Je sais parler anglais. <em>(litt. « l'anglais est parlable »)</em></li>
+<li><span class="jp-inline">英語<strong>が</strong>分かります</span> — <em>eigo ga wakarimasu</em> — Je comprends l'anglais.</li>
+<li><span class="jp-inline">ピアノ<strong>が</strong>弾けます</span> — <em>piano ga hikemasu</em> — Je sais jouer du piano.</li>
+<li><span class="jp-inline">寿司<strong>が</strong>好きです</span> — <em>sushi ga suki desu</em> — J'aime les sushis.</li>
+<li><span class="jp-inline">カード<strong>が</strong>できますか</span> — <em>kâdo ga dekimasu ka</em> — La carte, c'est possible ?</li>
+</ul>
+<p><strong>La règle simple à retenir :</strong></p>
+<ul class="rule-examples">
+<li>Forme normale du verbe (<em>hanasu</em>, <em>taberu</em>) → particule <strong>を</strong></li>
+<li>Forme potentielle (<em>hanaseru</em>, <em>taberareru</em>), goût (<em>suki</em>), compréhension (<em>wakaru</em>), capacité (<em>dekiru</em>) → particule <strong>が</strong></li>
+</ul>
+<p class="rule-tip">💡 La logique japonaise : "je sais parler anglais" devient "l'anglais est parlable pour moi". Ce n'est plus une action mais un état du sujet — d'où が.</p>
+<p class="rule-tip">💡 On peut dire <span class="jp-inline">英語<strong>は</strong>話せます</span> (<em>eigo wa hanasemasu</em>) — le sens change légèrement : は marque alors un <strong>contraste</strong> (« l'anglais, oui — d'autres langues, peut-être pas »).</p>`
   },
 
   rendaku: {
@@ -6360,6 +6476,40 @@ const RULES = {
 <p><strong>Pourquoi ?</strong> À l'origine, c'était pour fluidifier la prononciation : relâcher la consonne au milieu d'un mot est plus naturel à l'oral. Avec le temps, c'est devenu une règle quasi-systématique pour beaucoup de mots composés natifs.</p>
 <p class="rule-tip">⚠ Le rendaku n'est pas <strong>100% prévisible</strong> — il dépend du mot, de son origine (japonaise vs sino-japonaise), et de l'usage. Le mieux est de <strong>mémoriser la prononciation du mot complet</strong> plutôt que de calculer kanji par kanji. Les Japonais l'ont assimilé naturellement par exposition, pas par règle.</p>
 <p class="rule-tip">💡 Mots concernés dans votre vocabulaire : <span class="jp-inline">大丈夫</span> (<em>daijô<strong>b</strong>u</em>), <span class="jp-inline">現金</span> (<em>gen<strong>k</strong>in</em>, ici <em>pas</em> de rendaku), <span class="jp-inline">出口</span> (<em>de<strong>g</strong>uchi</em>, le 口 <em>kuchi</em> devient <em>guchi</em>).</p>`
+  },
+
+  particle_ni: {
+    title: "La particule に (ni)",
+    short: "Destination, point dans le temps, destinataire",
+    body: `<p>La particule <strong>に</strong> indique un <strong>point</strong> : un lieu de destination, un moment précis dans le temps, ou la personne à qui s'adresse une action.</p>
+<p>Structure : <span class="rule-formula">[Lieu/Moment] に [verbe de mouvement/action]</span></p>
+<p><strong>Exemples :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline">東京<strong>に</strong>行きます</span> — <em>Tôkyô ni ikimasu</em> — Je vais à Tokyo. (destination)</li>
+<li><span class="jp-inline">病院<strong>に</strong>行きたいです</span> — <em>byôin ni ikitai desu</em> — Je veux aller à l'hôpital.</li>
+<li><span class="jp-inline">朝<strong>に</strong>起きます</span> — <em>asa ni okimasu</em> — Je me lève le matin. (moment)</li>
+<li><span class="jp-inline">右<strong>に</strong>曲がってください</span> — <em>migi ni magatte kudasai</em> — Tournez à droite.</li>
+</ul>
+<p class="rule-tip">💡 Différence avec で : に = le <strong>point d'arrivée</strong> ou <strong>l'instant précis</strong> ; で = le <strong>lieu où se déroule</strong> une action ou le <strong>moyen utilisé</strong>. <em>Tokyo <strong>ni</strong> ikimasu</em> (je vais à Tokyo) vs <em>Tokyo <strong>de</strong> tabemasu</em> (je mange à Tokyo).</p>`
+  },
+
+  particle_de: {
+    title: "La particule で (de)",
+    short: "Moyen, lieu où se déroule une action",
+    body: `<p>La particule <strong>で</strong> indique le <strong>moyen</strong> par lequel une action est faite, ou le <strong>lieu où se déroule</strong> l'action (pas la destination).</p>
+<p>Structure : <span class="rule-formula">[Moyen/Lieu d'action] で [verbe]</span></p>
+<p><strong>Exemples — moyen :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline">カード<strong>で</strong>お願いします</span> — <em>kâdo de onegaishimasu</em> — Par carte, s'il vous plaît.</li>
+<li><span class="jp-inline">現金<strong>で</strong>お願いします</span> — <em>genkin de onegaishimasu</em> — En espèces, s'il vous plaît.</li>
+<li><span class="jp-inline">電車<strong>で</strong>行きます</span> — <em>densha de ikimasu</em> — J'y vais en train.</li>
+<li><span class="jp-inline">英語<strong>で</strong>お願いします</span> — <em>eigo de onegaishimasu</em> — En anglais, s'il vous plaît.</li>
+</ul>
+<p><strong>Exemples — lieu d'action :</strong></p>
+<ul class="rule-examples">
+<li><span class="jp-inline">レストラン<strong>で</strong>食べます</span> — <em>resutoran de tabemasu</em> — Je mange au restaurant.</li>
+</ul>
+<p class="rule-tip">💡 À ne pas confondre avec に : に marque la <strong>destination d'un déplacement</strong> (<em>resutoran ni ikimasu</em> = je vais au restaurant), で marque l'endroit où se déroule l'action (<em>resutoran de tabemasu</em> = je mange au restaurant).</p>`
   }
 };
 
@@ -6878,6 +7028,7 @@ const PATTERNS = [
     templateFr: "Où est [X] ?",
     description: "Demander la localisation d'un lieu ou d'un objet.",
     requires: [12, 72], // doko desu ka, は wa
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       // Lieux : toilettes, gare, hôpital, sortie, hôtel, chambre
@@ -6901,6 +7052,7 @@ const PATTERNS = [
     templateFr: "Donnez-moi [X], s'il vous plaît",
     description: "Demander qu'on vous donne quelque chose (au resto, au guichet).",
     requires: [32, 71], // kudasai, を wo
+    rules: ["particle_wo", "kudasai"],
     slots: [{
       name: "X",
       // Objets / boissons / billets : kore, mizu, ocha, osake, bîru, kippu
@@ -6947,6 +7099,7 @@ const PATTERNS = [
     templateFr: "Qu'est-ce que [X] ?",
     description: "Demander ce qu'est un objet (souvent en pointant).",
     requires: [53, 72], // nani / nan, は
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       // Pronoms démonstratifs ou objets
@@ -6970,6 +7123,7 @@ const PATTERNS = [
     templateFr: "Pas besoin de [X] / [X] ça va",
     description: "Décliner poliment un objet ou un service offert.",
     requires: [4, 72], // daijôbu desu, は
+    rules: ["particle_wa", "desu"],
     slots: [{
       name: "X",
       // Choses qu'on peut décliner : sac, thé, alcool, bière
@@ -6993,6 +7147,7 @@ const PATTERNS = [
     templateFr: "En [X], s'il vous plaît",
     description: "Indiquer un moyen de paiement ou de transport.",
     requires: [3, 76], // onegaishimasu, で
+    rules: ["particle_de"],
     slots: [{
       name: "X",
       // Moyens : carte, espèces
@@ -7016,6 +7171,7 @@ const PATTERNS = [
     templateFr: "Encore [X], s'il vous plaît",
     description: "Redemander une boisson ou portion supplémentaire.",
     requires: [32, 82], // kudasai, mô
+    rules: ["kudasai"],
     slots: [{
       name: "X",
       // Boissons/quantité : ippai (verre), bîru, ocha, mizu, osake
@@ -7039,6 +7195,7 @@ const PATTERNS = [
     templateFr: "Combien coûte [X] ?",
     description: "Demander le prix d'un objet (en boutique).",
     requires: [11, 72], // ikura desu ka, は
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([5, 43]) // kore, kippu
@@ -7061,6 +7218,7 @@ const PATTERNS = [
     templateFr: "Je veux aller à [X]",
     description: "Exprimer le souhait d'aller quelque part.",
     requires: [75, 81], // に, ikitai
+    rules: ["particle_ni", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([16, 17, 47, 56, 60]) // toire, eki, deguchi, hoteru, byôin
@@ -7083,6 +7241,7 @@ const PATTERNS = [
     templateFr: "Je ne comprends pas [X]",
     description: "Signaler qu'on ne comprend pas une langue ou une chose.",
     requires: [13, 73], // wakarimasen, が
+    rules: ["potential_ga", "particle_ga"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([14]) // eigo (potentiellement nihongo plus tard)
@@ -7105,6 +7264,7 @@ const PATTERNS = [
     templateFr: "[X] ça passe ? / [X] ça va ?",
     description: "Vérifier qu'un moyen de paiement ou une option est acceptée.",
     requires: [4, 72], // daijôbu desu, は
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([37, 38, 30]) // kâdo, genkin, osake
@@ -7129,6 +7289,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, où est [X] ?",
     description: "Version polie avec <em>sumimasen</em> pour interpeller poliment avant la question.",
     requires: [1, 12, 72], // sumimasen, doko desu ka, は
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([16, 17, 47, 56, 57, 60])
@@ -7151,6 +7312,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, donnez-moi [X], s'il vous plaît",
     description: "Version polie avec <em>sumimasen</em> en préfixe pour appeler le serveur poliment.",
     requires: [1, 32, 71], // sumimasen, kudasai, を
+    rules: ["particle_wo", "kudasai"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([5, 18, 28, 29, 30, 43])
@@ -7173,6 +7335,7 @@ const PATTERNS = [
     templateFr: "[X], s'il vous plaît (forme avec particule)",
     description: "Forme plus complète avec la particule <em>を</em> avant <em>onegaishimasu</em>. Plus naturel à l'écrit ou en formel.",
     requires: [3, 71], // onegaishimasu, を
+    rules: ["particle_wo"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([18, 20, 27, 28, 29, 30, 33, 39, 46, 58])
@@ -7195,6 +7358,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, qu'est-ce que [X] ?",
     description: "Version polie avec <em>sumimasen</em> — utile dans un restaurant pour demander ce qu'est un plat.",
     requires: [1, 53, 72], // sumimasen, nani, は
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([5])
@@ -7217,6 +7381,7 @@ const PATTERNS = [
     templateFr: "Non, pas besoin de [X]",
     description: "Refus plus explicite avec <em>iie</em> (non) en préfixe.",
     requires: [4, 72, 77], // daijôbu desu, は, iie
+    rules: ["particle_wa", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([29, 30, 39])
@@ -7239,6 +7404,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, en [X], s'il vous plaît",
     description: "Version polie pour préciser un moyen de paiement à la caisse.",
     requires: [1, 3, 76], // sumimasen, onegaishimasu, で
+    rules: ["particle_de"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([37, 38])
@@ -7261,6 +7427,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, encore [X], s'il vous plaît",
     description: "Version polie pour appeler le serveur et redemander une boisson.",
     requires: [1, 32, 82], // sumimasen, kudasai, mô
+    rules: ["kudasai"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([18, 28, 29, 30])
@@ -7283,6 +7450,7 @@ const PATTERNS = [
     templateFr: "Combien coûte ce [X] ?",
     description: "Forme précise avec <em>kono</em> (ce/cette) pour désigner un objet spécifique.",
     requires: [11, 72, 79], // ikura desu ka, は, kono
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([43]) // kippu (le seul nom utilisable avec kono pour l'instant)
@@ -7305,6 +7473,7 @@ const PATTERNS = [
     templateFr: "J'aimerais bien aller à [X]",
     description: "Forme adoucie avec <em>chotto</em> — exprime un souhait modeste plutôt qu'une demande directe.",
     requires: [15, 75, 81], // chotto, に, ikitai
+    rules: ["particle_ni", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([16, 17, 47, 56, 60])
@@ -7327,6 +7496,7 @@ const PATTERNS = [
     templateFr: "Je ne comprends pas bien [X]",
     description: "Forme nuancée avec <em>yoku</em> (bien) — moins absolu qu'un simple « je ne comprends pas ».",
     requires: [13, 73, 78], // wakarimasen, が, yoku
+    rules: ["potential_ga"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([14])
@@ -7349,6 +7519,7 @@ const PATTERNS = [
     templateFr: "[X] ça va vraiment ?",
     description: "Forme insistante avec <em>hontô ni</em> (vraiment) — pour s'assurer doublement.",
     requires: [4, 72, 75, 80], // daijôbu desu, は, に, hontô
+    rules: ["particle_wa", "particle_ka", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([37, 38, 30])
@@ -7373,6 +7544,7 @@ const PATTERNS = [
     templateFr: "Je veux manger [X]",
     description: "Exprimer le souhait de manger quelque chose au restaurant ou au combini.",
     requires: [71, 83], // を, tabetai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       // Nourriture : sushi, râmen, gohan, niku
@@ -7396,6 +7568,7 @@ const PATTERNS = [
     templateFr: "Je veux boire [X]",
     description: "Exprimer le souhait de boire quelque chose.",
     requires: [71, 84], // を, nomitai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       // Boissons : mizu, bîru, ocha, osake
@@ -7419,6 +7592,7 @@ const PATTERNS = [
     templateFr: "Je veux voir / visiter [X]",
     description: "Exprimer le souhait de voir ou visiter un lieu/objet.",
     requires: [71, 85], // を, mitai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       // Lieux à visiter : jinja, otera (et menu)
@@ -7442,6 +7616,7 @@ const PATTERNS = [
     templateFr: "Avez-vous [X] ?",
     description: "Demander si un service ou un objet est disponible.",
     requires: [73, 87], // が, arimasu
+    rules: ["potential_ga", "particle_ka"],
     slots: [{
       name: "X",
       // Choses qu'on cherche : menyû, eigo, kâdo, toire
@@ -7465,6 +7640,7 @@ const PATTERNS = [
     templateFr: "[X] est-il possible ?",
     description: "Demander si un service ou une option est possible.",
     requires: [72, 88], // は, dekimasu
+    rules: ["potential_ga", "particle_wa", "particle_ka"],
     slots: [{
       name: "X",
       // Services : kâdo, chekkuin, eigo
@@ -7488,6 +7664,7 @@ const PATTERNS = [
     templateFr: "Je suis [X]",
     description: "Se présenter avec sa nationalité, son nom ou son rôle.",
     requires: [72, 91], // は, watashi
+    rules: ["particle_wa", "desu"],
     slots: [{
       name: "X",
       // Présentation : furansu-jin (nationalité)
@@ -7513,6 +7690,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, je voudrais manger [X]",
     description: "Version polie pour appeler le serveur et exprimer ce que vous voulez manger.",
     requires: [1, 71, 83], // sumimasen, を, tabetai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([96, 97, 98, 101])
@@ -7535,6 +7713,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, je voudrais boire [X]",
     description: "Version polie pour commander une boisson.",
     requires: [1, 71, 84], // sumimasen, を, nomitai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([18, 28, 29, 30])
@@ -7557,6 +7736,7 @@ const PATTERNS = [
     templateFr: "J'aimerais bien voir [X]",
     description: "Version adoucie avec <em>chotto</em> — souhait plus modeste.",
     requires: [15, 71, 85], // chotto, を, mitai
+    rules: ["particle_wo", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([27, 106, 107])
@@ -7579,6 +7759,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, avez-vous [X] ?",
     description: "Version polie pour demander si un service ou objet existe.",
     requires: [1, 73, 87], // sumimasen, が, arimasu
+    rules: ["potential_ga", "particle_ka"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([14, 16, 27, 37])
@@ -7601,6 +7782,7 @@ const PATTERNS = [
     templateFr: "Excusez-moi, [X] est-il possible ?",
     description: "Version polie pour vérifier qu'un service est possible (paiement, check-in, etc.).",
     requires: [1, 72, 88], // sumimasen, は, dekimasu
+    rules: ["potential_ga", "particle_wa", "particle_ka"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([14, 37, 109])
@@ -7623,6 +7805,7 @@ const PATTERNS = [
     templateFr: "Enchanté, je suis [X], comptez sur moi",
     description: "Présentation complète et formelle avec hajimemashite et yoroshiku onegaishimasu.",
     requires: [3, 25, 72, 91, 95], // onegaishimasu, hajimemashite, は, watashi, yoroshiku onegaishimasu
+    rules: ["particle_wa", "desu"],
     slots: [{
       name: "X",
       fillerIds: () => _learnedAmong([93])
@@ -7664,6 +7847,7 @@ const PATTERNS = [
     templateFr: "Avez-vous un menu en anglais ?",
     description: "Phrase figée. Le <em>no</em> rattache : « menu d'anglais ». Très utile au restaurant.",
     requires: [14, 27, 74, 87], // eigo, menyû, no, arimasu
+    rules: ["particle_no", "potential_ga", "particle_ka"],
     slots: [],
     generate: () => ({
       jp: `英語のメニューありますか？`,
@@ -7679,6 +7863,7 @@ const PATTERNS = [
     templateFr: "Un autre verre, s'il vous plaît",
     description: "Phrase figée en izakaya quand le verre est vide. <em>Mô</em> = encore, <em>ippai</em> = un verre.",
     requires: [32, 82], // kudasai, mô
+    rules: ["kudasai"],
     slots: [],
     generate: () => ({
       jp: `もう一杯ください`,
@@ -10166,6 +10351,12 @@ function showNextCard(){
   document.getElementById("reviewAnswer").classList.remove("shown");
   document.getElementById("reviewActions").style.display = "flex";
   document.getElementById("reviewGradeActions").style.display = "none";
+  // Hide & clear inline grammar rules for the new card
+  const reviewRulesEl = document.getElementById("reviewRules");
+  if (reviewRulesEl) {
+    reviewRulesEl.classList.remove("shown");
+    document.getElementById("reviewRulesList").innerHTML = "";
+  }
 
   if (window.lucide) lucide.createIcons();
 }
@@ -10220,8 +10411,52 @@ function showNextPatternCard(p, instance){
   document.getElementById("reviewAnswer").classList.remove("shown");
   document.getElementById("reviewActions").style.display = "flex";
   document.getElementById("reviewGradeActions").style.display = "none";
+  // Hide & clear inline grammar rules (will be re-rendered on reveal if any)
+  const reviewRulesEl2 = document.getElementById("reviewRules");
+  if (reviewRulesEl2) {
+    reviewRulesEl2.classList.remove("shown");
+    document.getElementById("reviewRulesList").innerHTML = "";
+  }
 
   if (window.lucide) lucide.createIcons();
+}
+
+// Render the inline grammar rules under the review card for a vocab word.
+// Each rule renders as a collapsed card; tapping the header toggles open/close.
+// If no rules, hides the container.
+function renderReviewRules(rulesList){
+  const container = document.getElementById("reviewRules");
+  const list = document.getElementById("reviewRulesList");
+  if (!Array.isArray(rulesList) || rulesList.length === 0) {
+    container.classList.remove("shown");
+    list.innerHTML = "";
+    return;
+  }
+  let html = "";
+  rulesList.forEach(key => {
+    const r = RULES[key];
+    if (!r) return;
+    // Extract first JP character from title for the badge (if any)
+    const m = r.title.match(/[\u3040-\u30ff\u4e00-\u9fff]+/);
+    const jpBit = m ? m[0] : "";
+    // Title without leading JP prefix
+    const cleanTitle = r.title.replace(/^[^—]*— /, "");
+    html += `
+      <div class="review-rule-card" data-rule-key="${key}">
+        <button class="review-rule-toggle" type="button">
+          <i data-lucide="chevron-right" class="chev"></i>
+          ${jpBit ? `<span class="rule-jp">${jpBit}</span>` : `<span class="rule-jp">📖</span>`}
+          <span class="rule-titles">
+            <span class="rule-title-main">${cleanTitle}</span>
+            <span class="rule-title-short">${r.short}</span>
+          </span>
+        </button>
+        <div class="review-rule-body">${r.body}</div>
+      </div>
+    `;
+  });
+  list.innerHTML = html;
+  container.classList.add("shown");
 }
 
 function revealAnswer(){
@@ -10235,10 +10470,14 @@ function revealAnswer(){
     document.getElementById("ansSub").textContent = "";
     document.getElementById("ansSub").style.display = "none";
     document.getElementById("ansNote").style.display = "none";
+    // Render grammar rules attached to the pattern (if any)
+    const p = reviewSession.currentPattern;
+    renderReviewRules((p && p.rules) || []);
     const answerEl = document.getElementById("reviewAnswer");
     answerEl.classList.add("shown");
     document.getElementById("reviewActions").style.display = "none";
     document.getElementById("reviewGradeActions").style.display = "flex";
+    if (window.lucide) lucide.createIcons();
     return;
   }
   const w = reviewSession.currentWord;
@@ -10252,6 +10491,7 @@ function revealAnswer(){
     document.getElementById("ansSub").style.display = w.frSub ? "block" : "none";
     document.getElementById("ansNote").innerHTML = w.note;
     document.getElementById("ansNote").style.display = "block";
+    renderReviewRules(w.rules || []);
   } else if (reviewScope === "kanji") {
     document.getElementById("ansJp").textContent = w.char;
     const readings = w.on + (w.kun && w.kun !== "—" ? "  ·  " + w.kun : "");
@@ -10579,6 +10819,15 @@ document.getElementById("reviewCloseBtn").addEventListener("click", closeReview)
 document.getElementById("revealBtn").addEventListener("click", revealAnswer);
 document.getElementById("failBtn").addEventListener("click", () => gradeWord(false));
 document.getElementById("successBtn").addEventListener("click", () => gradeWord(true));
+
+// Toggle inline grammar rule cards in review (one click = expand/collapse).
+// Delegated handler on the rules list container.
+document.getElementById("reviewRulesList").addEventListener("click", (e) => {
+  const toggle = e.target.closest(".review-rule-toggle");
+  if (!toggle) return;
+  const card = toggle.closest(".review-rule-card");
+  if (card) card.classList.toggle("open");
+});
 
 // Keyboard shortcuts in review mode
 document.addEventListener("keydown", (e) => {
