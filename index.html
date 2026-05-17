@@ -1693,17 +1693,6 @@ body.has-invite-banner{padding-top:84px}
   text-shadow:0 0 10px rgba(6,214,240,.5);
 }
 
-/* Phrase rows in vocab table */
-.mode-japonais .vocab-table tbody tr.is-phrase{background:rgba(255,230,0,.04)}
-.mode-japonais .vocab-table tbody tr.is-phrase .jp-chars{font-size:18px}
-.mode-japonais .phrase-badge{
-  display:inline-block;font-family:'Outfit',sans-serif;font-weight:600;
-  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
-  background:var(--gold);color:#0e0a1a;
-  padding:2px 7px;margin-left:6px;vertical-align:middle;
-  font-weight:400;
-}
-
 /* Rules indicator (the little sparkle icon) */
 .mode-japonais .rules-indicator{
   display:inline-flex;align-items:center;justify-content:center;
@@ -2409,6 +2398,151 @@ body.has-invite-banner{padding-top:84px}
 }
 .mode-japonais .alphabet-note strong{color:var(--cyan);font-weight:600}
 
+/* === Section pliable "Phrases en cours" dans l'onglet vocab === */
+.mode-japonais .phrases-inline{
+  margin:18px 0 8px;
+  border:1px solid var(--rule);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(6,214,240,.04),rgba(168,85,247,.03));
+  overflow:hidden;
+}
+.mode-japonais .phrases-inline[open]{
+  background:linear-gradient(180deg,rgba(6,214,240,.06),rgba(168,85,247,.05));
+}
+.mode-japonais .phrases-inline-summary{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:11px 14px;cursor:pointer;list-style:none;
+  font-family:'Outfit',sans-serif;
+  user-select:none;
+  transition:background .15s ease;
+}
+.mode-japonais .phrases-inline-summary::-webkit-details-marker{display:none}
+.mode-japonais .phrases-inline-summary:hover{
+  background:rgba(6,214,240,.04);
+}
+.mode-japonais .phrases-inline-title{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:600;
+  color:var(--ink);letter-spacing:.02em;
+}
+.mode-japonais .phrases-inline-title svg{width:15px;height:15px;color:var(--cyan)}
+.mode-japonais .phrases-inline-count{
+  display:inline-block;min-width:22px;padding:2px 7px;
+  background:rgba(6,214,240,.12);
+  border:1px solid rgba(6,214,240,.25);
+  color:var(--cyan);
+  border-radius:99px;
+  font-size:11px;font-weight:700;
+  text-align:center;
+}
+.mode-japonais .phrases-inline-chevron{
+  width:16px;height:16px;color:var(--ink-faint);
+  transition:transform .2s ease;
+}
+.mode-japonais .phrases-inline[open] .phrases-inline-chevron{
+  transform:rotate(180deg);
+}
+.mode-japonais .phrases-inline-body{
+  padding:6px 8px 10px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+.mode-japonais .phrases-inline-empty{
+  padding:14px 12px;
+  font-size:12px;color:var(--ink-faint);font-style:italic;
+  line-height:1.6;
+  text-align:center;
+}
+.mode-japonais .phrases-inline-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 10px;border-radius:8px;
+  transition:background .12s ease;
+  font-size:12.5px;
+}
+.mode-japonais .phrases-inline-row + .phrases-inline-row{margin-top:2px}
+.mode-japonais .phrases-inline-row:hover{background:rgba(168,85,247,.06)}
+.mode-japonais .phrases-inline-template{
+  flex:1;min-width:0;
+  display:flex;flex-direction:column;gap:1px;
+}
+.mode-japonais .phrases-inline-template-jp{
+  font-family:'Outfit',sans-serif;
+  font-size:13px;color:var(--ink);font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-japonais .phrases-inline-template-fr{
+  font-size:11px;color:var(--ink-faint);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.mode-japonais .phrases-inline-level{
+  flex-shrink:0;
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+  padding:3px 8px;border-radius:99px;
+  border:1px solid transparent;
+}
+.mode-japonais .phrases-inline-level svg{width:11px;height:11px}
+.mode-japonais .phrases-inline-level.lvl-0{color:var(--ink-faint);border-color:rgba(255,255,255,.08)}
+.mode-japonais .phrases-inline-level.lvl-1{color:var(--violet);border-color:rgba(168,85,247,.3)}
+.mode-japonais .phrases-inline-level.lvl-2{color:var(--lime);border-color:rgba(170,255,0,.3)}
+.mode-japonais .phrases-inline-level.lvl-3{color:var(--gold);border-color:rgba(255,230,0,.4);text-shadow:0 0 6px rgba(255,230,0,.3)}
+.mode-japonais .phrases-inline-section-title{
+  font-size:10px;text-transform:uppercase;letter-spacing:.18em;
+  color:var(--ink-faint);font-weight:700;
+  padding:8px 10px 4px;
+}
+.mode-japonais .phrases-inline-evolved-mark{
+  flex-shrink:0;color:var(--gold);
+  font-size:11px;
+  margin-left:4px;
+}
+.mode-japonais .phrases-inline-link{
+  text-align:center;padding:10px 10px 4px;
+  font-size:11.5px;color:var(--ink-faint);
+}
+.mode-japonais .phrases-inline-link a{
+  color:var(--cyan);text-decoration:none;font-weight:600;
+}
+.mode-japonais .phrases-inline-link a:hover{text-decoration:underline}
+
+/* Variante locked : ton plus sourd */
+.mode-japonais .phrases-inline-locked{
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+}
+.mode-japonais .phrases-inline-locked[open]{
+  background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.015));
+}
+.mode-japonais .phrases-inline-locked .phrases-inline-title svg{color:var(--ink-faint)}
+.mode-japonais .phrases-inline-locked .phrases-inline-count{
+  background:rgba(255,255,255,.04);
+  border-color:rgba(255,255,255,.08);
+  color:var(--ink-faint);
+}
+.mode-japonais .phrases-inline-locked .phrases-inline-summary:hover{
+  background:rgba(255,255,255,.025);
+}
+.mode-japonais .phrases-inline-row-locked{
+  flex-direction:column;align-items:stretch;
+  padding:8px 10px 10px;
+  border-left:2px solid rgba(255,255,255,.05);
+  margin-left:2px;
+}
+.mode-japonais .phrases-inline-row-locked .phrases-inline-template-jp{
+  color:var(--ink-soft);
+}
+.mode-japonais .phrases-inline-hints{
+  margin-top:6px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.mode-japonais .phrases-inline-hint{
+  font-size:11px;color:var(--ink-faint);
+  line-height:1.45;
+  padding-left:14px;position:relative;
+}
+.mode-japonais .phrases-inline-hint::before{
+  content:"→";position:absolute;left:2px;color:var(--violet);
+}
+.mode-japonais .phrases-inline-hint em{color:var(--cyan);font-style:normal;font-weight:600}
+
 /* Rules view */
 .mode-japonais .rules-intro{
   font-family:'Outfit',sans-serif;
@@ -2473,12 +2607,6 @@ body.has-invite-banner{padding-top:84px}
 }
 .mode-japonais .rule-chip svg{width:10px;height:10px}
 
-/* Phrase row distinction */
-.mode-japonais .vocab-table tbody tr.is-phrase td{
-  border-top:1px dashed var(--rule);
-}
-.mode-japonais .vocab-table tbody tr.is-phrase .jp-chars{font-size:17px}
-
 /* Group divider for vocab — colored per theme via data-theme attr */
 .mode-japonais .vocab-table tbody tr.group-row{
   background:var(--surface-2);
@@ -2541,7 +2669,6 @@ body.has-invite-banner{padding-top:84px}
 .mode-japonais .theme-lieux_transport{--theme-color:var(--violet)}
 .mode-japonais .theme-temps_questions{--theme-color:var(--gold)}
 .mode-japonais .theme-hebergement_urgences{--theme-color:var(--peach)}
-.mode-japonais .theme-phrases_utiles{--theme-color:var(--skyblue)}
 
 @media (max-width:600px){
   .mode-japonais .group-row-content{flex-direction:row;justify-content:space-between}
@@ -2767,184 +2894,6 @@ body.has-invite-banner{padding-top:84px}
 .mode-japonais .numbers-group-header:first-child{margin-top:0}
 
 /* Phrases tab */
-.mode-japonais .phrase-card{
-  background:var(--surface);
-  border:1px solid var(--rule);border-radius:16px;
-  padding:18px 18px 14px;margin-bottom:14px;
-  position:relative;transition:all .2s;
-}
-.mode-japonais .phrase-card:hover{
-  border-color:var(--skyblue);
-  box-shadow:0 0 18px rgba(76,201,240,.2);
-}
-.mode-japonais .phrase-card.is-new{
-  border-color:var(--gold);
-  background:rgba(255,230,0,.05);
-  box-shadow:0 0 18px rgba(255,230,0,.2);
-}
-.mode-japonais .phrase-jp{
-  font-family:'Zen Maru Gothic',sans-serif;
-  font-size:24px;line-height:1.5;color:var(--ink);
-  margin-bottom:6px;font-weight:700;
-}
-.mode-japonais .phrase-romaji{
-  font-family:'Outfit',sans-serif;font-weight:500;
-  font-size:14px;color:var(--cyan);
-  margin-bottom:10px;
-  text-shadow:0 0 8px rgba(6,214,240,.3);
-}
-.mode-japonais .phrase-fr{
-  font-family:'Outfit',sans-serif;
-  font-size:16px;font-weight:500;color:var(--ink);
-  margin-bottom:10px;
-}
-.mode-japonais .phrase-note{
-  font-family:'Outfit',sans-serif;font-size:13px;
-  line-height:1.55;color:var(--ink-soft);
-  padding-top:10px;border-top:1px dashed var(--rule-soft);
-}
-.mode-japonais .phrase-note em{
-  font-family:'Zen Maru Gothic',sans-serif;font-style:normal;
-  color:var(--pink);font-weight:600;
-}
-.mode-japonais .phrase-components{
-  display:flex;flex-wrap:wrap;gap:5px;
-  margin-top:10px;
-}
-.mode-japonais .phrase-component{
-  font-family:'Zen Maru Gothic',sans-serif;
-  font-size:11px;color:var(--ink-soft);
-  padding:3px 10px;border-radius:999px;
-  background:var(--surface-2);
-  border:1px solid var(--rule-soft);
-}
-.mode-japonais .phrase-component em{
-  font-family:'Outfit',sans-serif;font-style:normal;
-  color:var(--cyan)!important;font-weight:500;
-}
-.mode-japonais .phrases-theme-header{
-  margin:24px 0 10px;padding:10px 14px;border-radius:12px;
-  font-family:'Outfit',sans-serif;font-size:12px;
-  font-weight:700;letter-spacing:.25em;text-transform:uppercase;
-  color:var(--ink);
-  background:var(--surface);
-  border-left:4px solid var(--skyblue);
-}
-.mode-japonais .phrases-theme-header:first-child{margin-top:0}
-.mode-japonais .phrases-empty{
-  text-align:center;padding:50px 20px;
-  font-family:'Outfit',sans-serif;
-  color:var(--ink-faint);line-height:1.7;
-}
-
-/* Patterns (sentence templates) */
-.mode-japonais .patterns-review-cta{
-  background:var(--surface);
-  border:1px solid var(--rule);border-radius:16px;
-  padding:20px 22px;margin-bottom:24px;
-  text-align:center;
-  background-image:
-    radial-gradient(circle at 20% 0%,rgba(255,46,136,.08) 0%,transparent 60%),
-    radial-gradient(circle at 80% 100%,rgba(168,85,247,.08) 0%,transparent 60%);
-}
-.mode-japonais .patterns-list-title{
-  margin:24px 0 12px;padding:8px 14px;border-radius:12px;
-  font-family:'Outfit',sans-serif;font-size:11px;
-  font-weight:700;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--cyan);background:var(--surface-2);
-  border-left:3px solid var(--cyan);
-}
-.mode-japonais .patterns-list-title:first-child{margin-top:0}
-.mode-japonais .patterns-list{display:flex;flex-direction:column;gap:10px}
-.mode-japonais .pattern-card{
-  background:var(--surface);
-  border:1px solid var(--rule);border-radius:14px;
-  border-left:3px solid var(--skyblue);
-  padding:14px 18px;
-  transition:all .2s;
-}
-.mode-japonais .pattern-card:hover{
-  border-color:var(--cyan);
-  box-shadow:0 0 14px rgba(6,214,240,.18);
-}
-.mode-japonais .pattern-template{
-  font-family:'Space Grotesk',sans-serif;font-weight:700;
-  font-size:16px;color:var(--pink);
-  margin-bottom:4px;
-  text-shadow:0 0 10px rgba(255,46,136,.25);
-}
-.mode-japonais .pattern-fr{
-  font-family:'Outfit',sans-serif;font-weight:500;
-  font-size:14px;color:var(--ink);margin-bottom:6px;
-}
-.mode-japonais .pattern-desc{
-  font-family:'Outfit',sans-serif;font-size:12.5px;
-  color:var(--ink-soft);line-height:1.5;
-}
-.mode-japonais .pattern-example{
-  margin-top:10px;padding-top:10px;
-  border-top:1px dashed var(--rule-soft);
-  font-size:13px;display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;
-}
-.mode-japonais .pattern-example-label{
-  font-family:'Outfit',sans-serif;font-weight:600;font-size:10px;
-  color:var(--ink-faint);letter-spacing:.15em;text-transform:uppercase;
-}
-.mode-japonais .pattern-example-jp{
-  font-family:'Zen Maru Gothic',sans-serif;font-weight:600;
-  color:var(--ink);font-size:14px;
-}
-.mode-japonais .pattern-example-romaji{
-  font-family:'Outfit',sans-serif;font-style:italic;
-  color:var(--cyan);font-size:13px;
-}
-.mode-japonais .pattern-card.pattern-locked{
-  border-left-color:var(--ink-faint);
-  opacity:.55;
-}
-.mode-japonais .pattern-card.pattern-locked .pattern-template{
-  color:var(--ink-soft);text-shadow:none;
-}
-.mode-japonais .pattern-locked-hint{
-  margin-top:8px;font-family:'Outfit',sans-serif;font-size:12px;
-  color:var(--orange);font-style:italic;
-}
-
-/* Pattern header + level badge */
-.mode-japonais .pattern-header{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:10px;margin-bottom:4px;flex-wrap:wrap;
-}
-.mode-japonais .pattern-level-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:3px 10px;border-radius:999px;
-  font-family:'Outfit',sans-serif;font-weight:600;
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  white-space:nowrap;flex-shrink:0;
-}
-.mode-japonais .pattern-level-badge svg{width:11px;height:11px}
-.mode-japonais .pattern-level-badge.pattern-level-0{
-  background:rgba(255,255,255,.06);color:var(--ink-faint);
-  border:1px solid var(--rule);
-}
-.mode-japonais .pattern-level-badge.pattern-level-1{
-  background:rgba(168,85,247,.12);color:var(--violet);
-  border:1px solid rgba(168,85,247,.4);
-  text-shadow:0 0 6px rgba(168,85,247,.4);
-}
-.mode-japonais .pattern-level-badge.pattern-level-2{
-  background:rgba(170,255,0,.12);color:var(--lime);
-  border:1px solid rgba(170,255,0,.4);
-  text-shadow:0 0 6px rgba(170,255,0,.4);
-}
-.mode-japonais .pattern-level-badge.pattern-level-3{
-  background:linear-gradient(135deg,rgba(255,230,0,.2),rgba(255,107,26,.2));
-  color:var(--gold);
-  border:1px solid rgba(255,230,0,.5);
-  text-shadow:0 0 8px rgba(255,230,0,.6);
-  box-shadow:0 0 14px rgba(255,230,0,.25);
-}
-
 /* Inline level pill in review header (uses .pattern-level-N classes too) */
 .mode-japonais .pattern-level-inline{
   display:inline-flex;align-items:center;gap:4px;
@@ -2971,41 +2920,6 @@ body.has-invite-banner{padding-top:84px}
   color:var(--gold);
   border:1px solid rgba(255,230,0,.5);
   text-shadow:0 0 8px rgba(255,230,0,.5);
-}
-
-/* Evolution badge (on v2 patterns) */
-.mode-japonais .pattern-evolved-badge{
-  display:inline-flex;align-items:center;gap:4px;
-  margin-bottom:6px;
-  padding:3px 10px;border-radius:999px;
-  font-family:'Outfit',sans-serif;font-weight:600;
-  font-size:10px;letter-spacing:.1em;text-transform:uppercase;
-  background:linear-gradient(135deg,var(--gold),var(--orange));color:#0e0a1a;
-  box-shadow:var(--glow-gold);
-}
-.mode-japonais .pattern-evolved-badge svg{width:11px;height:11px}
-
-/* Evolution line at bottom of pattern card */
-.mode-japonais .pattern-evolution-line{
-  margin-top:8px;padding-top:8px;
-  border-top:1px dashed var(--rule-soft);
-  font-family:'Outfit',sans-serif;font-size:12px;
-  color:var(--gold);
-  text-shadow:0 0 6px rgba(255,230,0,.3);
-}
-.mode-japonais .pattern-evolution-line strong{color:var(--gold);font-weight:700}
-.mode-japonais .pattern-evolution-line.locked{
-  color:var(--ink-faint);text-shadow:none;
-}
-.mode-japonais .pattern-evolution-line.locked em{
-  font-style:normal;color:var(--ink-soft);
-  font-family:'Space Grotesk',sans-serif;font-weight:500;
-}
-
-/* Cards at level 3 have a slight glow on the left border */
-.mode-japonais .pattern-card:has(.pattern-level-3){
-  border-left-color:var(--gold);
-  box-shadow:0 0 18px rgba(255,230,0,.12);
 }
 
 @media (max-width:600px){
@@ -5303,9 +5217,6 @@ window.activitiesAPI = {
     <button class="tab active" data-tab="vocab" role="tab">
       Vocabulaire <span class="tab-counter" id="vocabTabCounter">0/20</span>
     </button>
-    <button class="tab" data-tab="phrases" role="tab">
-      Phrases <span class="tab-counter" id="phrasesTabCounter">0</span>
-    </button>
     <button class="tab" data-tab="alphabet" role="tab">
       Alphabets <span class="tab-counter" id="alphabetTabCounter">0/10</span>
     </button>
@@ -5379,6 +5290,34 @@ window.activitiesAPI = {
     </div>
   </div>
 
+  <!-- ===== Section pliable : Phrases en cours ===== -->
+  <details class="phrases-inline" id="phrasesInline">
+    <summary class="phrases-inline-summary">
+      <span class="phrases-inline-title">
+        <i data-lucide="message-square-quote"></i>
+        Phrases en cours <span class="phrases-inline-count" id="phrasesInlineCount">0</span>
+      </span>
+      <i data-lucide="chevron-down" class="phrases-inline-chevron"></i>
+    </summary>
+    <div class="phrases-inline-body" id="phrasesInlineBody">
+      <!-- contenu généré dynamiquement par renderPhrasesInline() -->
+    </div>
+  </details>
+
+  <!-- ===== Section pliable : Phrases à débloquer ===== -->
+  <details class="phrases-inline phrases-inline-locked" id="phrasesLockedInline">
+    <summary class="phrases-inline-summary">
+      <span class="phrases-inline-title">
+        <i data-lucide="lock"></i>
+        À débloquer <span class="phrases-inline-count" id="phrasesLockedCount">0</span>
+      </span>
+      <i data-lucide="chevron-down" class="phrases-inline-chevron"></i>
+    </summary>
+    <div class="phrases-inline-body" id="phrasesLockedBody">
+      <!-- contenu généré dynamiquement par renderPhrasesInline() -->
+    </div>
+  </details>
+
   <table class="vocab-table">
     <colgroup>
       <col class="cw-jp">
@@ -5405,21 +5344,6 @@ window.activitiesAPI = {
   <div class="alphabet-note" id="vocabNote"></div>
 
   </section><!-- /vocabView -->
-
-  <section class="view" id="phrasesView">
-
-    <div class="alphabet-note" id="phrasesIntro">
-      <p style="font-style:italic;color:var(--ink-soft);">
-        Les <strong>phrases</strong> se débloquent automatiquement au fur et à mesure que vous apprenez le vocabulaire.
-        Une phrase apparaît ici dès que <strong>tous ses mots-composants</strong> sont au niveau Appris (sens FR → JP).
-      </p>
-    </div>
-
-    <div id="phrasesContainer"></div>
-
-    <div class="alphabet-note" id="phrasesNote"></div>
-
-  </section><!-- /phrasesView -->
 
   <section class="view" id="alphabetView">
 
@@ -5960,54 +5884,6 @@ const VOCAB = [
     mnemo:"Construction : 警 (kei = alerte/garde) + 察 (satsu = observer). « Alerter et observer ».",usage:{when:["<em>Keisatsu wo yonde kudasai</em> — Appelez la police s'il vous plaît","<em>Keisatsu desu</em> — C'est la police"],avoid:["Pour le poste de quartier → <em>kôban</em>"],variants:[{form:"交番 <em>kôban</em>",when:"Petit poste de police de quartier — utile pour demander son chemin ou objets perdus."}]}
   },
 
-  // ===== GROUPE 11 — Phrases utiles (IDs 63-70) — combinent les mots déjà appris =====
-  {id:63, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"これをください", romaji:"kore wo kudasai", fr:"Ceci, s'il vous plaît", frSub:"en pointant l'objet",
-    note:"<em>Kore</em> (ceci) + <em>wo</em> (objet) + <em>kudasai</em> (donnez-moi). Phrase la plus utile en boutique et au resto.",
-    rules:["particle_wo","kudasai"],
-    mnemo:"Phrase complète : これ (kore = ceci) + を (wo = particule d'objet) + ください (kudasai). Formule de base pour demander n'importe quoi en montrant.",usage:{when:["<em>Kore wo kudasai</em> (en pointant un plat) — Ceci, s'il vous plaît","<em>Sumimasen, kore wo kudasai</em> — Excusez-moi, je voudrais ceci"],avoid:["Pour un objet près de l'interlocuteur → <em>sore wo kudasai</em>","Pour un objet loin → <em>are wo kudasai</em>"],variants:[{form:"これお願いします <em>kore onegaishimasu</em>",when:"Variante plus polie : remplace <em>kudasai</em> par <em>onegaishimasu</em>."}]}
-  },
-  {id:64, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"駅はどこですか", romaji:"eki wa doko desu ka", fr:"Où est la gare ?", frSub:"",
-    note:"<em>Eki</em> (gare) + <em>wa</em> (topic) + <em>doko</em> (où) + <em>desu ka</em> (question). Le squelette <em>X wa doko desu ka</em> sert pour tout lieu.",
-    rules:["particle_wa","particle_ka","desu"],
-    mnemo:"Construction : 駅 (eki) + は (wa) + どこ (doko = où) + ですか (desu ka). Schéma général : « X wa doko desu ka » marche pour TOUT lieu.",usage:{when:["<em>Eki wa doko desu ka?</em> — Où est la gare ?","<em>Tokyo-eki wa doko desu ka?</em> — Où est la gare de Tokyo ?"],avoid:[],variants:[]}
-  },
-  {id:65, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"お会計お願いします", romaji:"o-kaikei onegaishimasu", fr:"L'addition, s'il vous plaît", frSub:"",
-    note:"À dire en fin de repas. Vous pouvez aussi simplement faire le geste du X avec les index.",
-    mnemo:"Construction : お会計 (o-kaikei = l'addition) + お願いします (onegaishimasu). Phrase clé en sortie de restaurant.",usage:{when:["<em>O-kaikei onegaishimasu</em> — L'addition s'il vous plaît","<em>Sumimasen, o-kaikei onegaishimasu</em> — Excusez-moi, l'addition s'il vous plaît"],avoid:[],variants:[{form:"お勘定お願いします <em>o-kanjô onegaishimasu</em>",when:"Synonyme dans les restos traditionnels."}]}
-  },
-  {id:66, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"英語のメニューありますか", romaji:"eigo no menyû arimasu ka", fr:"Avez-vous un menu en anglais ?", frSub:"",
-    note:"<em>Eigo no menyû</em> = menu d'anglais (le <em>no</em> rattache). <em>Arimasu ka</em> = y a-t-il ? Disponible aussi : <em>eigo no menyû onegaishimasu</em>.",
-    rules:["particle_no","particle_ka","arimasu"],
-    mnemo:"Construction : 英語 (eigo) + の (no = particule de possession) + メニュー (menyû) + ありますか (arimasu ka = y a-t-il ?). Le の lie deux noms.",usage:{when:["<em>Eigo no menyû arimasu ka?</em> — Avez-vous un menu en anglais ?","<em>Furansugo no menyû arimasu ka?</em> — Avez-vous un menu en français ?"],avoid:[],variants:[{form:"英語メニューはありますか <em>eigo menyû wa arimasu ka</em>",when:"Avec は au lieu de の. Plus direct."}]}
-  },
-  {id:67, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"これは何ですか", romaji:"kore wa nan desu ka", fr:"Qu'est-ce que c'est ?", frSub:"",
-    note:"En pointant un plat ou un objet. <em>Nan</em> est la forme contractée de <em>nani</em> devant <em>desu</em>.",
-    rules:["particle_wa","particle_ka","desu"],
-    mnemo:"Construction : これ (kore = ceci) + は (wa) + 何 (nan = quoi) + ですか (desu ka). Le 何 se prononce <em>nan</em> avant <em>desu</em>. Phrase universelle pour identifier.",usage:{when:["<em>Kore wa nan desu ka?</em> (en montrant un plat) — Qu'est-ce que c'est ?","<em>Sumimasen, kore wa nan desu ka?</em> — Excusez-moi, qu'est-ce que c'est ?"],avoid:["Pour un objet près de l'interlocuteur → <em>sore wa nan desu ka?</em>","Pour un objet loin → <em>are wa nan desu ka?</em>"],variants:[{form:"それは何ですか <em>sore wa nan desu ka</em>",when:"« Cela (près de toi), qu'est-ce que c'est ? »"},{form:"あれは何ですか <em>are wa nan desu ka</em>",when:"« Cela là-bas, qu'est-ce que c'est ? »"}]}
-  },
-  {id:68, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"水をください", romaji:"mizu wo kudasai", fr:"De l'eau, s'il vous plaît", frSub:"",
-    note:"Forme directe pour demander un objet précis. Variante plus polie : <em>o-mizu onegaishimasu</em>.",
-    rules:["particle_wo","kudasai"],
-    mnemo:"Construction : 水 (mizu = eau) + を (wo = particule d'objet) + ください. Schéma de la commande : « X wo kudasai ».",usage:{when:["<em>Mizu wo kudasai</em> — De l'eau s'il vous plaît","<em>O-mizu wo kudasai</em> — De l'eau s'il vous plaît (plus poli)"],avoid:[],variants:[{form:"お水をください <em>o-mizu wo kudasai</em>",when:"Plus poli avec préfixe <em>o-</em>. Forme habituelle au restaurant."}]}
-  },
-  {id:69, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"トイレはどこですか", romaji:"toire wa doko desu ka", fr:"Où sont les toilettes ?", frSub:"",
-    note:"À mémoriser absolument. Même structure que <em>eki wa doko desu ka</em>.",
-    rules:["particle_wa","particle_ka","desu"],
-    mnemo:"Application directe de la formule « X wa doko desu ka » : トイレ + は + どこ + ですか.",usage:{when:["<em>Toire wa doko desu ka?</em> — Où sont les toilettes ?","<em>Sumimasen, toire wa doko desu ka?</em> — Excusez-moi, où sont les toilettes ?"],avoid:["En contexte très formel → <em>otearai wa doko desu ka</em>"],variants:[{form:"お手洗いはどこですか <em>otearai wa doko desu ka</em>",when:"Plus poli, à utiliser dans un restaurant haut de gamme ou un ryokan."}]}
-  },
-  {id:70, kind:"phrase", category:"phrases", catLabel:"Phrases utiles", catNum:"拾壱",
-    jp:"もう一杯ください", romaji:"mô ippai kudasai", fr:"Un autre verre, s'il vous plaît", frSub:"au bar",
-    note:"<em>Mô</em> = encore, <em>ippai</em> = un verre/une coupe. Pratique en izakaya quand le verre est vide.",
-    rules:["kudasai"],
-    mnemo:"Construction : もう (mô = encore) + 一杯 (ippai = un verre) + ください. Le 杯 (verre) avec 一 fait <em>ippai</em> par sokuon (consonne double).",usage:{when:["<em>Mô ippai kudasai</em> — Un autre verre s'il vous plaît","<em>Bîru, mô ippai kudasai</em> — Une autre bière s'il vous plaît"],avoid:["Pour redemander du riz ou une portion → <em>okawari onegaishimasu</em>"],variants:[{form:"おかわり <em>okawari</em>",when:"« Une autre portion » — pour le riz, la soupe, les boissons sans alcool."}]}
-  },
   // ===== PARTICULES (IDs 71-76) =====
   // Petits mots grammaticaux essentiels pour combiner les autres mots.
   // Indispensables pour les patrons de phrases.
@@ -6291,7 +6167,7 @@ const VOCAB = [
    ============================================================ */
 /* ============================================================
    VOCAB — themes (display only, NOT unlock units)
-   The 70 words are unlocked progressively in batches of 10,
+   Words are unlocked progressively in batches of 10,
    in the order of voyage utility (their natural ID order).
    Themes below are used for display grouping in the table.
    ============================================================ */
@@ -6304,8 +6180,7 @@ const VOCAB_THEME_ORDER = [
   "argent_shopping",
   "lieux_transport",
   "temps_questions",
-  "hebergement_urgences",
-  "phrases_utiles"
+  "hebergement_urgences"
 ];
 const VOCAB_THEME_LABELS = {
   salutations_politesses: "Salutations & politesses",
@@ -6316,8 +6191,7 @@ const VOCAB_THEME_LABELS = {
   argent_shopping:        "Argent & shopping",
   lieux_transport:        "Lieux & transports",
   temps_questions:        "Temps & questions",
-  hebergement_urgences:   "Hébergement & urgences",
-  phrases_utiles:         "Phrases utiles"
+  hebergement_urgences:   "Hébergement & urgences"
 };
 const VOCAB_THEME_NUMS = {
   salutations_politesses: "壱",
@@ -6328,8 +6202,7 @@ const VOCAB_THEME_NUMS = {
   argent_shopping:        "陸",
   lieux_transport:        "漆",
   temps_questions:        "捌",
-  hebergement_urgences:   "玖",
-  phrases_utiles:         "拾"
+  hebergement_urgences:   "玖"
 };
 
 // Map each existing category -> new theme.
@@ -6346,8 +6219,7 @@ const CATEGORY_TO_THEME = {
   argent:      "argent_shopping",
   transports:  "lieux_transport",
   temps:       "temps_questions",
-  hebergement: "hebergement_urgences",
-  phrases:     "phrases_utiles"
+  hebergement: "hebergement_urgences"
 };
 function getTheme(v){ return CATEGORY_TO_THEME[v.category] || "depannage"; }
 
@@ -6702,7 +6574,7 @@ const KANJI = [
   { id: 300, char: "願", on: "GAN", kun: "nega(u)", meaning: "souhait, prière",
     etymology: "Composé de 原 (source, origine) + 頁 (tête / visage). Litt. « ce qui vient du fond du cœur, exprimé par le visage » → un souhait formulé.",
     mnemo: "Un souhait ou une prière. À gauche 原 (la source, l'origine) ; à droite 頁 (un visage). Litt. « ce qui vient du fond, exprimé par le visage ».",
-    wordIds: [3, 65] },
+    wordIds: [3] },
   { id: 301, char: "大", on: "DAI / TAI", kun: "ô(kii)", meaning: "grand",
     etymology: "Pictogramme : un humain debout, bras et jambes écartés au maximum. La posture « ouverte » exprime la grandeur.",
     mnemo: "Grand. Un homme debout vu de face : un trait horizontal pour les bras tendus, deux traits qui descendent en V pour les jambes écartées.",
@@ -6719,27 +6591,27 @@ const KANJI = [
   { id: 304, char: "英", on: "EI", kun: "—", meaning: "Angleterre, brillant",
     etymology: "艹 (herbe) + 央 (centre). À l'origine « fleur épanouie au centre » → brillant, distingué. Choisi pour transcrire « England » phonétiquement.",
     mnemo: "Brillant, par extension : Angleterre (transcription phonétique). 艹 (deux brins d'herbe) en haut, et 央 (centre) en bas. Litt. « la fleur la plus brillante ».",
-    wordIds: [14, 66] },
+    wordIds: [14] },
   { id: 305, char: "語", on: "GO", kun: "kata(ru)", meaning: "langue, parler",
     etymology: "言 (parole, dessin d'une bouche qui parle) + 吾 (moi). Litt. « ma parole » → la langue, le fait de parler.",
     mnemo: "Langue, parler. À gauche 言 (parole : trois traits sortant d'une bouche carrée 口), à droite 吾 (moi). Litt. « mes paroles ».",
-    wordIds: [14, 66] },
+    wordIds: [14] },
   { id: 306, char: "駅", on: "EKI", kun: "—", meaning: "gare, station",
     etymology: "馬 (cheval) + 尺 (mesure). À l'origine, relais de chevaux le long des routes. Aujourd'hui : gare ferroviaire.",
     mnemo: "Une gare. À l'origine, un relais de chevaux. À gauche 馬 (cheval) avec sa crinière, son corps et 4 pattes ; à droite 尺 (mesure).",
-    wordIds: [17, 64] },
+    wordIds: [17] },
   { id: 307, char: "水", on: "SUI", kun: "mizu", meaning: "eau",
     etymology: "Pictogramme : une rivière qui coule avec des éclaboussures de chaque côté. Très ancien, l'un des kanji fondamentaux.",
     mnemo: "L'eau. Un cours d'eau vu d'en haut : un trait central qui s'écoule, et deux paires de traits qui partent de chaque côté comme des éclaboussures.",
-    wordIds: [18, 68] },
+    wordIds: [18] },
   { id: 308, char: "会", on: "KAI", kun: "a(u)", meaning: "réunion, rencontrer",
     etymology: "Forme simplifiée de 會, qui montrait un couvercle posé sur un récipient — l'idée de « choses qui se rejoignent ». De là : se réunir, se rencontrer.",
     mnemo: "Se réunir, rencontrer. Un toit triangulaire 亼 (deux traits en V inversé) qui couvre, et en dessous des traits empilés : des choses qui se rassemblent sous un même toit.",
-    wordIds: [20, 65] },
+    wordIds: [20] },
   { id: 309, char: "計", on: "KEI", kun: "haka(ru)", meaning: "compter, mesurer",
     etymology: "言 (parole) + 十 (dix). Litt. « énoncer dix » → compter à voix haute, faire un calcul, planifier.",
     mnemo: "Compter, mesurer. À gauche 言 (parole), à droite 十 (dix : une croix). Litt. « énoncer jusqu'à dix » → faire un compte.",
-    wordIds: [20, 65] },
+    wordIds: [20] },
   // Group 6 — Restaurant
   { id: 310, char: "茶", on: "CHA / SA", kun: "—", meaning: "thé",
     etymology: "艹 (herbe) au-dessus + 木 (arbre) en bas, avec un élément central. Représente la plante du théier — herbe ligneuse.",
@@ -6756,7 +6628,7 @@ const KANJI = [
   { id: 313, char: "杯", on: "HAI", kun: "sakazuki", meaning: "coupe, verre",
     etymology: "木 (bois) + 不 (non/négation). Désignait à l'origine une coupe en bois qui « ne renverse pas ». Compteur pour les boissons.",
     mnemo: "Une coupe, un verre. À gauche 木 (arbre/bois : un tronc avec branches et racines), à droite 不 (négation). Litt. « récipient en bois qui ne se renverse pas ».",
-    wordIds: [31, 70] },
+    wordIds: [31] },
   { id: 314, char: "箸", on: "CHO", kun: "hashi", meaning: "baguettes",
     etymology: "竹 (bambou) en haut + 者 (personne/chose). Litt. « chose en bambou » → les baguettes traditionnelles.",
     mnemo: "Les baguettes pour manger. 竹 (bambou : deux brins penchés avec leurs feuilles) en haut, et 者 (chose, personne) en bas. Litt. « chose en bambou ».",
@@ -6835,7 +6707,7 @@ const KANJI = [
   { id: 332, char: "何", on: "KA", kun: "nani / nan", meaning: "quoi, combien",
     etymology: "亻 (personne) + 可 (possible). À l'origine, une personne portant une charge. Le sens « quoi ? » est venu par emprunt phonétique.",
     mnemo: "Quoi, combien. À gauche 亻 (une personne vue de profil), à droite 可 (possible). Une personne se demande ce qui est possible → quoi ?",
-    wordIds: [50, 53, 67] },
+    wordIds: [50, 53] },
   { id: 333, char: "時", on: "JI", kun: "toki", meaning: "heure, temps",
     etymology: "日 (soleil) + 寺 (temple, mais ici phonétique). « La position du soleil » servait à mesurer le temps. → heure, époque.",
     mnemo: "Heure, temps. À gauche 日 (soleil), à droite 寺 (temple). Avant les horloges, on lisait l'heure à la position du soleil par rapport au temple.",
@@ -6888,11 +6760,7 @@ const KANJI = [
   { id: 345, char: "察", on: "SATSU", kun: "—", meaning: "observer, juger",
     etymology: "宀 (toit) + 祭 (cérémonie). « Examiner attentivement comme lors d'une cérémonie » → observer, inspecter.",
     mnemo: "Observer, juger. 宀 (un toit) en haut, 祭 (cérémonie/rituel) en bas. Litt. « examiner attentivement comme lors d'une cérémonie ».",
-    wordIds: [62] },
-  { id: 346, char: "一", on: "ICHI", kun: "hito(tsu)", meaning: "un, premier",
-    etymology: "Un seul trait horizontal. Le plus simple des kanji : un seul trait = l'unité, le un. Base de tous les nombres.",
-    mnemo: "Un, le premier. Le kanji le plus simple : un seul trait horizontal = l'unité. Suivent 二 (deux traits) et 三 (trois traits).",
-    wordIds: [70] }
+    wordIds: [62] }
 ];
 
 /* ============================================================
@@ -6982,24 +6850,6 @@ function reconcileNumbersUnlock(silent){
 loadNumbersUnlock();
 
 /* ============================================================
-   PHRASES — sentences built from learned vocabulary
-   IDs 500-599 (stable, never reuse).
-   Each phrase has `components: [vocabId, ...]` — when ALL
-   components are at rev >= 2, the phrase is unlocked.
-   ============================================================ */
-const PHRASES = []; // legacy: replaced by PATTERNS system
-
-const PHRASES_THEME_LABELS = {
-  politesse:   "Politesse",
-  restaurant:  "Restaurant",
-  shopping:    "Shopping",
-  transport:   "Transport",
-  questions:   "Questions",
-  hebergement: "Hébergement",
-  urgence:     "Urgence"
-};
-
-/* ============================================================
    PATRONS DE PHRASES — schémas grammaticaux à combiner
    Chaque pattern a :
    - id: identifiant stable
@@ -7022,6 +6872,7 @@ function _learnedAmong(ids){
 const PATTERNS = [
   {
     id: "where_is",
+    complexity: 2,
     evolvesTo: "where_is_polite",
     template: "[X] wa doko desu ka?",
     templateFr: "Où est [X] ?",
@@ -7044,6 +6895,7 @@ const PATTERNS = [
 
   {
     id: "give_me",
+    complexity: 2,
     evolvesTo: "give_me_polite",
     template: "[X] wo kudasai",
     templateFr: "Donnez-moi [X], s'il vous plaît",
@@ -7066,6 +6918,7 @@ const PATTERNS = [
 
   {
     id: "please_x",
+    complexity: 1,
     evolvesTo: "please_x_with_wo",
     template: "[X] onegaishimasu",
     templateFr: "[X], s'il vous plaît",
@@ -7088,6 +6941,7 @@ const PATTERNS = [
 
   {
     id: "what_is",
+    complexity: 2,
     evolvesTo: "what_is_polite",
     template: "[X] wa nan desu ka?",
     templateFr: "Qu'est-ce que [X] ?",
@@ -7110,6 +6964,7 @@ const PATTERNS = [
 
   {
     id: "no_thanks_x",
+    complexity: 2,
     evolvesTo: "no_thanks_iie",
     template: "[X] wa daijôbu desu",
     templateFr: "Pas besoin de [X] / [X] ça va",
@@ -7132,6 +6987,7 @@ const PATTERNS = [
 
   {
     id: "by_means",
+    complexity: 2,
     evolvesTo: "by_means_polite",
     template: "[X] de onegaishimasu",
     templateFr: "En [X], s'il vous plaît",
@@ -7154,6 +7010,7 @@ const PATTERNS = [
 
   {
     id: "another_x",
+    complexity: 1,
     evolvesTo: "another_x_polite",
     template: "Mô [X] kudasai",
     templateFr: "Encore [X], s'il vous plaît",
@@ -7176,6 +7033,7 @@ const PATTERNS = [
 
   {
     id: "how_much",
+    complexity: 2,
     evolvesTo: "how_much_this",
     template: "[X] wa ikura desu ka?",
     templateFr: "Combien coûte [X] ?",
@@ -7197,6 +7055,7 @@ const PATTERNS = [
 
   {
     id: "go_to",
+    complexity: 2,
     evolvesTo: "go_to_a_bit",
     template: "[X] ni ikitai desu",
     templateFr: "Je veux aller à [X]",
@@ -7218,6 +7077,7 @@ const PATTERNS = [
 
   {
     id: "dont_understand",
+    complexity: 2,
     evolvesTo: "dont_understand_well",
     template: "[X] ga wakarimasen",
     templateFr: "Je ne comprends pas [X]",
@@ -7239,6 +7099,7 @@ const PATTERNS = [
 
   {
     id: "is_x_ok",
+    complexity: 2,
     evolvesTo: "is_x_ok_really",
     template: "[X] wa daijôbu desu ka?",
     templateFr: "[X] ça passe ? / [X] ça va ?",
@@ -7262,6 +7123,7 @@ const PATTERNS = [
 
   {
     id: "where_is_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wa doko desu ka?",
     templateFr: "Excusez-moi, où est [X] ?",
@@ -7283,6 +7145,7 @@ const PATTERNS = [
 
   {
     id: "give_me_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wo kudasai",
     templateFr: "Excusez-moi, donnez-moi [X], s'il vous plaît",
@@ -7304,6 +7167,7 @@ const PATTERNS = [
 
   {
     id: "please_x_with_wo",
+    complexity: 2,
     isEvolution: true,
     template: "[X] wo onegaishimasu",
     templateFr: "[X], s'il vous plaît (forme avec particule)",
@@ -7325,6 +7189,7 @@ const PATTERNS = [
 
   {
     id: "what_is_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wa nan desu ka?",
     templateFr: "Excusez-moi, qu'est-ce que [X] ?",
@@ -7346,6 +7211,7 @@ const PATTERNS = [
 
   {
     id: "no_thanks_iie",
+    complexity: 3,
     isEvolution: true,
     template: "Iie, [X] wa daijôbu desu",
     templateFr: "Non, pas besoin de [X]",
@@ -7367,6 +7233,7 @@ const PATTERNS = [
 
   {
     id: "by_means_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] de onegaishimasu",
     templateFr: "Excusez-moi, en [X], s'il vous plaît",
@@ -7388,6 +7255,7 @@ const PATTERNS = [
 
   {
     id: "another_x_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, mô [X] kudasai",
     templateFr: "Excusez-moi, encore [X], s'il vous plaît",
@@ -7409,6 +7277,7 @@ const PATTERNS = [
 
   {
     id: "how_much_this",
+    complexity: 3,
     isEvolution: true,
     template: "Kono [X] wa ikura desu ka?",
     templateFr: "Combien coûte ce [X] ?",
@@ -7430,6 +7299,7 @@ const PATTERNS = [
 
   {
     id: "go_to_a_bit",
+    complexity: 3,
     isEvolution: true,
     template: "Chotto [X] ni ikitai desu",
     templateFr: "J'aimerais bien aller à [X]",
@@ -7451,6 +7321,7 @@ const PATTERNS = [
 
   {
     id: "dont_understand_well",
+    complexity: 3,
     isEvolution: true,
     template: "[X] ga yoku wakarimasen",
     templateFr: "Je ne comprends pas bien [X]",
@@ -7472,6 +7343,7 @@ const PATTERNS = [
 
   {
     id: "is_x_ok_really",
+    complexity: 4,
     isEvolution: true,
     template: "[X] wa hontô ni daijôbu desu ka?",
     templateFr: "[X] ça va vraiment ?",
@@ -7495,6 +7367,7 @@ const PATTERNS = [
 
   {
     id: "want_to_eat",
+    complexity: 2,
     evolvesTo: "want_to_eat_polite",
     template: "[X] wo tabetai desu",
     templateFr: "Je veux manger [X]",
@@ -7517,6 +7390,7 @@ const PATTERNS = [
 
   {
     id: "want_to_drink",
+    complexity: 2,
     evolvesTo: "want_to_drink_polite",
     template: "[X] wo nomitai desu",
     templateFr: "Je veux boire [X]",
@@ -7539,6 +7413,7 @@ const PATTERNS = [
 
   {
     id: "want_to_see",
+    complexity: 2,
     evolvesTo: "want_to_see_polite",
     template: "[X] wo mitai desu",
     templateFr: "Je veux voir / visiter [X]",
@@ -7561,6 +7436,7 @@ const PATTERNS = [
 
   {
     id: "do_you_have",
+    complexity: 2,
     evolvesTo: "do_you_have_polite",
     template: "[X] ga arimasu ka?",
     templateFr: "Avez-vous [X] ?",
@@ -7583,6 +7459,7 @@ const PATTERNS = [
 
   {
     id: "is_x_possible",
+    complexity: 2,
     evolvesTo: "is_x_possible_polite",
     template: "[X] wa dekimasu ka?",
     templateFr: "[X] est-il possible ?",
@@ -7605,6 +7482,7 @@ const PATTERNS = [
 
   {
     id: "i_am",
+    complexity: 2,
     evolvesTo: "i_am_polite",
     template: "Watashi wa [X] desu",
     templateFr: "Je suis [X]",
@@ -7629,6 +7507,7 @@ const PATTERNS = [
 
   {
     id: "want_to_eat_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wo tabetai desu",
     templateFr: "Excusez-moi, je voudrais manger [X]",
@@ -7650,6 +7529,7 @@ const PATTERNS = [
 
   {
     id: "want_to_drink_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wo nomitai desu",
     templateFr: "Excusez-moi, je voudrais boire [X]",
@@ -7671,6 +7551,7 @@ const PATTERNS = [
 
   {
     id: "want_to_see_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Chotto [X] wo mitai desu",
     templateFr: "J'aimerais bien voir [X]",
@@ -7692,6 +7573,7 @@ const PATTERNS = [
 
   {
     id: "do_you_have_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] ga arimasu ka?",
     templateFr: "Excusez-moi, avez-vous [X] ?",
@@ -7713,6 +7595,7 @@ const PATTERNS = [
 
   {
     id: "is_x_possible_polite",
+    complexity: 3,
     isEvolution: true,
     template: "Sumimasen, [X] wa dekimasu ka?",
     templateFr: "Excusez-moi, [X] est-il possible ?",
@@ -7734,6 +7617,7 @@ const PATTERNS = [
 
   {
     id: "i_am_polite",
+    complexity: 5,
     isEvolution: true,
     template: "Hajimemashite, watashi wa [X] desu, yoroshiku onegaishimasu",
     templateFr: "Enchanté, je suis [X], comptez sur moi",
@@ -7751,6 +7635,56 @@ const PATTERNS = [
         promptFr: `Présentez-vous formellement : enchanté, vous êtes « ${x.fr.toLowerCase()} », comptez sur moi.`
       };
     }
+  },
+
+  // ===== PATRONS FIXES (sans slot) — phrases idiomatiques figées =====
+  // Ces phrases sont trop spécifiques pour être génériques avec un slot.
+  // Elles deviennent disponibles dès que tous leurs mots-composants sont
+  // au niveau Appris (rev >= 2).
+
+  {
+    id: "fixed_okaikei_onegai",
+    complexity: 2,
+    template: "O-kaikei onegaishimasu",
+    templateFr: "L'addition, s'il vous plaît",
+    description: "Phrase figée à dire en fin de repas. Vous pouvez aussi faire le geste du X avec les index.",
+    requires: [3, 20], // onegaishimasu, o-kaikei
+    slots: [],
+    generate: () => ({
+      jp: `お会計お願いします`,
+      romaji: `o-kaikei onegaishimasu`,
+      promptFr: `Demandez l'addition au restaurant.`
+    })
+  },
+
+  {
+    id: "fixed_eigo_menu",
+    complexity: 3,
+    template: "Eigo no menyû arimasu ka?",
+    templateFr: "Avez-vous un menu en anglais ?",
+    description: "Phrase figée. Le <em>no</em> rattache : « menu d'anglais ». Très utile au restaurant.",
+    requires: [14, 27, 74, 87], // eigo, menyû, no, arimasu
+    slots: [],
+    generate: () => ({
+      jp: `英語のメニューありますか？`,
+      romaji: `eigo no menyû arimasu ka?`,
+      promptFr: `Demandez s'il y a un menu en anglais au restaurant.`
+    })
+  },
+
+  {
+    id: "fixed_mo_ippai",
+    complexity: 2,
+    template: "Mô ippai kudasai",
+    templateFr: "Un autre verre, s'il vous plaît",
+    description: "Phrase figée en izakaya quand le verre est vide. <em>Mô</em> = encore, <em>ippai</em> = un verre.",
+    requires: [32, 82], // kudasai, mô
+    slots: [],
+    generate: () => ({
+      jp: `もう一杯ください`,
+      romaji: `mô ippai kudasai`,
+      promptFr: `Au bar, demandez un autre verre.`
+    })
   }
 ];
 
@@ -7893,6 +7827,41 @@ function getPatternWeight(p){
     if (hoursAgo < 24 && stats.consec === 0) w *= 2;
   }
   return w;
+}
+
+// patternReadiness(p) — score 0..1 indiquant à quel point un pattern est
+// "mûr" pour apparaître. Utilisé en étape 2 pour pondérer les patterns
+// dans le moteur de file unifié.
+//
+//   reqScore   = moyenne du min(fwd, rev) de chaque `requires`, normalisée sur 3
+//                → 1.0 quand tous les requires sont au niveau Maîtrisé
+//   fillerScore = nb de fillers disponibles (rev>=2), saturé à 3
+//                → 0 si aucun slot remplissable, 1 dès 3+ fillers
+//
+// Pondération : 70% requires, 30% fillers (les requires sont la condition dure,
+// les fillers sont la condition souple). Pour les patterns sans slot
+// (fixed_*), fillerScore = 1 par défaut (rien à remplir).
+function patternReadiness(p){
+  // Score requires
+  let reqScore = 1;
+  if (p.requires && p.requires.length > 0) {
+    let sum = 0;
+    for (const id of p.requires) {
+      const ld = getLevelDir(id);
+      sum += Math.min(ld.fwd || 0, ld.rev || 0);
+    }
+    reqScore = sum / (p.requires.length * 3);
+  }
+  // Score fillers
+  let fillerScore = 1;
+  if (p.slots && p.slots.length > 0) {
+    let total = 0;
+    for (const slot of p.slots) {
+      total += slot.fillerIds().length;
+    }
+    fillerScore = Math.min(1, total / 3);
+  }
+  return reqScore * 0.7 + fillerScore * 0.3;
 }
 
 // Un patron est disponible si :
@@ -8413,7 +8382,6 @@ function render(){
       items.forEach(v => {
       const isLearned = learnedSet.has(v.id);
       const lv = getLevel(v.id);
-      const isPhrase = v.kind === "phrase";
       const hasRules = Array.isArray(v.rules) && v.rules.length > 0;
       const hasUsage = v.usage && (
         (v.usage.when && v.usage.when.length) ||
@@ -8421,7 +8389,7 @@ function render(){
         (v.usage.variants && v.usage.variants.length)
       );
       const tr = document.createElement("tr");
-      tr.className = (isLearned ? "is-learned " : "") + (isPhrase ? "is-phrase" : "");
+      tr.className = isLearned ? "is-learned" : "";
       const usageIndicator = hasUsage
         ? `<button class="usage-indicator" data-usage="${v.id}" aria-label="Voir le mode d'emploi" title="Quand utiliser ce mot"><i data-lucide="message-circle-question"></i></button>`
         : "";
@@ -9081,120 +9049,94 @@ document.querySelectorAll('.chip[data-filter="numbersStatus"]').forEach(chip => 
   });
 });
 
-/* ============================================================
-   PHRASES rendering
-   ============================================================ */
-const phrasesContainer = document.getElementById("phrasesContainer");
-
+// renderPhrases() — wrapper de compatibilité.
+// L'onglet "Phrases" a été supprimé : les patterns sont désormais affichés
+// dans la section pliable au-dessus de la table vocab. Cette fonction est
+// conservée comme alias pour que tous les appels existants (dispersés dans
+// le code) continuent de fonctionner sans modification.
 function renderPhrases(){
+  renderPhrasesInline();
+}
+
+// renderPhrasesInline() — affiche les 2 sections pliables au-dessus de
+// la table vocab : "Phrases en cours" (disponibles) et "À débloquer"
+// (verrouillées avec hints pour savoir quoi apprendre ensuite).
+function renderPhrasesInline(){
+  const body = document.getElementById("phrasesInlineBody");
+  const countEl = document.getElementById("phrasesInlineCount");
+  const lockedBody = document.getElementById("phrasesLockedBody");
+  const lockedCountEl = document.getElementById("phrasesLockedCount");
+  if (!body || !countEl || !lockedBody || !lockedCountEl) return;
+
+  // ---------- Section 1 : disponibles ----------
   const available = getAvailablePatterns();
-  const tabCounter = document.getElementById("phrasesTabCounter");
-  if (tabCounter) tabCounter.textContent = available.length + "/" + PATTERNS.length;
-  const noteEl = document.getElementById("phrasesNote");
+  countEl.textContent = String(available.length);
 
   if (available.length === 0) {
-    phrasesContainer.innerHTML = `<div class="phrases-empty">
-      <p>Aucun patron de phrase disponible pour le moment.</p>
-      <p style="margin-top:10px;">Apprenez d'abord les <strong>particules</strong> (を, は, が, の, に, で) et leurs partenaires (ください, お願いします, etc.) pour pouvoir combiner des mots en phrases.</p>
+    body.innerHTML = `<div class="phrases-inline-empty">
+      Apprenez quelques particules (を, は, の…) et leurs partenaires (ください, お願いします) pour débloquer vos premières phrases.
     </div>`;
-    if (noteEl) noteEl.innerHTML = "";
-    return;
-  }
+  } else {
+    // Groupage : base d'abord, puis évolutions
+    const availableBase = available.filter(p => !p.isEvolution);
+    const availableEvolved = available.filter(p => p.isEvolution);
 
-  // Big "Réviser les patrons" button at the top
-  let html = `<div class="patterns-review-cta">
-    <p style="margin-bottom:14px;color:var(--ink-soft);font-size:14px;line-height:1.55;">
-      Au lieu d'apprendre des phrases par cœur, exercez-vous à <strong style="color:var(--cyan);">combiner</strong> les mots que vous connaissez selon des patrons.
-      Maîtrisez un patron pour débloquer sa <strong style="color:var(--gold);">version évoluée</strong>.
-    </p>
-    <button class="review-btn" id="reviewPatternsBtn" type="button" style="font-size:15px;padding:12px 24px;">
-      <i data-lucide="shuffle"></i>
-      Réviser les patrons
-    </button>
-  </div>`;
-
-  // Helper to render a single pattern card
-  function renderPatternCard(p, locked){
-    const sample = !locked ? instantiatePattern(p) : null;
-    const level = getPatternLevel(p.id);
-    const levelClass = `pattern-level-${level}`;
-    const levelLabel = ["Inconnu","En cours","Appris","Maîtrisé"][level];
-    const levelIcon = ["circle","circle-half","circle-check","crown"][level];
-    const evolutionHtml = (!locked && p.evolvesTo) ? (() => {
-      const ev = PATTERNS.find(pp => pp.id === p.evolvesTo);
-      if (!ev) return "";
-      const evAvailable = isPatternAvailable(ev);
-      if (level === 3 && evAvailable) {
-        return `<div class="pattern-evolution-line">→ Évolue en : <strong>${ev.template}</strong></div>`;
-      } else if (level < 3) {
-        return `<div class="pattern-evolution-line locked">→ Au niveau Maîtrisé : débloque <em>${ev.template}</em></div>`;
-      }
-      return "";
-    })() : "";
-    const evolvedBadge = p.isEvolution
-      ? `<span class="pattern-evolved-badge"><i data-lucide="sparkles"></i> Évolution</span>`
-      : "";
-    return `<div class="pattern-card ${locked ? "pattern-locked" : ""}">
-      <div class="pattern-header">
-        <div class="pattern-template">${p.template}</div>
-        ${!locked ? `<span class="pattern-level-badge ${levelClass}" title="${levelLabel}">
+    function renderRow(p){
+      const lvl = getPatternLevel(p.id);
+      const levelLabel = ["Inconnu","En cours","Appris","Maîtrisé"][lvl];
+      const levelIcon = ["circle","circle-half","circle-check","crown"][lvl];
+      const evolvedMark = p.isEvolution
+        ? `<span class="phrases-inline-evolved-mark" title="Évolution">✨</span>`
+        : "";
+      return `<div class="phrases-inline-row">
+        <div class="phrases-inline-template">
+          <div class="phrases-inline-template-jp">${p.template}${evolvedMark}</div>
+          <div class="phrases-inline-template-fr">${p.templateFr}</div>
+        </div>
+        <span class="phrases-inline-level lvl-${lvl}" title="${levelLabel}">
           <i data-lucide="${levelIcon}"></i> ${levelLabel}
-        </span>` : ""}
-      </div>
-      ${evolvedBadge}
-      <div class="pattern-fr">${p.templateFr}</div>
-      <div class="pattern-desc">${p.description}</div>
-      ${sample ? `<div class="pattern-example">
-        <span class="pattern-example-label">Exemple :</span>
-        <span class="pattern-example-jp">${sample.jp}</span>
-        <span class="pattern-example-romaji">${sample.romaji}</span>
-      </div>` : ""}
-      ${evolutionHtml}
-    </div>`;
+        </span>
+      </div>`;
+    }
+
+    let html = "";
+    if (availableBase.length > 0) {
+      html += availableBase.map(renderRow).join("");
+    }
+    if (availableEvolved.length > 0) {
+      html += `<div class="phrases-inline-section-title">Évolutions</div>`;
+      html += availableEvolved.map(renderRow).join("");
+    }
+    body.innerHTML = html;
   }
 
-  // Group available: base patterns first, then evolutions
-  const availableBase = available.filter(p => !p.isEvolution);
-  const availableEvolved = available.filter(p => p.isEvolution);
-
-  if (availableBase.length > 0) {
-    html += `<div class="patterns-list-title">Patrons disponibles</div>`;
-    html += `<div class="patterns-list">`;
-    availableBase.forEach(p => { html += renderPatternCard(p, false); });
-    html += `</div>`;
-  }
-
-  if (availableEvolved.length > 0) {
-    html += `<div class="patterns-list-title">Évolutions débloquées</div>`;
-    html += `<div class="patterns-list">`;
-    availableEvolved.forEach(p => { html += renderPatternCard(p, false); });
-    html += `</div>`;
-  }
-
-  // Locked patterns (hint to motivate)
-  // Exclude v1 patterns that have been replaced by their v2 — those should
-  // not appear anywhere on screen, since their evolution has taken over.
+  // ---------- Section 2 : à débloquer ----------
+  // Mêmes règles d'éligibilité que dans renderPhrases :
+  // on cache les v1 dont le v2 a pris le relais.
   const locked = PATTERNS.filter(p => {
     if (isPatternAvailable(p)) return false;
     if (!p.isEvolution && p.evolvesTo && isV1Replaced(p)) return false;
     return true;
   });
-  if (locked.length > 0) {
-    html += `<div class="patterns-list-title">À débloquer</div>`;
-    html += `<div class="patterns-list">`;
-    locked.forEach(p => {
-      // Build missing-words list (production rev < 2)
+  lockedCountEl.textContent = String(locked.length);
+
+  if (locked.length === 0) {
+    lockedBody.innerHTML = `<div class="phrases-inline-empty">
+      Toutes les phrases sont débloquées. 🎉
+    </div>`;
+  } else {
+    function renderLockedRow(p){
+      // Détection des manques (mêmes règles que renderPhrases)
       const missing = [];
       for (const reqId of p.requires) {
         const ld = getLevelDir(reqId);
         if ((ld.rev || 0) < 2) {
           const v = VOCAB.find(x => x.id === reqId);
-          if (v) missing.push(v.jp + " (" + v.romaji + ")");
+          if (v) missing.push(`${v.jp} (<em>${v.romaji}</em>)`);
         }
       }
       const hasFiller = p.slots.every(s => s.fillerIds().length > 0);
 
-      // Detect why it's locked, in priority order
       const hints = [];
       if (p.isEvolution) {
         const parent = PATTERNS.find(pp => pp.evolvesTo === p.id);
@@ -9202,16 +9144,14 @@ function renderPhrases(){
           hints.push(`Maîtrisez d'abord : <em>${parent.template}</em>`);
         }
         if (isPatternDemoted(p.id)) {
-          hints.push(`Rétrogradé suite à trop d'échecs. Reprenez la version de base pour le réactiver.`);
+          hints.push(`Rétrogradé — reprenez la version de base pour réactiver.`);
         }
       }
       if (missing.length > 0) {
-        hints.push(`Mots à apprendre (FR → JP, niveau Appris) : ${missing.join(", ")}`);
+        hints.push(`Apprendre (sens FR→JP) : ${missing.join(", ")}`);
       }
       if (!hasFiller) {
-        // Extract the eligible filler IDs from each slot's fillerIds function.
-        // The functions are written as: () => _learnedAmong([id1, id2, ...])
-        // We parse that array from the function source for display purposes.
+        // Extraire les noms candidats des slots (même logique que renderPhrases)
         const candidateNames = [];
         for (const slot of p.slots) {
           const src = slot.fillerIds.toString();
@@ -9220,42 +9160,36 @@ function renderPhrases(){
             const ids = match[1].split(",").map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
             const names = ids.map(id => {
               const v = VOCAB.find(x => x.id === id);
-              return v ? `${v.jp} (${v.romaji})` : null;
+              return v ? `${v.jp} (<em>${v.romaji}</em>)` : null;
             }).filter(Boolean);
             candidateNames.push(...names);
           }
         }
         if (candidateNames.length > 0) {
-          hints.push(`Apprenez au moins un mot compatible : ${candidateNames.join(", ")}`);
-        } else {
-          hints.push(`Aucun mot compatible disponible pour ce patron pour le moment.`);
+          hints.push(`Apprendre au moins un mot compatible : ${candidateNames.join(", ")}`);
         }
       }
       if (hints.length === 0) {
         hints.push(`Conditions de déblocage non remplies.`);
       }
-      const hintHtml = hints.map(h => `<div class="pattern-locked-hint">${h}</div>`).join("");
+      const hintHtml = hints.map(h => `<div class="phrases-inline-hint">${h}</div>`).join("");
 
-      const evolvedBadge = p.isEvolution
-        ? `<span class="pattern-evolved-badge"><i data-lucide="sparkles"></i> Évolution</span>`
+      const evolvedMark = p.isEvolution
+        ? `<span class="phrases-inline-evolved-mark" title="Évolution">✨</span>`
         : "";
-      html += `<div class="pattern-card pattern-locked">
-        <div class="pattern-template">${p.template}</div>
-        ${evolvedBadge}
-        <div class="pattern-fr">${p.templateFr}</div>
-        ${hintHtml}
+
+      return `<div class="phrases-inline-row phrases-inline-row-locked">
+        <div class="phrases-inline-template">
+          <div class="phrases-inline-template-jp">${p.template}${evolvedMark}</div>
+          <div class="phrases-inline-template-fr">${p.templateFr}</div>
+        </div>
+        <div class="phrases-inline-hints">${hintHtml}</div>
       </div>`;
-    });
-    html += `</div>`;
+    }
+
+    lockedBody.innerHTML = locked.map(renderLockedRow).join("");
   }
 
-  phrasesContainer.innerHTML = html;
-
-  // Bind the review button
-  const btn = document.getElementById("reviewPatternsBtn");
-  if (btn) btn.addEventListener("click", () => openPatternReview());
-
-  if (noteEl) noteEl.innerHTML = "";
   if (window.lucide) lucide.createIcons();
 }
 
@@ -9832,7 +9766,10 @@ document.querySelectorAll(".tab").forEach(tab => {
 // Restore last active tab
 try {
   const savedTab = localStorage.getItem(TAB_KEY);
-  const validTabs = ["vocab", "phrases", "alphabet", "kanji", "numbers", "rules"];
+  const validTabs = ["vocab", "alphabet", "kanji", "numbers", "rules"];
+  // Migration : si l'utilisateur avait l'onglet "phrases" actif avant sa
+  // suppression, on retombe naturellement sur "vocab" (qui contient
+  // maintenant les patterns dans une section pliable).
   if (savedTab && validTabs.includes(savedTab) && savedTab !== "vocab") {
     switchTab(savedTab);
   }
@@ -9844,6 +9781,27 @@ let stats = {}; // { id: { failures: N, consecutiveSuccesses: N } }
 try {
   stats = JSON.parse(localStorage.getItem(STATS_KEY) || "{}");
 } catch(e){ stats = {}; }
+
+// ============================================================
+// Migration : purger les IDs VOCAB obsolètes (anciennes "phrases" 63-70)
+// Ces 8 entrées ont été retirées du VOCAB et remplacées par des PATTERNS.
+// Pour les utilisateurs existants, on supprime silencieusement leurs
+// niveaux/stats orphelins du localStorage afin d'éviter pollution.
+// ============================================================
+(function purgeObsoleteVocabIds(){
+  const OBSOLETE_IDS = [63, 64, 65, 66, 67, 68, 69, 70];
+  let mutated = false;
+  for (const id of OBSOLETE_IDS) {
+    if (levels && levels[id] !== undefined) { delete levels[id]; mutated = true; }
+    if (levelDir && levelDir[id] !== undefined) { delete levelDir[id]; mutated = true; }
+    if (stats && stats[id] !== undefined) { delete stats[id]; mutated = true; }
+  }
+  if (mutated) {
+    try { localStorage.setItem(LEVELS_KEY, JSON.stringify(levels)); } catch(e){}
+    try { localStorage.setItem(LEVEL_DIR_KEY, JSON.stringify(levelDir)); } catch(e){}
+    try { localStorage.setItem(STATS_KEY, JSON.stringify(stats)); } catch(e){}
+  }
+})();
 
 function getStats(id){
   if (!stats[id]) {
@@ -9909,8 +9867,13 @@ function getStreakMultiplier(streak){
 let reviewSession = {
   seen: 0, success: 0, fail: 0,
   recentIds: [],           // sliding window of last 3 word IDs (anti-repeat)
+  recentPatternIds: [],    // sliding window of last 4 pattern IDs (anti-repeat)
+  priorityPatternIds: [],  // queue prioritaire pour interleaving (étape 2.3)
   currentWord: null,
-  currentDir: null
+  currentDir: null,
+  currentItemKind: "word", // "word" ou "pattern" — pour dispatch reveal/grade
+  currentPattern: null,
+  currentInstance: null
 };
 let reviewScope = "vocab"; // "vocab" or "alphabet"
 let reviewIntense = false;
@@ -9955,6 +9918,78 @@ function pickNextWord(){
   return weighted[weighted.length - 1].v;
 }
 
+// pickNextItem() — moteur unifié du mode vocab : choisit entre un mot
+// (item type "word") ou un patron (type "pattern") selon le stock de
+// vocabulaire appris (rev≥2). Plus l'utilisateur connaît de mots, plus
+// les patterns apparaissent souvent.
+//
+// Ratio adaptatif :
+//   < 10 mots appris → 0% patterns (100% vocab)
+//   10-20            → 20%
+//   20-40            → 40%
+//   40+              → 50%
+//
+// Une priority queue (`reviewSession.priorityPatternIds`) prend précédence
+// si elle est non vide — utilisée par l'interleaving contextuel (étape 2.3)
+// pour pousser un pattern juste après le succès d'un mot qui le débloque.
+//
+// Retourne : { kind: "word"|"pattern", item: vocabEntry|null, pattern: patternDef|null, instance: patternInstance|null }
+function pickNextItem(){
+  // Priorité absolue : interleaving contextuel
+  if (reviewSession.priorityPatternIds && reviewSession.priorityPatternIds.length > 0) {
+    const pid = reviewSession.priorityPatternIds.shift();
+    const p = PATTERNS.find(pp => pp.id === pid);
+    if (p && isPatternAvailable(p)) {
+      const inst = instantiatePattern(p);
+      if (inst) return { kind: "pattern", item: null, pattern: p, instance: inst };
+    }
+    // Si le pattern n'est plus dispo (rare), on retombe sur la sélection normale
+  }
+
+  // Calcul du ratio adaptatif
+  const learnedVocabCount = VOCAB.filter(v => {
+    const ld = getLevelDir(v.id);
+    return Math.min(ld.fwd || 0, ld.rev || 0) >= 2;
+  }).length;
+
+  let patternRatio;
+  if (learnedVocabCount < 10) patternRatio = 0;
+  else if (learnedVocabCount < 20) patternRatio = 0.2;
+  else if (learnedVocabCount < 40) patternRatio = 0.4;
+  else patternRatio = 0.5;
+
+  // Tirage pattern ?
+  const availablePatterns = getAvailablePatterns();
+  if (patternRatio > 0 && availablePatterns.length > 0 && Math.random() < patternRatio) {
+    // Sélection pondérée des patterns disponibles
+    // Pondération = patternWeight × readiness (les patterns "mûrs" passent en premier)
+    // Anti-répétition : pénalité si le pattern a été vu récemment
+    const recentPatternIds = reviewSession.recentPatternIds || [];
+    const weighted = availablePatterns.map(p => {
+      let w = getPatternWeight(p) * (0.3 + 0.7 * patternReadiness(p));
+      if (recentPatternIds.includes(p.id)) w *= 0.05;
+      return { p, w };
+    });
+    const total = weighted.reduce((acc, x) => acc + x.w, 0);
+    if (total > 0) {
+      let r = Math.random() * total;
+      for (const it of weighted) {
+        r -= it.w;
+        if (r <= 0) {
+          const inst = instantiatePattern(it.p);
+          if (inst) return { kind: "pattern", item: null, pattern: it.p, instance: inst };
+          break;
+        }
+      }
+    }
+    // Si l'instantiation échoue, on retombe sur un mot (no-op)
+  }
+
+  // Tirage mot par défaut
+  const word = pickNextWord();
+  return { kind: "word", item: word, pattern: null, instance: null };
+}
+
 // Pick direction with bias toward the direction the user fails more
 function pickDirection(){
   const w = reviewSession.currentWord;
@@ -9986,8 +10021,23 @@ function pickDirection(){
 }
 
 function showNextCard(){
-  const word = pickNextWord();
+  // Mode vocab : moteur unifié qui peut tirer un mot OU un patron
+  if (reviewScope === "vocab") {
+    const next = pickNextItem();
+    if (next.kind === "pattern") {
+      showNextPatternCard(next.pattern, next.instance);
+      return;
+    }
+    // sinon, mot normal : on continue avec next.item
+    var word = next.item;
+  } else {
+    var word = pickNextWord();
+  }
+
   reviewSession.currentWord = word;
+  reviewSession.currentItemKind = "word";
+  reviewSession.currentPattern = null;
+  reviewSession.currentInstance = null;
   const dir = pickDirection();
   reviewSession.currentDir = dir;
 
@@ -10120,7 +10170,77 @@ function showNextCard(){
   if (window.lucide) lucide.createIcons();
 }
 
+// showNextPatternCard(p, instance) — affiche un patron dans la session
+// vocab unifiée. Stocke l'état dans reviewSession (pas patternReviewSession)
+// pour que revealAnswer/gradeWord puissent dispatcher.
+function showNextPatternCard(p, instance){
+  reviewSession.currentWord = null;
+  reviewSession.currentItemKind = "pattern";
+  reviewSession.currentPattern = p;
+  reviewSession.currentInstance = instance;
+  reviewSession.currentDir = null;
+
+  // Anti-répétition des patterns
+  if (!reviewSession.recentPatternIds) reviewSession.recentPatternIds = [];
+  reviewSession.recentPatternIds.push(p.id);
+  if (reviewSession.recentPatternIds.length > 4) reviewSession.recentPatternIds.shift();
+
+  const fromEl = document.getElementById("reviewFromLang");
+  const toEl = document.getElementById("reviewToLang");
+  const promptEl = document.getElementById("reviewPrompt");
+  const promptSubEl = document.getElementById("reviewPromptSub");
+  const directionEl = document.getElementById("reviewDirection");
+
+  fromEl.textContent = "Situation";
+  toEl.textContent = "Phrase JP";
+
+  // Nettoyer les badges existants de la zone direction
+  directionEl.querySelectorAll(".dir-level-pill, .hard-mode-badge, .pattern-level-inline").forEach(el => el.remove());
+  // Ajouter un badge de niveau du patron
+  const lvl = getPatternLevel(p.id);
+  const levelLabel = ["Inconnu","En cours","Appris","Maîtrisé"][lvl];
+  const levelIcon = ["circle","circle-half","circle-check","crown"][lvl];
+  const span = document.createElement("span");
+  span.className = `pattern-level-inline pattern-level-${lvl}`;
+  span.innerHTML = `<i data-lucide="${levelIcon}"></i> ${levelLabel}`;
+  directionEl.appendChild(span);
+
+  // Prompt FR
+  promptEl.className = "review-prompt is-fr";
+  promptEl.innerHTML = instance.promptFr;
+  // À partir du niveau Appris, on cache le template pour forcer la reconstitution
+  const cleanMode = lvl >= 2;
+  if (cleanMode) {
+    promptSubEl.innerHTML = `<span style="color:var(--violet);font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 8px rgba(168,85,247,.4);">Sans aide — reconstituez la structure</span>`;
+  } else {
+    promptSubEl.innerHTML = `<span style="color:var(--ink-faint);font-size:13px;">Patron :</span> <span style="color:var(--cyan);font-weight:600;">${p.template}</span>`;
+  }
+
+  // Masquer la réponse
+  document.getElementById("reviewAnswer").classList.remove("shown");
+  document.getElementById("reviewActions").style.display = "flex";
+  document.getElementById("reviewGradeActions").style.display = "none";
+
+  if (window.lucide) lucide.createIcons();
+}
+
 function revealAnswer(){
+  // Dispatch sur le kind si on est en mode vocab unifié
+  if (reviewScope === "vocab" && reviewSession.currentItemKind === "pattern") {
+    const inst = reviewSession.currentInstance;
+    if (!inst) return;
+    document.getElementById("ansJp").innerHTML = inst.jp;
+    document.getElementById("ansRomaji").textContent = inst.romaji;
+    document.getElementById("ansFr").textContent = "";
+    document.getElementById("ansSub").textContent = "";
+    document.getElementById("ansSub").style.display = "none";
+    document.getElementById("ansNote").style.display = "none";
+    const answerEl = document.getElementById("reviewAnswer");
+    answerEl.classList.add("shown");
+    document.getElementById("reviewActions").style.display = "none";
+    document.getElementById("reviewGradeActions").style.display = "flex";
+    return;
+  }
   const w = reviewSession.currentWord;
   if (!w) return;
 
@@ -10195,12 +10315,61 @@ function flashFeedback(type){
 }
 
 function gradeWord(success){
+  // Dispatch sur le kind : si on est en mode vocab unifié sur un patron,
+  // on délègue à gradePatternResult.
+  if (reviewScope === "vocab" && reviewSession.currentItemKind === "pattern") {
+    const p = reviewSession.currentPattern;
+    if (!p) return;
+    reviewSession.seen += 1;
+    if (success) reviewSession.success += 1;
+    else reviewSession.fail += 1;
+
+    const prevLevel = getPatternLevel(p.id);
+    const prevDemoted = isPatternDemoted(p.id);
+    gradePatternResult(p.id, success);
+    const newLevel = getPatternLevel(p.id);
+    const newDemoted = isPatternDemoted(p.id);
+
+    // Démotion v2 → v1
+    if (!prevDemoted && newDemoted && p.isEvolution) {
+      const parent = PATTERNS.find(pp => pp.evolvesTo === p.id);
+      if (parent) {
+        setTimeout(() => showToast(`⏬ Patron rétrogradé. Reprenez ${parent.template} pour le re-débloquer.`, "error"), 600);
+      }
+    }
+    // Promotion v1 niveau 3 → débloque v2
+    if (success && prevLevel < 3 && newLevel === 3 && p.evolvesTo) {
+      const evolved = PATTERNS.find(pp => pp.id === p.evolvesTo);
+      if (evolved && isPatternAvailable(evolved)) {
+        setTimeout(() => showToast(`✨ Patron évolué débloqué : ${evolved.template}`, "success"), 600);
+      }
+    }
+
+    flashFeedback(success ? "success" : "fail");
+    document.getElementById("reviewSeen").textContent = reviewSession.seen;
+    document.getElementById("reviewSuccess").textContent = reviewSession.success;
+    document.getElementById("reviewFail").textContent = reviewSession.fail;
+
+    // Re-render arrière-plan
+    renderPhrases();
+
+    setTimeout(() => { showNextCard(); }, 450);
+    return;
+  }
+
   const w = reviewSession.currentWord;
   if (!w) return;
   const s = getStats(w.id);
   const dir = reviewSession.currentDir;
   const wasCleanMode = reviewSession.currentCleanMode === true;
   const now = Date.now();
+
+  // Snapshot des patterns disponibles AVANT promotion — pour interleaving
+  // contextuel : si un pattern devient dispo après ce succès, on le pousse
+  // dans la priority queue pour qu'il apparaisse rapidement.
+  const availableBefore = (reviewScope === "vocab")
+    ? new Set(getAvailablePatterns().map(p => p.id))
+    : null;
 
   // Always record that we just saw this word
   s.lastSeen = now;
@@ -10286,6 +10455,27 @@ function gradeWord(success){
   renderNumbers();
   renderPhrases();
 
+  // Interleaving contextuel : si ce succès a débloqué un ou plusieurs
+  // patrons (un mot vient de passer rev>=2 et complétait un requires),
+  // on les insère en tête de la priority queue pour qu'ils apparaissent
+  // dans les prochains items.
+  if (success && availableBefore) {
+    const availableAfter = getAvailablePatterns();
+    const newlyAvailable = availableAfter.filter(p => !availableBefore.has(p.id));
+    if (newlyAvailable.length > 0) {
+      for (const p of newlyAvailable) {
+        if (!reviewSession.priorityPatternIds.includes(p.id)) {
+          reviewSession.priorityPatternIds.push(p.id);
+        }
+      }
+      // Toast discret pour l'utilisateur
+      const msg = newlyAvailable.length === 1
+        ? `💬 Nouvelle phrase débloquée : ${newlyAvailable[0].template}`
+        : `💬 ${newlyAvailable.length} nouvelles phrases débloquées`;
+      setTimeout(() => showToast(msg, "success"), 250);
+    }
+  }
+
   setTimeout(() => { showNextCard(); }, 450);
 }
 
@@ -10341,13 +10531,23 @@ function openReview(scope, intense){
     reviewPool = basePool;
   }
 
-  reviewSession = { seen: 0, success: 0, fail: 0, recentIds: [], currentWord: null, currentDir: null };
+  reviewSession = {
+    seen: 0, success: 0, fail: 0,
+    recentIds: [],
+    recentPatternIds: [],
+    priorityPatternIds: [],
+    currentWord: null,
+    currentDir: null,
+    currentItemKind: "word",
+    currentPattern: null,
+    currentInstance: null
+  };
   document.getElementById("reviewSeen").textContent = "0";
   document.getElementById("reviewSuccess").textContent = "0";
   document.getElementById("reviewFail").textContent = "0";
 
   const titleEl = document.getElementById("reviewTitle");
-  const scopeLabel = reviewScope === "vocab" ? "vocabulaire"
+  const scopeLabel = reviewScope === "vocab" ? "vocabulaire & phrases"
                    : reviewScope === "kanji" ? "kanji"
                    : reviewScope === "numbers" ? "nombres"
                    : "alphabets";
@@ -10360,212 +10560,6 @@ function openReview(scope, intense){
   document.getElementById("reviewOverlay").classList.add("active");
   document.body.style.overflow = "hidden";
   showNextCard();
-}
-
-/* ============================================================
-   PATTERN REVIEW — combinaison de patrons + vocabulaire
-   Mode dédié : on enchaîne les patrons avec slots aléatoires.
-   Pas de notation individuelle par mot, pas de niveau Maîtrisé :
-   on s'entraîne juste à composer.
-   ============================================================ */
-let patternReviewSession = null;
-
-function openPatternReview(){
-  const available = getAvailablePatterns();
-  if (available.length === 0) {
-    showToast("Aucun patron disponible — apprenez plus de vocabulaire", "error");
-    return;
-  }
-
-  reviewScope = "patterns";
-  reviewIntense = false;
-  patternReviewSession = {
-    seen: 0,
-    success: 0,
-    fail: 0,
-    recentPatternIds: [],
-    currentPattern: null,
-    currentInstance: null,
-    revealed: false
-  };
-
-  document.getElementById("reviewSeen").textContent = "0";
-  document.getElementById("reviewSuccess").textContent = "0";
-  document.getElementById("reviewFail").textContent = "0";
-
-  const titleEl = document.getElementById("reviewTitle");
-  titleEl.innerHTML = `<span class="jp">組み合わせ</span> Révision des patrons`;
-
-  document.getElementById("reviewOverlay").classList.add("active");
-  document.body.style.overflow = "hidden";
-  showNextPattern();
-}
-
-function pickNextPattern(){
-  const available = getAvailablePatterns();
-  if (available.length === 0) return null;
-  // Avoid repeating the last pattern if possible
-  const recent = patternReviewSession.recentPatternIds || [];
-  let pool = available.filter(p => !recent.includes(p.id));
-  if (pool.length === 0) pool = available;
-  // Weighted random selection
-  const weights = pool.map(getPatternWeight);
-  const total = weights.reduce((a, b) => a + b, 0);
-  if (total <= 0) return pool[Math.floor(Math.random() * pool.length)];
-  let r = Math.random() * total;
-  for (let i = 0; i < pool.length; i++) {
-    r -= weights[i];
-    if (r <= 0) return pool[i];
-  }
-  return pool[pool.length - 1];
-}
-
-function showNextPattern(){
-  const p = pickNextPattern();
-  if (!p) {
-    closeReview();
-    return;
-  }
-  let instance = instantiatePattern(p);
-  // If the slot picker returned null (no eligible filler), skip
-  if (!instance) {
-    showToast("Patron non instanciable, on passe", "error");
-    return;
-  }
-  patternReviewSession.currentPattern = p;
-  patternReviewSession.currentInstance = instance;
-  patternReviewSession.revealed = false;
-  patternReviewSession.recentPatternIds.push(p.id);
-  if (patternReviewSession.recentPatternIds.length > 4) {
-    patternReviewSession.recentPatternIds.shift();
-  }
-
-  // Setup direction label and prompt
-  const fromEl = document.getElementById("reviewFromLang");
-  const toEl = document.getElementById("reviewToLang");
-  fromEl.textContent = "Situation";
-  toEl.textContent = "Phrase JP";
-
-  // Hide the per-direction levels indicator and hard mode badge (not relevant for patterns)
-  const directionEl = document.getElementById("reviewDirection");
-  if (directionEl) {
-    directionEl.querySelectorAll(".dir-level-pill, .hard-mode-badge, .pattern-level-inline").forEach(el => el.remove());
-    // Add a live level badge for the current pattern
-    const lvl = getPatternLevel(p.id);
-    const levelLabel = ["Inconnu","En cours","Appris","Maîtrisé"][lvl];
-    const levelIcon = ["circle","circle-half","circle-check","crown"][lvl];
-    const span = document.createElement("span");
-    span.className = `pattern-level-inline pattern-level-${lvl}`;
-    span.innerHTML = `<i data-lucide="${levelIcon}"></i> ${levelLabel}`;
-    directionEl.appendChild(span);
-    if (window.lucide) lucide.createIcons();
-  }
-
-  const promptEl = document.getElementById("reviewPrompt");
-  const promptSubEl = document.getElementById("reviewPromptSub");
-  promptEl.className = "review-prompt is-fr";
-  promptEl.innerHTML = instance.promptFr;
-  // At level >= 2, hide the template hint to force recall of the structure
-  const cleanMode = getPatternLevel(p.id) >= 2;
-  if (cleanMode) {
-    promptSubEl.innerHTML = `<span style="color:var(--violet);font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 8px rgba(168,85,247,.4);">Sans aide — reconstituez la structure</span>`;
-  } else {
-    promptSubEl.innerHTML = `<span style="color:var(--ink-faint);font-size:13px;">Patron :</span> <span style="color:var(--cyan);font-weight:600;">${p.template}</span>`;
-  }
-
-  // Hide answer
-  const answerEl = document.getElementById("reviewAnswer");
-  answerEl.classList.remove("shown");
-  // Reveal/Grade buttons reset — toggle the containers
-  document.getElementById("reviewActions").style.display = "flex";
-  document.getElementById("reviewGradeActions").style.display = "none";
-}
-
-function revealPatternAnswer(){
-  if (!patternReviewSession || patternReviewSession.revealed) return;
-  patternReviewSession.revealed = true;
-  const inst = patternReviewSession.currentInstance;
-  // Populate the existing answer fields rather than overwriting the parent
-  // innerHTML (which would destroy elements with IDs needed by revealAnswer
-  // for vocab/kanji/numbers/alphabet modes).
-  document.getElementById("ansJp").innerHTML = inst.jp;
-  document.getElementById("ansRomaji").textContent = inst.romaji;
-  document.getElementById("ansFr").textContent = "";
-  document.getElementById("ansSub").textContent = "";
-  document.getElementById("ansSub").style.display = "none";
-  document.getElementById("ansNote").style.display = "none";
-  const answerEl = document.getElementById("reviewAnswer");
-  answerEl.classList.add("shown");
-  document.getElementById("reviewActions").style.display = "none";
-  document.getElementById("reviewGradeActions").style.display = "flex";
-}
-
-function gradePattern(success){
-  if (!patternReviewSession) return;
-  patternReviewSession.seen++;
-  if (success) patternReviewSession.success++;
-  else patternReviewSession.fail++;
-  document.getElementById("reviewSeen").textContent = patternReviewSession.seen;
-  document.getElementById("reviewSuccess").textContent = patternReviewSession.success;
-  document.getElementById("reviewFail").textContent = patternReviewSession.fail;
-
-  // Update pattern level/stats based on the result
-  const currentPattern = patternReviewSession.currentPattern;
-  if (currentPattern) {
-    const prevLevel = getPatternLevel(currentPattern.id);
-    const prevDemoted = isPatternDemoted(currentPattern.id);
-    gradePatternResult(currentPattern.id, success);
-    const newLevel = getPatternLevel(currentPattern.id);
-    const newDemoted = isPatternDemoted(currentPattern.id);
-
-    // Detect demotion: a v2 just got demoted on this turn
-    if (!prevDemoted && newDemoted && currentPattern.isEvolution) {
-      const parent = PATTERNS.find(p => p.evolvesTo === currentPattern.id);
-      if (parent) {
-        setTimeout(() => showToast(`⏬ Patron rétrogradé. Reprenez ${parent.template} pour le re-débloquer.`, "error"), 600);
-      }
-    }
-
-    // If we just reached level 3 (Maîtrisé) on a v1, and it has an evolution, announce it
-    if (success && prevLevel < 3 && newLevel === 3 && currentPattern.evolvesTo) {
-      const evolved = PATTERNS.find(p => p.id === currentPattern.evolvesTo);
-      if (evolved) {
-        const isNowAvailable = isPatternAvailable(evolved);
-        if (isNowAvailable) {
-          setTimeout(() => showToast(`✨ Patron évolué débloqué : ${evolved.template}`, "success"), 600);
-        } else {
-          // Identify which words are still missing
-          const missing = [];
-          for (const reqId of evolved.requires) {
-            const ld = getLevelDir(reqId);
-            if ((ld.rev || 0) < 2) {
-              const v = VOCAB.find(x => x.id === reqId);
-              if (v) missing.push(v.romaji);
-            }
-          }
-          if (missing.length > 0) {
-            setTimeout(() => showToast(`🎯 Maîtrisé ! Apprenez ${missing.join(", ")} pour débloquer l'évolution.`, "success"), 600);
-          }
-        }
-      }
-    }
-    // Re-render the phrases list (in background) so the level badges are updated
-    // when the user closes the review overlay.
-    renderPhrases();
-  }
-
-  // Flash effect
-  const wrap = document.querySelector(".review-card-wrap");
-  let flash = wrap.querySelector(".review-flash");
-  if (!flash) {
-    flash = document.createElement("div");
-    flash.className = "review-flash";
-    wrap.appendChild(flash);
-  }
-  flash.className = "review-flash " + (success ? "flash-success" : "flash-fail");
-  setTimeout(() => { flash.className = "review-flash"; }, 400);
-
-  setTimeout(() => showNextPattern(), 200);
 }
 
 function closeReview(){
@@ -10582,18 +10576,9 @@ document.getElementById("openKanjiReviewIntenseBtn").addEventListener("click", (
 document.getElementById("openNumbersReviewBtn").addEventListener("click", () => openReview("numbers"));
 document.getElementById("openNumbersReviewIntenseBtn").addEventListener("click", () => openReview("numbers", true));
 document.getElementById("reviewCloseBtn").addEventListener("click", closeReview);
-document.getElementById("revealBtn").addEventListener("click", () => {
-  if (reviewScope === "patterns") revealPatternAnswer();
-  else revealAnswer();
-});
-document.getElementById("failBtn").addEventListener("click", () => {
-  if (reviewScope === "patterns") gradePattern(false);
-  else gradeWord(false);
-});
-document.getElementById("successBtn").addEventListener("click", () => {
-  if (reviewScope === "patterns") gradePattern(true);
-  else gradeWord(true);
-});
+document.getElementById("revealBtn").addEventListener("click", revealAnswer);
+document.getElementById("failBtn").addEventListener("click", () => gradeWord(false));
+document.getElementById("successBtn").addEventListener("click", () => gradeWord(true));
 
 // Keyboard shortcuts in review mode
 document.addEventListener("keydown", (e) => {
@@ -10602,19 +10587,16 @@ document.addEventListener("keydown", (e) => {
   else if (e.key === " " || e.key === "Enter") {
     const answerShown = document.getElementById("reviewAnswer").classList.contains("shown");
     if (!answerShown) {
-      if (reviewScope === "patterns") revealPatternAnswer();
-      else revealAnswer();
+      revealAnswer();
       e.preventDefault();
     }
   } else if (e.key === "1" || e.key.toLowerCase() === "n") {
     if (document.getElementById("reviewAnswer").classList.contains("shown")) {
-      if (reviewScope === "patterns") gradePattern(false);
-      else gradeWord(false);
+      gradeWord(false);
     }
   } else if (e.key === "2" || e.key.toLowerCase() === "y") {
     if (document.getElementById("reviewAnswer").classList.contains("shown")) {
-      if (reviewScope === "patterns") gradePattern(true);
-      else gradeWord(true);
+      gradeWord(true);
     }
   }
 });
