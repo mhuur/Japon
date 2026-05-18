@@ -12126,22 +12126,29 @@ function pickDirection(){
     return Math.random() < 0.5 ? "fwd" : "rev";
   }
 
-  // Vocab: keep the existing failure-biased logic, BUT first check SRS due-state :
-  // if one direction is Maîtrisé and not yet due, while the other still needs work,
-  // strongly prefer the one that's not in SRS slumber.
+  // Vocab: prefer the lagging direction (asymmetry-aware). The failure-bias
+  // random tirage only kicks in when both directions are at the SAME level —
+  // otherwise we'd keep reviewing a well-known direction while the weak one
+  // stagnates. SRS-gates above still apply for Maîtrisé.
   const ld = getLevelDir(w.id);
   const now = Date.now();
-  const fwdMastered = (ld.fwd || 0) >= 3;
-  const revMastered = (ld.rev || 0) >= 3;
+  const fwdLvl = ld.fwd || 0;
+  const revLvl = ld.rev || 0;
+  const fwdMastered = fwdLvl >= 3;
+  const revMastered = revLvl >= 3;
   const fwdDue = (ld.nextDueFwd || 0) <= now;
   const revDue = (ld.nextDueRev || 0) <= now;
   if (fwdMastered && !fwdDue && (!revMastered || revDue)) return "rev";
   if (revMastered && !revDue && (!fwdMastered || fwdDue)) return "fwd";
 
+  // Prefer the direction with the lower level (more room to grow).
+  if (fwdLvl > revLvl) return "rev";
+  if (revLvl > fwdLvl) return "fwd";
+
+  // Equal levels → failure-biased random tirage as before.
   const s = getStats(w.id);
   const fFwd = (s.failuresByDir && s.failuresByDir.fwd) || 0;
   const fRev = (s.failuresByDir && s.failuresByDir.rev) || 0;
-  // Probability proportional to failures + 1 to avoid 0
   const wFwd = 1 + fFwd * 1.5;
   const wRev = 1 + fRev * 1.5;
   return Math.random() < wFwd / (wFwd + wRev) ? "fwd" : "rev";
