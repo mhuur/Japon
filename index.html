@@ -2199,6 +2199,82 @@ body.has-invite-banner{padding-top:84px}
 .mode-japonais .review-answer .ans-note .jp-inline{
   font-family:'Zen Maru Gothic',sans-serif;font-style:normal;color:var(--ink);
 }
+/* Grammar quiz card (alternative to review-answer) */
+.mode-japonais .review-grammar{
+  display:none;margin-top:8px;text-align:center;
+}
+.mode-japonais .review-grammar.shown{display:block}
+.mode-japonais .review-grammar .grammar-instruction{
+  font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.mode-japonais .review-grammar .grammar-instruction::before,
+.mode-japonais .review-grammar .grammar-instruction::after{
+  content:"";height:1px;flex:1;max-width:50px;background:var(--rule);
+}
+.mode-japonais .review-grammar .grammar-context-fr{
+  font-family:'Outfit',sans-serif;font-size:15px;color:var(--ink-soft);
+  margin-bottom:16px;font-style:italic;
+}
+.mode-japonais .review-grammar .grammar-phrase-jp{
+  font-family:'Zen Maru Gothic',sans-serif;font-size:28px;font-weight:700;
+  color:var(--ink);margin-bottom:6px;line-height:1.5;
+}
+.mode-japonais .review-grammar .grammar-phrase-jp .blank{
+  display:inline-block;min-width:48px;padding:0 8px;
+  border-bottom:3px solid var(--pink);color:var(--pink);
+  margin:0 4px;
+}
+.mode-japonais .review-grammar .grammar-phrase-jp .blank.filled{
+  border-bottom-color:var(--cyan);color:var(--cyan);
+}
+.mode-japonais .review-grammar .grammar-phrase-jp .blank.wrong{
+  border-bottom-color:#ef4444;color:#ef4444;
+}
+.mode-japonais .review-grammar .grammar-phrase-romaji{
+  font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink-faint);
+  margin-bottom:24px;
+}
+.mode-japonais .review-grammar .grammar-choices{
+  display:flex;gap:10px;flex-wrap:wrap;justify-content:center;
+  margin-bottom:18px;
+}
+.mode-japonais .review-grammar .grammar-choice-btn{
+  flex:1;min-width:80px;max-width:140px;
+  padding:14px 8px;border-radius:14px;
+  font-family:'Zen Maru Gothic',sans-serif;font-size:22px;font-weight:700;
+  border:1.5px solid var(--rule);background:var(--surface);color:var(--ink);
+  cursor:pointer;transition:all .15s;
+}
+.mode-japonais .review-grammar .grammar-choice-btn:hover{
+  border-color:var(--pink);transform:translateY(-1px);
+}
+.mode-japonais .review-grammar .grammar-choice-btn:disabled{
+  cursor:default;transform:none;
+}
+.mode-japonais .review-grammar .grammar-choice-btn.correct{
+  border-color:#22c55e;background:rgba(34,197,94,.12);color:#22c55e;
+}
+.mode-japonais .review-grammar .grammar-choice-btn.incorrect{
+  border-color:#ef4444;background:rgba(239,68,68,.12);color:#ef4444;opacity:.7;
+}
+.mode-japonais .review-grammar .grammar-choice-btn.dimmed{
+  opacity:.4;
+}
+.mode-japonais .review-grammar .grammar-explanation{
+  display:none;text-align:left;
+  font-family:'Outfit',sans-serif;font-size:13px;line-height:1.6;
+  color:var(--ink);padding:14px 18px;background:var(--surface-2);
+  border-radius:12px;border-left:3px solid var(--cyan);
+  margin-top:12px;
+}
+.mode-japonais .review-grammar .grammar-explanation.shown{display:block}
+.mode-japonais .review-grammar .grammar-explanation strong{color:var(--pink)}
+.mode-japonais .review-grammar .grammar-explanation em{color:var(--cyan);font-style:normal;font-weight:500}
+.mode-japonais .review-grammar .grammar-explanation .jp-inline{
+  font-family:'Zen Maru Gothic',sans-serif;font-style:normal;color:var(--ink);
+}
 /* Inline grammar rules in review card */
 .mode-japonais .review-rules{
   display:none;width:100%;max-width:600px;margin:14px auto 0;
@@ -5672,6 +5748,15 @@ window.activitiesAPI = {
         <span class="ans-sub" id="ansSub"></span>
         <div class="ans-note" id="ansNote"></div>
       </div>
+
+      <div class="review-grammar" id="reviewGrammar">
+        <div class="grammar-instruction" id="grammarInstruction"></div>
+        <div class="grammar-context-fr" id="grammarContextFr"></div>
+        <div class="grammar-phrase-jp" id="grammarPhraseJp"></div>
+        <div class="grammar-phrase-romaji" id="grammarPhraseRomaji"></div>
+        <div class="grammar-choices" id="grammarChoices"></div>
+        <div class="grammar-explanation" id="grammarExplanation"></div>
+      </div>
     </div>
 
     <div class="review-rules" id="reviewRules">
@@ -6432,7 +6517,41 @@ const RULES = {
 <div class="rule-vs-cell right"><span class="vs-label">が</span><span class="jp-inline">英語<strong>が</strong>話せます</span> — Je sais parler l'anglais. <em>(neutre, capacité)</em></div>
 </div>
 <p class="rule-tip">💡 Avec les verbes de capacité/goût/compréhension (<em>hanaseru, dekiru, wakaru, suki</em>), <strong>が</strong> est la forme par défaut. <strong>は</strong> apparaît si on veut souligner un contraste.</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "駅 ___ どこですか？",
+        prompt_romaji: "eki ___ doko desu ka?",
+        prompt_fr: "Où est la gare ?",
+        choices: ["は", "が", "を"],
+        answer: "は",
+        explanation: "C'est une <strong>question descriptive</strong> sur un sujet déjà connu (« quant à la gare, c'est où ? »). Pas d'action transitive → <strong>は</strong>, pas を. Et le sujet est introduit comme thème, pas comme info nouvelle → は, pas が."
+      },
+      {
+        prompt_jp: "私 ___ フランス人です。",
+        prompt_romaji: "watashi ___ furansu-jin desu",
+        prompt_fr: "Je suis français.",
+        choices: ["は", "を", "が"],
+        answer: "は",
+        explanation: "Présentation classique : « quant à moi, je suis français ». Avec <em>desu</em> (description, état), on emploie <strong>は</strong>."
+      },
+      {
+        prompt_jp: "お酒 ___ 大丈夫です。",
+        prompt_romaji: "o-sake ___ daijôbu desu",
+        prompt_fr: "L'alcool, ça va (refus poli).",
+        choices: ["を", "は", "が"],
+        answer: "は",
+        explanation: "Aucune action transitive — c'est une description d'état (« quant à l'alcool, ça va comme ça »). Donc <strong>は</strong>. Si on disait <em>o-sake wo kudasai</em>, là on demanderait de l'alcool → を."
+      },
+      {
+        prompt_jp: "これ ___ 何ですか？",
+        prompt_romaji: "kore ___ nan desu ka?",
+        prompt_fr: "Qu'est-ce que c'est ?",
+        choices: ["は", "が", "を"],
+        answer: "は",
+        explanation: "On désigne un objet et on demande sa nature (« quant à ceci, c'est quoi ? »). Description, donc <strong>は</strong>."
+      }
+    ]
   },
 
   particle_wo: {
@@ -6460,7 +6579,41 @@ const RULES = {
 <div class="rule-vs-cell right"><span class="vs-label">は</span><span class="jp-inline">お酒<strong>は</strong>大丈夫</span> — L'alcool, ça va merci</div>
 </div>
 <p class="rule-tip">⚠ <strong>Piège</strong> : avec les verbes de <em>capacité</em> (<em>hanaseru, dekiru, wakaru</em>) et de <em>goût</em> (<em>suki</em>), on n'utilise <strong>ni を ni は</strong> mais <strong>が</strong>. Voir « が avec les verbes de capacité ».</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "水 ___ ください。",
+        prompt_romaji: "mizu ___ kudasai",
+        prompt_fr: "De l'eau, s'il vous plaît.",
+        choices: ["は", "を", "が"],
+        answer: "を",
+        explanation: "<em>Kudasai</em> est une action transitive (« donnez »). L'eau est l'objet de cette action → <strong>を</strong>."
+      },
+      {
+        prompt_jp: "寿司 ___ 食べます。",
+        prompt_romaji: "sushi ___ tabemasu",
+        prompt_fr: "Je mange des sushis.",
+        choices: ["を", "が", "は"],
+        answer: "を",
+        explanation: "<em>Taberu</em> (manger) est un verbe d'action transitif. L'objet mangé prend <strong>を</strong>. Attention : avec <em>tabetai</em> (vouloir manger) c'est aussi を — le souhait ne change pas la transitivité."
+      },
+      {
+        prompt_jp: "写真 ___ 撮ってもいいですか？",
+        prompt_romaji: "shashin ___ totte mo ii desu ka?",
+        prompt_fr: "Puis-je prendre une photo ?",
+        choices: ["が", "を", "は"],
+        answer: "を",
+        explanation: "On <em>prend</em> une photo — action transitive sur la photo. <strong>を</strong>."
+      },
+      {
+        prompt_jp: "英語 ___ 話します。",
+        prompt_romaji: "eigo ___ hanashimasu",
+        prompt_fr: "Je parle anglais.",
+        choices: ["を", "が", "に"],
+        answer: "を",
+        explanation: "<em>Hanasu</em> (parler) à la forme <strong>normale</strong> est transitif → <strong>を</strong>. Attention au piège : à la forme potentielle <em>hanaseru</em> (« savoir parler »), on bascule sur が. La forme du verbe change la particule."
+      }
+    ]
   },
 
   particle_no: {
@@ -6474,7 +6627,33 @@ const RULES = {
 <li><span class="jp-inline">私<strong>の</strong>鍵</span> — Ma clé (litt. « clé de moi »)</li>
 <li><span class="jp-inline">部屋<strong>の</strong>番号</span> — Le numéro de la chambre</li>
 </ul>
-<p class="rule-tip">💡 La logique est inverse du français : on dit « anglais-de-menu » au lieu de « menu en anglais ».</p>`
+<p class="rule-tip">💡 La logique est inverse du français : on dit « anglais-de-menu » au lieu de « menu en anglais ».</p>`,
+    quiz: [
+      {
+        prompt_jp: "英語 ___ メニュー、ありますか？",
+        prompt_romaji: "eigo ___ menyû, arimasu ka?",
+        prompt_fr: "Avez-vous un menu en anglais ?",
+        choices: ["は", "の", "を"],
+        answer: "の",
+        explanation: "<strong>の</strong> rattache deux noms — ici « anglais » qualifie « menu ». Logique inverse du français : « anglais-de-menu » = menu en anglais."
+      },
+      {
+        prompt_jp: "私 ___ 鍵をください。",
+        prompt_romaji: "watashi ___ kagi wo kudasai",
+        prompt_fr: "Donnez-moi ma clé, s'il vous plaît.",
+        choices: ["の", "に", "は"],
+        answer: "の",
+        explanation: "Possession : « clé de moi » → <em>watashi <strong>no</strong> kagi</em>. La particule の est la marque de possession universelle."
+      },
+      {
+        prompt_jp: "ホテル ___ 部屋の番号は何ですか？",
+        prompt_romaji: "hoteru ___ heya no bangô wa nan desu ka?",
+        prompt_fr: "Quel est le numéro de chambre de l'hôtel ?",
+        choices: ["の", "で", "に"],
+        answer: "の",
+        explanation: "Relation qualificative : « la chambre de l'hôtel ». On peut enchaîner les の : <em>hoteru <strong>no</strong> heya <strong>no</strong> bangô</em> = numéro-de-chambre-d'hôtel."
+      }
+    ]
   },
 
   particle_ka: {
@@ -6489,7 +6668,33 @@ const RULES = {
 <li><span class="jp-inline">いくらです<strong>か</strong></span> — Combien ça coûte ?</li>
 <li><span class="jp-inline">英語のメニューあります<strong>か</strong></span> — Avez-vous un menu en anglais ?</li>
 </ul>
-<p class="rule-tip">💡 À l'écrit, le ? n'est pas toujours nécessaire — le か suffit. À l'oral, on monte légèrement la voix sur le か.</p>`
+<p class="rule-tip">💡 À l'écrit, le ? n'est pas toujours nécessaire — le か suffit. À l'oral, on monte légèrement la voix sur le か.</p>`,
+    quiz: [
+      {
+        prompt_jp: "これは水です ___ ？",
+        prompt_romaji: "kore wa mizu desu ___ ?",
+        prompt_fr: "Est-ce que c'est de l'eau ?",
+        choices: ["か", "ね", "を"],
+        answer: "か",
+        explanation: "<strong>か</strong> transforme une affirmation en question. Toujours en fin de phrase. <em>desu ka</em> = forme polie standard pour poser une question."
+      },
+      {
+        prompt_jp: "トイレはどこです ___ ？",
+        prompt_romaji: "toire wa doko desu ___ ?",
+        prompt_fr: "Où sont les toilettes ?",
+        choices: ["の", "か", "は"],
+        answer: "か",
+        explanation: "Question avec un mot interrogatif (<em>doko</em>) — on garde quand même <strong>か</strong> à la fin pour signaler la question."
+      },
+      {
+        prompt_jp: "カード ___ 大丈夫です ___ ？",
+        prompt_romaji: "kâdo ___ daijôbu desu ___ ?",
+        prompt_fr: "La carte, ça passe ?",
+        choices: ["は / か", "が / の", "を / ね"],
+        answer: "は / か",
+        explanation: "Deux particules à placer : <strong>は</strong> pour marquer le thème (la carte), et <strong>か</strong> pour la question. Schéma typique : <em>[thème] wa [état] desu ka?</em>"
+      }
+    ]
   },
 
   desu: {
@@ -6503,7 +6708,33 @@ const RULES = {
 <li><span class="jp-inline">私はフランス人<strong>です</strong></span> — Je suis français.</li>
 <li><span class="jp-inline">高い<strong>です</strong></span> — C'est cher.</li>
 </ul>
-<p class="rule-tip">💡 <em>desu</em> se prononce souvent <strong>« dess' »</strong>, le <em>u</em> final étant à peine audible. Forme négative : <em>dewa arimasen</em> ou plus courant <em>ja arimasen</em>.</p>`
+<p class="rule-tip">💡 <em>desu</em> se prononce souvent <strong>« dess' »</strong>, le <em>u</em> final étant à peine audible. Forme négative : <em>dewa arimasen</em> ou plus courant <em>ja arimasen</em>.</p>`,
+    quiz: [
+      {
+        prompt_jp: "私はフランス人 ___ 。",
+        prompt_romaji: "watashi wa furansu-jin ___",
+        prompt_fr: "Je suis français.",
+        choices: ["desu", "arimasu", "wa"],
+        answer: "desu",
+        explanation: "<strong>desu</strong> est la copule polie qui clôt une phrase descriptive (« être X »). À ne pas confondre avec <em>arimasu</em> (« il y a, exister ») qui sert pour l'existence d'objets."
+      },
+      {
+        prompt_jp: "高い ___ 。",
+        prompt_romaji: "takai ___",
+        prompt_fr: "C'est cher.",
+        choices: ["arimasu", "desu", "kudasai"],
+        answer: "desu",
+        explanation: "Adjectif (<em>takai</em>) + <strong>desu</strong> = description polie. Sans <em>desu</em>, c'est familier (« <em>takai !</em> » = c'est cher !). Avec <em>desu</em>, c'est poli (« c'est cher »)."
+      },
+      {
+        prompt_jp: "これは水で ___ か？",
+        prompt_romaji: "kore wa mizu de ___ ka?",
+        prompt_fr: "Est-ce que c'est de l'eau ?",
+        choices: ["arimasu", "su", "shita"],
+        answer: "su",
+        explanation: "La forme interrogative polie est <strong>desu ka</strong>. Une seule syllabe à ajouter à <em>de</em> pour compléter <em>desu</em>, puis <em>ka</em> pour la question."
+      }
+    ]
   },
 
   kudasai: {
@@ -6518,7 +6749,33 @@ const RULES = {
 <li><span class="jp-inline">メニュー<strong>をください</strong></span> — Le menu, s'il vous plaît.</li>
 </ul>
 <p class="rule-tip">💡 <em>kudasai</em> est plus direct que <em>onegaishimasu</em>. Pour des services ou des demandes plus abstraites, préférez <em>onegaishimasu</em>.</p>
-<p class="rule-tip">💡 La particule <em>wo</em> peut être omise à l'oral familier : <em>kore kudasai</em>.</p>`
+<p class="rule-tip">💡 La particule <em>wo</em> peut être omise à l'oral familier : <em>kore kudasai</em>.</p>`,
+    quiz: [
+      {
+        prompt_jp: "水をくだ ___ 。",
+        prompt_romaji: "mizu wo kuda ___",
+        prompt_fr: "De l'eau, s'il vous plaît.",
+        choices: ["さい", "shimasu", "りますか"],
+        answer: "さい",
+        explanation: "La forme polie pour demander un objet est <strong>ください</strong> (<em>kudasai</em>). Forme figée à reconnaître entière."
+      },
+      {
+        prompt_jp: "メニュー ___ ください。",
+        prompt_romaji: "menyû ___ kudasai",
+        prompt_fr: "Le menu, s'il vous plaît.",
+        choices: ["を", "は", "が"],
+        answer: "を",
+        explanation: "<em>kudasai</em> est une action transitive (« donner »). L'objet demandé prend <strong>を</strong>. À l'oral familier, le を peut être omis (<em>menyû kudasai</em>)."
+      },
+      {
+        prompt_jp: "ちょっと待っ ___ 。",
+        prompt_romaji: "chotto matte ___",
+        prompt_fr: "Attendez un instant, s'il vous plaît.",
+        choices: ["ください", "をください", "ありがとう"],
+        answer: "ください",
+        explanation: "Pour demander une <strong>action</strong> (pas un objet), on emploie <strong>forme en -te + ください</strong>. Pas de を ici : <em>matte</em> est déjà la forme en -te du verbe 待つ. Schéma : <em>[verbe-te] kudasai</em>."
+      }
+    ]
   },
 
   arimasu: {
@@ -6546,7 +6803,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 <p class="rule-tip">💡 <strong>Cas piège</strong> : les <strong>plantes</strong> et les <strong>poissons morts</strong> (dans un magasin par exemple) prennent <em>arimasu</em>. Les <strong>poissons vivants</strong> prennent <em>imasu</em>. Les <strong>voitures et trains</strong> prennent <em>arimasu</em> (objets), même si on les voit bouger.</p>
 <p class="rule-tip">💡 Forme négative : <em>arimasen</em> (« il n'y en a pas ») et <em>imasen</em> (« il n'y est pas »).</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "鍵が ___ 。",
+        prompt_romaji: "kagi ga ___",
+        prompt_fr: "Il y a une clé.",
+        choices: ["arimasu", "imasu", "desu"],
+        answer: "arimasu",
+        explanation: "Une clé est un <strong>objet inanimé</strong> — donc <strong>あります</strong>. <em>imasu</em> est réservé aux êtres vivants (personnes, animaux)."
+      },
+      {
+        prompt_jp: "犬が ___ 。",
+        prompt_romaji: "inu ga ___",
+        prompt_fr: "Il y a un chien.",
+        choices: ["arimasu", "imasu", "desu"],
+        answer: "imasu",
+        explanation: "Un chien est un <strong>être vivant</strong> qui se déplace de sa propre volonté → <strong>います</strong>. Même pour un chien qui dort, c'est <em>imasu</em>."
+      },
+      {
+        prompt_jp: "予約が ___ 。",
+        prompt_romaji: "yoyaku ga ___",
+        prompt_fr: "J'ai une réservation.",
+        choices: ["imasu", "arimasu", "shimasu"],
+        answer: "arimasu",
+        explanation: "Une réservation est une <strong>chose abstraite</strong> — elle prend <strong>あります</strong>. La possession (« j'ai ») se rend généralement par <em>arimasu</em> en japonais."
+      },
+      {
+        prompt_jp: "子供が3人 ___ 。",
+        prompt_romaji: "kodomo ga sannin ___",
+        prompt_fr: "J'ai trois enfants.",
+        choices: ["arimasu", "imasu", "desu"],
+        answer: "imasu",
+        explanation: "Les enfants sont des êtres vivants → <strong>います</strong>. Pour parler de la famille (avoir des enfants, des frères, etc.), c'est toujours <em>imasu</em>."
+      }
+    ]
   },
 
   particle_ga: {
@@ -6576,7 +6867,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 <p class="rule-tip">💡 <strong>Astuce questions</strong> : avec un mot interrogatif (<em>nani, dare, doko</em>), on emploie <strong>が</strong> avant le mot question, mais <strong>は</strong> sur le thème de la question. Ex : <em>kore <strong>wa</strong> nan desu ka?</em> (« ceci, qu'est-ce que c'est ? »), <em>dare <strong>ga</strong> kimashita ka?</em> (« qui est venu ? »).</p>
 <p class="rule-tip">⚠ Cas important : les verbes de <strong>capacité</strong>, <strong>goût</strong>, <strong>compréhension</strong> et <strong>existence</strong> prennent <strong>が</strong> et non を. Voir « が avec les verbes de capacité ».</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "トイレ ___ あります。",
+        prompt_romaji: "toire ___ arimasu",
+        prompt_fr: "Il y a des toilettes.",
+        choices: ["は", "を", "が"],
+        answer: "が",
+        explanation: "On <strong>annonce l'existence</strong> de quelque chose — info nouvelle introduite. <em>Arimasu</em> (existence) prend toujours <strong>が</strong>. On dirait <em>toire <strong>wa</strong> doko desu ka?</em> seulement pour <em>demander</em> où elles sont (sujet présupposé)."
+      },
+      {
+        prompt_jp: "お腹 ___ すいた。",
+        prompt_romaji: "onaka ___ suita",
+        prompt_fr: "J'ai faim. (litt. le ventre est vide)",
+        choices: ["を", "が", "に"],
+        answer: "が",
+        explanation: "Expression d'état du corps : « le ventre est vide ». État/ressenti → <strong>が</strong>. Même schéma pour <em>atama <strong>ga</strong> itai</em> (j'ai mal à la tête)."
+      },
+      {
+        prompt_jp: "誰 ___ 来ましたか？",
+        prompt_romaji: "dare ___ kimashita ka?",
+        prompt_fr: "Qui est venu ?",
+        choices: ["は", "が", "を"],
+        answer: "が",
+        explanation: "Quand le <strong>mot interrogatif est le sujet</strong> (qui, quoi, lequel…), on emploie <strong>が</strong>. C'est l'info nouvelle qu'on cherche. À comparer : <em>kore <strong>wa</strong> nan desu ka?</em> (le thème <em>kore</em> est connu, on demande son identité)."
+      }
+    ]
   },
 
   potential_ga: {
@@ -6602,7 +6919,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 <li>Forme potentielle (<em>hanaseru</em>, <em>taberareru</em>), goût (<em>suki</em>), compréhension (<em>wakaru</em>), capacité (<em>dekiru</em>) → particule <strong>が</strong></li>
 </ul>
 <p class="rule-tip">💡 La logique japonaise : "je sais parler anglais" devient "l'anglais est parlable pour moi". Ce n'est plus une action mais un état du sujet — d'où が.</p>
-<p class="rule-tip">💡 On peut dire <span class="jp-inline">英語<strong>は</strong>話せます</span> (<em>eigo wa hanasemasu</em>) — le sens change légèrement : は marque alors un <strong>contraste</strong> (« l'anglais, oui — d'autres langues, peut-être pas »).</p>`
+<p class="rule-tip">💡 On peut dire <span class="jp-inline">英語<strong>は</strong>話せます</span> (<em>eigo wa hanasemasu</em>) — le sens change légèrement : は marque alors un <strong>contraste</strong> (« l'anglais, oui — d'autres langues, peut-être pas »).</p>`,
+    quiz: [
+      {
+        prompt_jp: "英語 ___ 話せますか？",
+        prompt_romaji: "eigo ___ hanasemasu ka?",
+        prompt_fr: "Parlez-vous anglais ?",
+        choices: ["は", "を", "が"],
+        answer: "が",
+        explanation: "<em>Hanaseru</em> (forme potentielle de <em>hanasu</em>) exprime une <strong>capacité</strong>, pas une action. Avec une capacité, on emploie <strong>が</strong>, pas を. Le sens littéral : « l'anglais est-il parlable ? »."
+      },
+      {
+        prompt_jp: "寿司 ___ 好きです。",
+        prompt_romaji: "sushi ___ suki desu",
+        prompt_fr: "J'aime les sushis.",
+        choices: ["を", "が", "に"],
+        answer: "が",
+        explanation: "<em>Suki</em> (aimer) est un <strong>adjectif de goût</strong> en japonais, pas un verbe d'action. Donc <strong>が</strong>, pas を. Même schéma pour <em>kirai</em> (détester) : <em>natto <strong>ga</strong> kirai desu</em>."
+      },
+      {
+        prompt_jp: "日本語 ___ 分かります。",
+        prompt_romaji: "nihongo ___ wakarimasu",
+        prompt_fr: "Je comprends le japonais.",
+        choices: ["を", "が", "は"],
+        answer: "が",
+        explanation: "<em>Wakaru</em> (comprendre) exprime un <strong>état de compréhension</strong>, pas une action. Comme pour les capacités → <strong>が</strong>. Sens littéral : « le japonais m'est compréhensible »."
+      },
+      {
+        prompt_jp: "カード ___ できますか？",
+        prompt_romaji: "kâdo ___ dekimasu ka?",
+        prompt_fr: "La carte, est-ce possible ?",
+        choices: ["は", "を", "が"],
+        answer: "が",
+        explanation: "<em>Dekiru</em> (être possible / savoir faire) prend <strong>が</strong>. Cas pratique courant à la caisse. Attention : on peut aussi entendre <em>kâdo <strong>wa</strong> dekimasu ka?</em> avec は — c'est correct, ça marque alors un contraste (« la carte, ça passe ? — mais pas l'espèce »)."
+      }
+    ]
   },
 
   rendaku: {
@@ -6619,7 +6970,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </ul>
 <p><strong>Pourquoi ?</strong> À l'origine, c'était pour fluidifier la prononciation : relâcher la consonne au milieu d'un mot est plus naturel à l'oral. Avec le temps, c'est devenu une règle quasi-systématique pour beaucoup de mots composés natifs.</p>
 <p class="rule-tip">⚠ Le rendaku n'est pas <strong>100% prévisible</strong> — il dépend du mot, de son origine (japonaise vs sino-japonaise), et de l'usage. Le mieux est de <strong>mémoriser la prononciation du mot complet</strong> plutôt que de calculer kanji par kanji. Les Japonais l'ont assimilé naturellement par exposition, pas par règle.</p>
-<p class="rule-tip">💡 Mots concernés dans votre vocabulaire : <span class="jp-inline">大丈夫</span> (<em>daijô<strong>b</strong>u</em>), <span class="jp-inline">現金</span> (<em>gen<strong>k</strong>in</em>, ici <em>pas</em> de rendaku), <span class="jp-inline">出口</span> (<em>de<strong>g</strong>uchi</em>, le 口 <em>kuchi</em> devient <em>guchi</em>).</p>`
+<p class="rule-tip">💡 Mots concernés dans votre vocabulaire : <span class="jp-inline">大丈夫</span> (<em>daijô<strong>b</strong>u</em>), <span class="jp-inline">現金</span> (<em>gen<strong>k</strong>in</em>, ici <em>pas</em> de rendaku), <span class="jp-inline">出口</span> (<em>de<strong>g</strong>uchi</em>, le 口 <em>kuchi</em> devient <em>guchi</em>).</p>`,
+    quiz: [
+      {
+        prompt_jp: "出口 (sortie) — le kanji 口 se lit normalement &quot;kuchi&quot;. Dans 出口, il devient :",
+        prompt_romaji: "deguchi / dekuchi ?",
+        prompt_fr: "Comment se prononce 口 dans 出口 ?",
+        choices: ["kuchi (sans rendaku)", "guchi (avec rendaku)", "buchi"],
+        answer: "guchi (avec rendaku)",
+        explanation: "Le rendaku <strong>voise</strong> la consonne initiale du second kanji dans un mot composé. Ici <em>ku</em> → <em>gu</em>. Mot complet : <strong>de<em>g</em>uchi</strong>."
+      },
+      {
+        prompt_jp: "大丈夫 (daijôbu) — le kanji 夫 se lit normalement &quot;fu&quot;. Pourquoi ici on entend &quot;bu&quot; ?",
+        prompt_romaji: "fu → bu",
+        prompt_fr: "Quel phénomène phonétique est en jeu ?",
+        choices: ["Erreur de transcription", "Rendaku (voisement séquentiel)", "Particule cachée"],
+        answer: "Rendaku (voisement séquentiel)",
+        explanation: "Le <em>rendaku</em> 連濁 voise la consonne du kanji intérieur d'un composé. <em>h/f</em> peut devenir <em>b</em> (ou parfois <em>p</em>). D'où <em>daijô<strong>b</strong>u</em>."
+      },
+      {
+        prompt_jp: "巻き寿司 — le kanji 寿司 (sushi) ici devient...",
+        prompt_romaji: "sushi → ___",
+        prompt_fr: "Comment se prononce 寿司 dans makizushi ?",
+        choices: ["sushi", "zushi", "bushi"],
+        answer: "zushi",
+        explanation: "Rendaku classique <em>s → z</em> dans un mot composé. <em>maki + sushi</em> → <em>maki<strong>z</strong>ushi</em>. Idem pour <em>nigiri<strong>z</strong>ushi</em>, <em>chirashi<strong>z</strong>ushi</em>."
+      }
+    ]
   },
 
   particle_ni: {
@@ -6645,7 +7022,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 <div class="rule-vs-cell right"><span class="vs-label">で (action)</span><span class="jp-inline">東京<strong>で</strong>働いています</span> — Je travaille à Tokyo <em>(action située)</em></div>
 </div>
 <p class="rule-tip">💡 <strong>Astuce</strong> : avec un verbe de <em>mouvement</em> (ikimasu, kimasu, kaerimasu), c'est presque toujours <strong>に</strong>. Avec un verbe d'<em>action</em> sur place (tabemasu, nomimasu, hatarakimasu), c'est <strong>で</strong>.</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "東京 ___ 行きます。",
+        prompt_romaji: "Tôkyô ___ ikimasu",
+        prompt_fr: "Je vais à Tokyo.",
+        choices: ["で", "に", "は"],
+        answer: "に",
+        explanation: "<em>ikimasu</em> (aller) est un verbe de mouvement. La destination prend <strong>に</strong>. Mnémo : « <em>ni</em> = vers / jusqu'à »."
+      },
+      {
+        prompt_jp: "病院 ___ 行きたいです。",
+        prompt_romaji: "byôin ___ ikitai desu",
+        prompt_fr: "Je veux aller à l'hôpital.",
+        choices: ["で", "に", "を"],
+        answer: "に",
+        explanation: "Destination d'un déplacement → <strong>に</strong>. Le souhait (<em>ikitai</em>) ne change rien à la particule — c'est le verbe <em>iku</em> qui détermine."
+      },
+      {
+        prompt_jp: "右 ___ 曲がってください。",
+        prompt_romaji: "migi ___ magatte kudasai",
+        prompt_fr: "Tournez à droite.",
+        choices: ["で", "に", "を"],
+        answer: "に",
+        explanation: "Direction d'un mouvement (tourner vers) → <strong>に</strong>. Comme une destination de virage."
+      }
+    ]
   },
 
   particle_de: {
@@ -6675,7 +7078,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 <div class="rule-vs-cell right"><span class="vs-label">に (destination)</span><span class="jp-inline">東京<strong>に</strong>行きます</span> — Je vais à Tokyo</div>
 </div>
 <p class="rule-tip">💡 <strong>Astuce</strong> : si tu peux remplacer par « au moyen de » ou « dans le lieu où », c'est <strong>で</strong>. Si tu peux remplacer par « vers » ou « jusqu'à », c'est <strong>に</strong>.</p>
-</div>`
+</div>`,
+    quiz: [
+      {
+        prompt_jp: "カード ___ お願いします。",
+        prompt_romaji: "kâdo ___ onegaishimasu",
+        prompt_fr: "Par carte, s'il vous plaît.",
+        choices: ["に", "で", "を"],
+        answer: "で",
+        explanation: "<strong>で</strong> marque le <strong>moyen</strong> de paiement (par carte). Schéma : <em>[moyen] de onegaishimasu</em>. Idem pour <em>genkin <strong>de</strong></em> (en espèces)."
+      },
+      {
+        prompt_jp: "電車 ___ 行きます。",
+        prompt_romaji: "densha ___ ikimasu",
+        prompt_fr: "J'y vais en train.",
+        choices: ["に", "で", "を"],
+        answer: "で",
+        explanation: "Moyen de transport → <strong>で</strong>. Attention au piège : la destination prend に (<em>Tôkyô <strong>ni</strong> ikimasu</em>) mais le moyen prend で (<em>densha <strong>de</strong></em>)."
+      },
+      {
+        prompt_jp: "レストラン ___ 食べます。",
+        prompt_romaji: "resutoran ___ tabemasu",
+        prompt_fr: "Je mange au restaurant.",
+        choices: ["に", "で", "を"],
+        answer: "で",
+        explanation: "Lieu où se déroule l'action (manger, pas y aller) → <strong>で</strong>. Comparer : <em>resutoran <strong>ni</strong> ikimasu</em> (je vais au resto) vs <em>resutoran <strong>de</strong> tabemasu</em> (je mange au resto)."
+      },
+      {
+        prompt_jp: "英語 ___ お願いします。",
+        prompt_romaji: "eigo ___ onegaishimasu",
+        prompt_fr: "En anglais, s'il vous plaît.",
+        choices: ["で", "の", "に"],
+        answer: "で",
+        explanation: "<strong>で</strong> sert aussi pour « par le moyen de la langue ». Très utile en voyage : <em>eigo <strong>de</strong></em>, <em>furansugo <strong>de</strong></em>."
+      }
+    ]
   },
 
   kudasai_vs_onegaishimasu: {
@@ -6708,7 +7145,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </ul>
 
 <p class="rule-tip">💡 <strong>En pratique au Japon</strong> : si tu hésites, <em>onegaishimasu</em> passe partout sans choquer (juste un peu trop poli pour un simple verre d'eau). <em>Kudasai</em> sans contexte peut sembler un peu sec pour un service.</p>
-<p class="rule-tip">💡 <strong>Forme en -te + kudasai</strong> sert à demander une <strong>action</strong> (« faites ceci ») : <em>matte kudasai</em>, <em>mite kudasai</em>, <em>oshiete kudasai</em>. Là, <em>onegaishimasu</em> ne marche pas.</p>`
+<p class="rule-tip">💡 <strong>Forme en -te + kudasai</strong> sert à demander une <strong>action</strong> (« faites ceci ») : <em>matte kudasai</em>, <em>mite kudasai</em>, <em>oshiete kudasai</em>. Là, <em>onegaishimasu</em> ne marche pas.</p>`,
+    quiz: [
+      {
+        prompt_jp: "カードで ___ 。",
+        prompt_romaji: "kâdo de ___",
+        prompt_fr: "Par carte, s'il vous plaît.",
+        choices: ["kudasai", "onegaishimasu", "arimasu"],
+        answer: "onegaishimasu",
+        explanation: "Avec un <strong>moyen</strong> (la particule で), c'est toujours <strong>お願いします</strong>. ❌ <em>kâdo de kudasai</em> est incorrect — <em>kudasai</em> exige un objet concret avec を."
+      },
+      {
+        prompt_jp: "お会計 ___ 。",
+        prompt_romaji: "o-kaikei ___",
+        prompt_fr: "L'addition, s'il vous plaît.",
+        choices: ["kudasai", "onegaishimasu", "arigatô"],
+        answer: "onegaishimasu",
+        explanation: "L'addition est un <strong>service</strong> abstrait, pas un objet. <strong>お願いします</strong> est l'usage standard au restaurant : <em>o-kaikei onegaishimasu</em>."
+      },
+      {
+        prompt_jp: "ちょっと待って ___ 。",
+        prompt_romaji: "chotto matte ___",
+        prompt_fr: "Attendez un instant, s'il vous plaît.",
+        choices: ["onegaishimasu", "kudasai", "desu"],
+        answer: "kudasai",
+        explanation: "Forme <strong>-te + ください</strong> = demande d'action. <em>matte</em> est déjà la forme en -te du verbe 待つ. ❌ <em>matte onegaishimasu</em> sonne maladroit — pour une action, c'est kudasai."
+      },
+      {
+        prompt_jp: "水 ___ 。",
+        prompt_romaji: "mizu wo ___",
+        prompt_fr: "De l'eau, s'il vous plaît (au resto).",
+        choices: ["kudasai", "onegaishimasu", "arimasu"],
+        answer: "kudasai",
+        explanation: "Objet concret tangible (un verre d'eau qu'on va te tendre) → <strong>を ください</strong> est naturel. <em>mizu onegaishimasu</em> marche aussi, mais sonne légèrement plus formel."
+      }
+    ]
   },
 
   kosoado: {
@@ -6745,7 +7216,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">💡 <strong>Astuce mnémo</strong> : <em>ko</em> comme « <strong>k</strong>ôté-moi », <em>so</em> comme « <strong>s</strong>oi (l'autre) », <em>a</em> comme « <strong>a</strong>u loin », <em>do</em> comme « <strong>d</strong>oute / question ».</p>
-<p class="rule-tip">💡 <strong>Au téléphone</strong> ou quand l'objet n'est pas visible : <em>sore</em> = « ce dont tu parles », <em>are</em> = « ce dont nous parlons tous les deux et qu'on connaît ».</p>`
+<p class="rule-tip">💡 <strong>Au téléphone</strong> ou quand l'objet n'est pas visible : <em>sore</em> = « ce dont tu parles », <em>are</em> = « ce dont nous parlons tous les deux et qu'on connaît ».</p>`,
+    quiz: [
+      {
+        prompt_jp: "(en tenant un objet) ___ は何ですか？",
+        prompt_romaji: "___ wa nan desu ka?",
+        prompt_fr: "Qu'est-ce que c'est ? (en montrant l'objet que je tiens)",
+        choices: ["これ", "それ", "あれ"],
+        answer: "これ",
+        explanation: "Objet <strong>près de moi</strong> (je le tiens, ou il est juste à côté) → <strong>これ kore</strong>. La famille « ko- » désigne ce qui est proche du locuteur."
+      },
+      {
+        prompt_jp: "(en pointant le menu que le serveur tient) ___ をください。",
+        prompt_romaji: "___ wo kudasai",
+        prompt_fr: "Donnez-moi ça (le menu que tu tiens).",
+        choices: ["これ", "それ", "あれ"],
+        answer: "それ",
+        explanation: "Objet <strong>près de l'interlocuteur</strong> (tenu par lui, ou à portée de sa main) → <strong>それ sore</strong>. Famille « so- » = proche du « tu »."
+      },
+      {
+        prompt_jp: "(en pointant un magasin à l'autre bout de la rue) ___ は何ですか？",
+        prompt_romaji: "___ wa nan desu ka?",
+        prompt_fr: "C'est quoi, ce magasin là-bas ?",
+        choices: ["これ", "それ", "あれ"],
+        answer: "あれ",
+        explanation: "Objet <strong>loin de nous deux</strong>, à distance → <strong>あれ are</strong>. Famille « a- » = au loin. Si on s'approchait jusqu'au magasin, on basculerait sur <em>kore</em>."
+      },
+      {
+        prompt_jp: "(en désignant un train précis sur le quai) ___ 電車は東京に行きますか？",
+        prompt_romaji: "___ densha wa Tôkyô ni ikimasu ka?",
+        prompt_fr: "Ce train (celui-là) va à Tokyo ?",
+        choices: ["これ", "この", "あれ"],
+        answer: "この",
+        explanation: "Devant un <strong>nom</strong> (« ce train »), on utilise la forme en <strong>-no</strong> : <strong>この kono</strong>. ❌ <em>kore densha</em> n'existe pas — <em>kore</em> s'utilise seul, sans nom derrière."
+      }
+    ]
   },
 
   verb_forms_overview: {
@@ -6772,7 +7277,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">💡 <strong>Préalable</strong> : pour conjuguer correctement, il faut savoir à quel <strong>groupe</strong> appartient le verbe (godan ou ichidan). Voir la règle « Les 3 groupes de verbes ».</p>
-<p class="rule-tip">💡 Chaque forme a sa propre règle détaillée — explore-les pour comprendre la recette de fabrication.</p>`
+<p class="rule-tip">💡 Chaque forme a sa propre règle détaillée — explore-les pour comprendre la recette de fabrication.</p>`,
+    quiz: [
+      {
+        prompt_jp: "食べました — quel temps / quelle forme ?",
+        prompt_romaji: "tabemashita",
+        prompt_fr: "Identifier la forme verbale.",
+        choices: ["Présent poli", "Passé poli", "Désidérative", "Forme en -te"],
+        answer: "Passé poli",
+        explanation: "Terminaison <strong>-mashita</strong> = <strong>passé poli</strong> affirmatif. <em>tabemashita</em> = j'ai mangé / nous avons mangé / etc. (pas de personne)."
+      },
+      {
+        prompt_jp: "行きたい — quel temps / quelle forme ?",
+        prompt_romaji: "ikitai",
+        prompt_fr: "Identifier la forme verbale.",
+        choices: ["Présent poli", "Passé poli", "Désidérative", "Forme en -te"],
+        answer: "Désidérative",
+        explanation: "Terminaison <strong>-tai</strong> = forme <strong>désidérative</strong> (souhait personnel). <em>ikitai</em> = je veux aller. Couplée avec <em>desu</em> pour la politesse : <em>ikitai desu</em>."
+      },
+      {
+        prompt_jp: "待って — quel temps / quelle forme ?",
+        prompt_romaji: "matte",
+        prompt_fr: "Identifier la forme verbale.",
+        choices: ["Présent poli", "Passé poli", "Désidérative", "Forme en -te"],
+        answer: "Forme en -te",
+        explanation: "Terminaison <strong>-te</strong> = la fameuse <strong>forme en -te</strong>, la plus polyvalente. <em>matte</em> = de 待つ (matsu). Souvent suivie de <em>kudasai</em>, <em>imasu</em>, etc."
+      }
+    ]
   },
 
   verb_groups: {
@@ -6801,7 +7332,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">⚠ <strong>Pièges</strong> : certains verbes finissent en -eru ou -iru mais sont quand même <strong>godan</strong>. Les plus fréquents : <em>kaeru</em> (rentrer), <em>hairu</em> (entrer), <em>hashiru</em> (courir), <em>shiru</em> (savoir), <em>iru</em> (avoir besoin). À mémoriser au cas par cas.</p>
-<p class="rule-tip">💡 <strong>Astuce</strong> : la plupart des verbes en -eru/-iru sont ichidan, donc en cas de doute parier sur ichidan a souvent raison.</p>`
+<p class="rule-tip">💡 <strong>Astuce</strong> : la plupart des verbes en -eru/-iru sont ichidan, donc en cas de doute parier sur ichidan a souvent raison.</p>`,
+    quiz: [
+      {
+        prompt_jp: "食べる taberu — à quel groupe appartient ce verbe ?",
+        prompt_romaji: "",
+        prompt_fr: "Identifier le groupe.",
+        choices: ["ichidan", "godan", "irrégulier"],
+        answer: "ichidan",
+        explanation: "Termine en <strong>-eru</strong> → <strong>ichidan</strong> (groupe 2). La conjugaison sera régulière : <em>tabemasu, tabemashita, tabete, tabetai</em>."
+      },
+      {
+        prompt_jp: "飲む nomu — à quel groupe appartient ce verbe ?",
+        prompt_romaji: "",
+        prompt_fr: "Identifier le groupe.",
+        choices: ["ichidan", "godan", "irrégulier"],
+        answer: "godan",
+        explanation: "Termine en <strong>-mu</strong> (pas -eru ni -iru) → <strong>godan</strong> (groupe 1). Conjugaison : <em>nomimasu, nomimashita, nonde, nomitai</em>."
+      },
+      {
+        prompt_jp: "する suru — à quel groupe appartient ce verbe ?",
+        prompt_romaji: "",
+        prompt_fr: "Identifier le groupe.",
+        choices: ["ichidan", "godan", "irrégulier"],
+        answer: "irrégulier",
+        explanation: "<em>suru</em> est l'un des deux <strong>verbes irréguliers</strong> du japonais (l'autre étant <em>kuru</em>). Il faut mémoriser ses formes : <em>shimasu, shimashita, shite, shitai</em>."
+      },
+      {
+        prompt_jp: "帰る kaeru (rentrer) — à quel groupe appartient-il ?",
+        prompt_romaji: "",
+        prompt_fr: "Piège classique.",
+        choices: ["ichidan", "godan", "irrégulier"],
+        answer: "godan",
+        explanation: "Piège ! <em>kaeru</em> finit en <strong>-eru</strong>, donc on s'attendrait à ichidan. Mais c'est une exception : il est <strong>godan</strong>. Forme polie : <em>kaeri<strong>ma</strong>su</em>, pas <em>kaemasu</em>. À mémoriser avec <em>hairu, hashiru, shiru, iru</em>."
+      }
+    ]
   },
 
   masu_form: {
@@ -6826,7 +7391,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">💡 <em>-masu</em> couvre <strong>présent et futur proche</strong>. <em>Ashita ikimasu</em> = « demain j'y vais ». Le contexte temporel suffit.</p>
-<p class="rule-tip">💡 La forme polie est <strong>celle à utiliser par défaut</strong> en tant que voyageur. La forme du dictionnaire (taberu, nomu, iku) est utilisée entre proches ou dans les manuels.</p>`
+<p class="rule-tip">💡 La forme polie est <strong>celle à utiliser par défaut</strong> en tant que voyageur. La forme du dictionnaire (taberu, nomu, iku) est utilisée entre proches ou dans les manuels.</p>`,
+    quiz: [
+      {
+        prompt_jp: "Forme polie au présent de 食べる taberu :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -masu.",
+        choices: ["taberumasu", "tabemasu", "tabimasu", "tabemashita"],
+        answer: "tabemasu",
+        explanation: "<em>taberu</em> est <strong>ichidan</strong> : on remplace simplement <em>-ru</em> par <em>-masu</em> → <strong>tabemasu</strong>. ❌ <em>taberumasu</em> garde le -ru à tort."
+      },
+      {
+        prompt_jp: "Forme polie au présent de 飲む nomu :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -masu.",
+        choices: ["nomimasu", "nomumasu", "nomemasu", "nomemashita"],
+        answer: "nomimasu",
+        explanation: "<em>nomu</em> est <strong>godan</strong> : le <em>-u</em> final devient <em>-i</em>, puis on ajoute <em>-masu</em> → <strong>nomimasu</strong>. Schéma godan : <em>nom-u → nom-i → nomimasu</em>."
+      },
+      {
+        prompt_jp: "Négatif poli de 分かります wakarimasu :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la négation.",
+        choices: ["wakaranai", "wakarimasen", "wakarimasendeshita", "wakarinai"],
+        answer: "wakarimasen",
+        explanation: "Pour passer de l'affirmatif au négatif poli, on remplace <strong>-masu</strong> par <strong>-masen</strong> → <em>wakarimasu</em> devient <strong>wakarimasen</strong> (je ne comprends pas)."
+      }
+    ]
   },
 
   mashita_form: {
@@ -6851,7 +7442,33 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">💡 <strong>Cas pédagogique important</strong> : <em>wakarimashita</em> (« j'ai compris ») est au passé alors qu'en français on dirait souvent « je comprends » au présent. Le japonais utilise le passé dès que la <strong>compréhension est acquise</strong>, c'est-à-dire à l'instant où vous saisissez.</p>
-<p class="rule-tip">💡 <em>desu</em> (la copule « être ») a sa propre forme passée : <em>deshita</em>. Ex : <em>oishii deshita</em> = « c'était bon ».</p>`
+<p class="rule-tip">💡 <em>desu</em> (la copule « être ») a sa propre forme passée : <em>deshita</em>. Ex : <em>oishii deshita</em> = « c'était bon ».</p>`,
+    quiz: [
+      {
+        prompt_jp: "Passé poli de 食べます tabemasu :",
+        prompt_romaji: "",
+        prompt_fr: "Construire le passé affirmatif.",
+        choices: ["tabemasen", "tabemashita", "tabetai", "tabemashitan"],
+        answer: "tabemashita",
+        explanation: "Pour le passé poli, on remplace <strong>-masu</strong> par <strong>-mashita</strong> → <em>tabemasu</em> devient <strong>tabemashita</strong> (j'ai mangé). Marche pareil pour tous les verbes."
+      },
+      {
+        prompt_jp: "Comment dire « j'ai compris » poliment ?",
+        prompt_romaji: "",
+        prompt_fr: "Trouver l'expression.",
+        choices: ["wakarimasu", "wakarimasen", "wakarimashita", "wakatte"],
+        answer: "wakarimashita",
+        explanation: "Subtilité : en japonais, le <strong>passé</strong> est employé dès que la compréhension est acquise (à l'instant). En français on dirait « je comprends » au présent, mais en japonais on emploie <strong>wakarimashita</strong>."
+      },
+      {
+        prompt_jp: "Négatif passé poli de 行きます ikimasu :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la négation au passé.",
+        choices: ["ikimasen", "ikimashita", "ikimasen deshita", "ikanakatta"],
+        answer: "ikimasen deshita",
+        explanation: "Négatif passé poli = <strong>-masen deshita</strong>. Donc <em>ikimasu</em> → <strong>ikimasen deshita</strong> (je n'y suis pas allé). C'est <em>-masen</em> (négatif présent) + <em>deshita</em> (passé)."
+      }
+    ]
   },
 
   tai_form: {
@@ -6876,7 +7493,49 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 
 <p class="rule-tip">⚠ <strong>Limitation importante</strong> : <em>-tai</em> ne s'utilise <strong>que pour soi-même</strong> (ou en question pour l'interlocuteur direct). Pour parler du souhait d'un tiers, il faut <em>-tagaru</em> ou une formulation différente. Ex : on ne dit pas <em>kare wa sushi wo tabetai desu</em>.</p>
-<p class="rule-tip">💡 La forme -tai est <strong>directe</strong> et exprime un vrai désir. En boutique, préférer <em>onegaishimasu</em> ou <em>kudasai</em> pour commander — <em>-tai desu</em> est un peu trop direct comme commande.</p>`
+<p class="rule-tip">💡 La forme -tai est <strong>directe</strong> et exprime un vrai désir. En boutique, préférer <em>onegaishimasu</em> ou <em>kudasai</em> pour commander — <em>-tai desu</em> est un peu trop direct comme commande.</p>`,
+    quiz: [
+      {
+        prompt_jp: "Forme désidérative de 飲みます nomimasu (« je veux boire ») :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -tai.",
+        choices: ["nomimasen", "nomitai", "nondemasu", "nomimashita"],
+        answer: "nomitai",
+        explanation: "On part de <em>nomimasu</em>, on remplace <strong>-masu</strong> par <strong>-tai</strong> → <strong>nomitai</strong> (je veux boire). Forme polie : <em>nomitai desu</em>."
+      },
+      {
+        prompt_jp: "Négatif de 食べたい tabetai (« je ne veux pas manger ») :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la négation.",
+        choices: ["tabetainai", "tabetakunai", "tabemasen", "tabenakatta"],
+        answer: "tabetakunai",
+        explanation: "Attention ! <em>-tai</em> se comporte comme un <strong>adjectif en -い</strong>. Le -i final disparaît et devient <strong>-kunai</strong> → <em>tabetai</em> → <strong>tabetakunai</strong>. Pareil pour tous les adjectifs en -i."
+      },
+      {
+        prompt_jp: "« Il (mon ami) veut manger des sushis. » — quelle expression est correcte ?",
+        prompt_romaji: "",
+        prompt_fr: "Limitation de -tai.",
+        choices: [
+          "Kare wa sushi wo tabetai desu.",
+          "Kare wa sushi wo tabetagatte imasu.",
+          "Kare wa sushi wo tabemasu."
+        ],
+        answer: "Kare wa sushi wo tabetagatte imasu.",
+        explanation: "<strong>-tai s'utilise uniquement pour soi-même</strong> (ou en question pour l'interlocuteur). Pour parler du souhait d'un tiers, on emploie <strong>-tagaru</strong> (forme externe « il manifeste vouloir »), souvent à la forme en -te imasu."
+      },
+      {
+        prompt_jp: "« Je voulais aller à Kyoto » (passé) :",
+        prompt_romaji: "",
+        prompt_fr: "Construire le passé désidératif.",
+        choices: [
+          "Kyôto ni ikitai deshita",
+          "Kyôto ni ikitakatta desu",
+          "Kyôto ni ikimasen deshita"
+        ],
+        answer: "Kyôto ni ikitakatta desu",
+        explanation: "Le passé de <em>-tai</em> suit la règle des adjectifs en -い : <em>-tai</em> → <strong>-takatta</strong>. Donc <em>ikitai</em> → <strong>ikitakatta desu</strong>. ❌ <em>ikitai deshita</em> est incorrect — <em>deshita</em> sert pour <em>desu</em>, pas pour conjuguer <em>-tai</em>."
+      }
+    ]
   },
 
   te_form: {
@@ -6913,7 +7572,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </ul>
 
 <p class="rule-tip">⚠ La forme -te est <strong>la conjugaison la plus difficile</strong> à mémoriser à cause des règles godan. Le plus efficace : apprendre par cœur la forme -te de chaque verbe utile, plutôt que de calculer à chaque fois.</p>
-<p class="rule-tip">💡 <strong>Mnémo</strong> pour les godan : « <em>u-tsu-ru → tte</em> », « <em>mu-nu-bu → nde</em> », « <em>ku → ite</em> », « <em>gu → ide</em> », « <em>su → shite</em> », et <em>iku</em> est une exception (itte).</p>`
+<p class="rule-tip">💡 <strong>Mnémo</strong> pour les godan : « <em>u-tsu-ru → tte</em> », « <em>mu-nu-bu → nde</em> », « <em>ku → ite</em> », « <em>gu → ide</em> », « <em>su → shite</em> », et <em>iku</em> est une exception (itte).</p>`,
+    quiz: [
+      {
+        prompt_jp: "Forme en -te de 待つ matsu (attendre) :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -te.",
+        choices: ["matte", "machite", "matanai", "matsute"],
+        answer: "matte",
+        explanation: "<em>matsu</em> est godan en <strong>-tsu</strong> → la règle est <strong>-tsu → -tte</strong>. Donc <em>matsu</em> → <strong>matte</strong>. Suivi de <em>kudasai</em> pour la politesse."
+      },
+      {
+        prompt_jp: "Forme en -te de 飲む nomu (boire) :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -te.",
+        choices: ["nomite", "nonde", "nomete", "nomatte"],
+        answer: "nonde",
+        explanation: "<em>nomu</em> est godan en <strong>-mu</strong> → règle <strong>-mu/-nu/-bu → -nde</strong>. Donc <em>nomu</em> → <strong>nonde</strong>. Mnémo : « mu-nu-bu nde »."
+      },
+      {
+        prompt_jp: "Forme en -te de 食べる taberu (manger) :",
+        prompt_romaji: "",
+        prompt_fr: "Construire la forme -te.",
+        choices: ["tabette", "tabete", "tabite", "taberute"],
+        answer: "tabete",
+        explanation: "<em>taberu</em> est <strong>ichidan</strong> : règle simple, on remplace <em>-ru</em> par <em>-te</em> → <strong>tabete</strong>. Pas de transformation complexe pour les ichidan."
+      },
+      {
+        prompt_jp: "Forme en -te de 行く iku (aller) :",
+        prompt_romaji: "",
+        prompt_fr: "Attention, exception !",
+        choices: ["ikite", "itte", "iite", "ikute"],
+        answer: "itte",
+        explanation: "<strong>Exception célèbre</strong> : bien que <em>iku</em> finisse en -ku (qui donnerait normalement <em>-ite</em>), il devient <strong>itte</strong> et non <em>iite</em>. Seule exception de cette catégorie — à mémoriser."
+      }
+    ]
   },
 
   te_kudasai: {
@@ -6947,7 +7640,41 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
 </div>
 </div>
 
-<p class="rule-tip">💡 <strong>Niveau de politesse</strong> : -te kudasai est correct mais reste une « instruction polie ». Pour un service vraiment formel (au téléphone, au comptoir), préférer <em>o + racine + kudasai</em> (forme honorifique) ou <em>onegaishimasu</em>. Ex : <em>shôshô o-machi kudasai</em> (« veuillez patienter ») vs <em>chotto matte kudasai</em> (poli usuel).</p>`
+<p class="rule-tip">💡 <strong>Niveau de politesse</strong> : -te kudasai est correct mais reste une « instruction polie ». Pour un service vraiment formel (au téléphone, au comptoir), préférer <em>o + racine + kudasai</em> (forme honorifique) ou <em>onegaishimasu</em>. Ex : <em>shôshô o-machi kudasai</em> (« veuillez patienter ») vs <em>chotto matte kudasai</em> (poli usuel).</p>`,
+    quiz: [
+      {
+        prompt_jp: "« Attendez s'il vous plaît » : laquelle est correcte ?",
+        prompt_romaji: "",
+        prompt_fr: "Choisir la bonne forme.",
+        choices: ["matsu kudasai", "matte kudasai", "matsu wo kudasai"],
+        answer: "matte kudasai",
+        explanation: "Pour demander une <strong>action</strong>, il faut mettre le verbe à la <strong>forme -te</strong> puis ajouter <em>kudasai</em>. <em>matsu</em> (forme dictionnaire) ne s'utilise pas tel quel ici. ❌ Pas de を pour une demande d'action."
+      },
+      {
+        prompt_jp: "« Donnez-moi de l'eau » :",
+        prompt_romaji: "",
+        prompt_fr: "Action ou objet ?",
+        choices: ["mizu kudasai", "mizu wo kudasai", "mizu te kudasai"],
+        answer: "mizu wo kudasai",
+        explanation: "L'eau est un <strong>objet</strong>, pas une action — donc <em>nom + を + kudasai</em>. ❌ <em>mizu te kudasai</em> n'existe pas. <em>mizu kudasai</em> est familier (oral relâché)."
+      },
+      {
+        prompt_jp: "« Parlez lentement, s'il vous plaît » — laquelle est correcte ?",
+        prompt_romaji: "",
+        prompt_fr: "Construire avec un verbe godan en -su.",
+        choices: ["yukkuri hanasu kudasai", "yukkuri hanashite kudasai", "yukkuri hanasu wo kudasai"],
+        answer: "yukkuri hanashite kudasai",
+        explanation: "<em>hanasu</em> (parler, godan en -su) → forme -te : <strong>hanashite</strong>. Puis <em>kudasai</em>. Schéma : <em>[adverbe] [verbe-te] kudasai</em>."
+      },
+      {
+        prompt_jp: "« Regardez (ceci) » dans le sens « jetez un œil » :",
+        prompt_romaji: "",
+        prompt_fr: "Demande d'action avec un verbe ichidan.",
+        choices: ["miru kudasai", "mite kudasai", "miru wo kudasai"],
+        answer: "mite kudasai",
+        explanation: "<em>miru</em> est ichidan → forme -te : <strong>mite</strong>. Puis <em>kudasai</em> → <em>mite kudasai</em> (regardez). Très utile pour faire vérifier quelque chose."
+      }
+    ]
   }
 };
 
@@ -8325,6 +9052,7 @@ const PATTERNS = [
 
 let patternLevels = {};
 let patternStats = {}; // {patternId: {success, fail, consec, lastSeen}}
+let grammarStats = {}; // {ruleKey: {success, fail, consec, lastSeen, recentQuestionIdx: [...], failsByQ: {idx: count}}}
 try {
   const raw = localStorage.getItem("japonais_essentiel_pattern_levels");
   if (raw) patternLevels = JSON.parse(raw);
@@ -8333,12 +9061,19 @@ try {
   const raw = localStorage.getItem("japonais_essentiel_pattern_stats");
   if (raw) patternStats = JSON.parse(raw);
 } catch(e){}
+try {
+  const raw = localStorage.getItem("japonais_essentiel_grammar_stats");
+  if (raw) grammarStats = JSON.parse(raw);
+} catch(e){}
 
 function persistPatternLevels(){
   try { localStorage.setItem("japonais_essentiel_pattern_levels", JSON.stringify(patternLevels)); } catch(e){}
 }
 function persistPatternStats(){
   try { localStorage.setItem("japonais_essentiel_pattern_stats", JSON.stringify(patternStats)); } catch(e){}
+}
+function persistGrammarStats(){
+  try { localStorage.setItem("japonais_essentiel_grammar_stats", JSON.stringify(grammarStats)); } catch(e){}
 }
 function getPatternLevel(id){ return patternLevels[id] || 0; }
 function setPatternLevel(id, lvl){
@@ -8348,6 +9083,26 @@ function setPatternLevel(id, lvl){
 function getPatternStats(id){
   if (!patternStats[id]) patternStats[id] = {success:0, fail:0, consec:0, lastSeen:0};
   return patternStats[id];
+}
+function getGrammarStats(key){
+  if (!grammarStats[key]) {
+    grammarStats[key] = { success:0, fail:0, consec:0, lastSeen:0, recentQuestionIdx:[], failsByQ:{} };
+  }
+  // Migrate older entries lacking new fields
+  const s = grammarStats[key];
+  if (!Array.isArray(s.recentQuestionIdx)) s.recentQuestionIdx = [];
+  if (typeof s.failsByQ !== "object" || s.failsByQ === null) s.failsByQ = {};
+  return s;
+}
+// Returns the list of rule keys that (a) are unlocked AND (b) have a quiz array.
+function getGrammarPool(){
+  const unlocked = getUnlockedRuleKeys();
+  const out = [];
+  for (const key of unlocked) {
+    const r = RULES[key];
+    if (r && Array.isArray(r.quiz) && r.quiz.length > 0) out.push(key);
+  }
+  return out;
 }
 
 // ============================================================
@@ -9356,6 +10111,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     stats = {};
     patternLevels = {};
     patternStats = {};
+    grammarStats = {};
     patternsNotified = new Set();
     unlockedPhaseCount = KANA_UNLOCK_BATCH;
     unlockedVocabCount = VOCAB_UNLOCK_BATCH;
@@ -9366,6 +10122,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     persistStats();
     persistPatternLevels();
     persistPatternStats();
+    persistGrammarStats();
     persistPatternsNotified();
     persistUnlockState();
     persistVocabUnlock();
@@ -9999,13 +10756,16 @@ function showToast(msg, type){
 
 document.getElementById('jpExportBtn').addEventListener("click", () => {
   const data = {
-    version: 7,
+    version: 8,
     app: "japonais_essentiel",
     exportedAt: new Date().toISOString(),
     learned: [...learnedSet],
     levels: levels,
     levelDir: levelDir,
     stats: stats,
+    patternLevels: patternLevels,
+    patternStats: patternStats,
+    grammarStats: grammarStats,
     unlockedPhaseCount: unlockedPhaseCount,
     unlockedVocabCount: unlockedVocabCount,
     unlockedNumberGroupCount: unlockedNumberGroupCount,
@@ -10119,7 +10879,17 @@ document.getElementById("importInput").addEventListener("change", (e) => {
           if (allIds.has(numId) && d && typeof d === "object") {
             levelDir[numId] = {
               fwd: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.fwd,10) || 0)),
-              rev: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.rev,10) || 0))
+              rev: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.rev,10) || 0)),
+              cleanFwd: Math.max(0, parseInt(d.cleanFwd,10) || 0),
+              cleanRev: Math.max(0, parseInt(d.cleanRev,10) || 0),
+              lastCleanFwd: Math.max(0, parseInt(d.lastCleanFwd,10) || 0),
+              lastCleanRev: Math.max(0, parseInt(d.lastCleanRev,10) || 0),
+              lastFwdSuccess: Math.max(0, parseInt(d.lastFwdSuccess,10) || 0),
+              lastRevSuccess: Math.max(0, parseInt(d.lastRevSuccess,10) || 0),
+              nextDueFwd: Math.max(0, parseInt(d.nextDueFwd,10) || 0),
+              nextDueRev: Math.max(0, parseInt(d.nextDueRev,10) || 0),
+              srsIntervalFwd: Math.max(0, parseInt(d.srsIntervalFwd,10) || 0),
+              srsIntervalRev: Math.max(0, parseInt(d.srsIntervalRev,10) || 0)
             };
           }
         }
@@ -10127,9 +10897,39 @@ document.getElementById("importInput").addEventListener("change", (e) => {
       // Fallback: any level without directional data gets both dirs at the global level
       for (const [id, lv] of Object.entries(levels)) {
         const numId = parseInt(id, 10);
-        if (!levelDir[numId]) levelDir[numId] = { fwd: lv, rev: lv };
+        if (!levelDir[numId]) levelDir[numId] = {
+          fwd: lv, rev: lv, cleanFwd: 0, cleanRev: 0,
+          lastCleanFwd: 0, lastCleanRev: 0,
+          lastFwdSuccess: 0, lastRevSuccess: 0,
+          nextDueFwd: 0, nextDueRev: 0,
+          srsIntervalFwd: 0, srsIntervalRev: 0
+        };
       }
       persistLevelDir();
+
+      // Restore pattern progression if present
+      if (data.patternLevels && typeof data.patternLevels === "object") {
+        patternLevels = {};
+        for (const [k, v] of Object.entries(data.patternLevels)) {
+          patternLevels[k] = Math.max(0, Math.min(3, parseInt(v, 10) || 0));
+        }
+        persistPatternLevels();
+      }
+      if (data.patternStats && typeof data.patternStats === "object") {
+        patternStats = {};
+        for (const [k, v] of Object.entries(data.patternStats)) {
+          if (v && typeof v === "object") patternStats[k] = v;
+        }
+        persistPatternStats();
+      }
+      // Restore grammar stats if present
+      if (data.grammarStats && typeof data.grammarStats === "object") {
+        grammarStats = {};
+        for (const [k, v] of Object.entries(data.grammarStats)) {
+          if (v && typeof v === "object") grammarStats[k] = v;
+        }
+        persistGrammarStats();
+      }
 
       // Restore unlock state if present, then reconcile (handles old exports too)
       const importedPhase = (typeof data.unlockedPhaseCount === "number") ? data.unlockedPhaseCount
@@ -10612,14 +11412,19 @@ function getStreakMultiplier(streak){
 
 let reviewSession = {
   seen: 0, success: 0, fail: 0,
-  recentIds: [],           // sliding window of last 3 word IDs (anti-repeat)
-  recentPatternIds: [],    // sliding window of last 4 pattern IDs (anti-repeat)
-  priorityPatternIds: [],  // queue prioritaire pour interleaving (étape 2.3)
+  recentIds: [],              // sliding window of last 3 word IDs (anti-repeat)
+  recentPatternIds: [],       // sliding window of last 4 pattern IDs (anti-repeat)
+  recentGrammarKeys: [],      // sliding window of last 3 grammar rule keys (anti-repeat)
+  priorityPatternIds: [],     // queue prioritaire pour interleaving (étape 2.3)
   currentWord: null,
   currentDir: null,
-  currentItemKind: "word", // "word" ou "pattern" — pour dispatch reveal/grade
+  currentItemKind: "word",    // "word", "pattern" ou "grammar" — pour dispatch reveal/grade
   currentPattern: null,
-  currentInstance: null
+  currentInstance: null,
+  currentGrammarKey: null,    // ruleKey of current grammar card (if grammar)
+  currentGrammarIdx: null,    // question index within rule.quiz
+  currentGrammarAnswered: false,
+  currentGrammarCorrect: null
 };
 let reviewScope = "vocab"; // "vocab" or "alphabet"
 let reviewIntense = false;
@@ -10720,6 +11525,23 @@ function pickNextItem(){
   else if (learnedVocabCount < 40) patternRatio = 0.4;
   else patternRatio = 0.5;
 
+  // Grammar quiz : appears in vocab scope only, when unlocked rules with quizzes exist.
+  // Targets 12 % of cards when at least 4 quiz-bearing rules are unlocked.
+  // Scaled down progressively when fewer rules to avoid the same rule looping.
+  const grammarPool = reviewScope === "vocab" ? getGrammarPool() : [];
+  let grammarRatio = 0;
+  if (grammarPool.length >= 1 && learnedVocabCount >= 10) {
+    // Cap at 12% when 4+ rules; scale linearly below that
+    grammarRatio = Math.min(0.12, grammarPool.length * 0.03);
+  }
+
+  // Tirage grammar ?
+  if (grammarRatio > 0 && Math.random() < grammarRatio) {
+    const pick = pickNextGrammar(grammarPool);
+    if (pick) return { kind: "grammar", item: null, ruleKey: pick.ruleKey, questionIdx: pick.questionIdx };
+    // fallthrough on failure
+  }
+
   // Tirage pattern ?
   const availablePatterns = getAvailablePatterns();
   if (patternRatio > 0 && availablePatterns.length > 0 && Math.random() < patternRatio) {
@@ -10750,6 +11572,61 @@ function pickNextItem(){
   // Tirage mot par défaut
   const word = pickNextWord();
   return { kind: "word", item: word, pattern: null, instance: null };
+}
+
+// Tirage pondéré d'une règle de grammaire + d'une question dans son quiz.
+// Pondération règle : règles peu vues ou souvent ratées sont prioritaires.
+// Pondération question : questions ratées récemment privilégiées, mais
+// fenêtre anti-répétition pour ne pas reposer la même question deux fois d'affilée.
+function pickNextGrammar(pool){
+  if (!pool || pool.length === 0) return null;
+  const now = Date.now();
+  // Anti-répétition au niveau session : les 3 dernières règles vues
+  const recentKeys = reviewSession.recentGrammarKeys || [];
+  // 1. Choix de la règle
+  const weighted = pool.map(key => {
+    const s = getGrammarStats(key);
+    const lastSeen = s.lastSeen || 0;
+    // Stale bonus : règle jamais vue ou pas revue depuis longtemps
+    const hoursSinceSeen = lastSeen === 0 ? 1000 : (now - lastSeen) / (1000 * 60 * 60);
+    const staleness = Math.min(5, Math.log1p(hoursSinceSeen) / Math.log1p(24)); // 0 à ~5
+    // Erreurs récentes : success/fail balance
+    const totalTries = s.success + s.fail;
+    const failRate = totalTries > 0 ? s.fail / totalTries : 0.5; // par défaut neutre
+    const failBonus = 1 + failRate * 2; // jusqu'à ×3 si pure échec
+    let w = (1 + staleness) * failBonus;
+    if (recentKeys.includes(key)) w *= 0.1;
+    return { key, w };
+  });
+  const total = weighted.reduce((a, x) => a + x.w, 0);
+  if (total <= 0) return null;
+  let r = Math.random() * total;
+  let chosenKey = weighted[weighted.length - 1].key;
+  for (const it of weighted) {
+    r -= it.w;
+    if (r <= 0) { chosenKey = it.key; break; }
+  }
+  // 2. Choix de la question dans le quiz de la règle
+  const rule = RULES[chosenKey];
+  if (!rule || !Array.isArray(rule.quiz) || rule.quiz.length === 0) return null;
+  const s = getGrammarStats(chosenKey);
+  const recentQ = Array.isArray(s.recentQuestionIdx) ? s.recentQuestionIdx : [];
+  const qWeights = rule.quiz.map((_, idx) => {
+    const failCount = (s.failsByQ && s.failsByQ[idx]) || 0;
+    let w = 1 + failCount * 1.5;
+    // Anti-répétition : les 2 dernières questions de cette règle pénalisées
+    if (recentQ.includes(idx)) w *= 0.1;
+    return w;
+  });
+  const qTotal = qWeights.reduce((a, x) => a + x, 0);
+  if (qTotal <= 0) return { ruleKey: chosenKey, questionIdx: 0 };
+  let qr = Math.random() * qTotal;
+  let chosenIdx = qWeights.length - 1;
+  for (let i = 0; i < qWeights.length; i++) {
+    qr -= qWeights[i];
+    if (qr <= 0) { chosenIdx = i; break; }
+  }
+  return { ruleKey: chosenKey, questionIdx: chosenIdx };
 }
 
 // Pick direction with bias toward the direction the user fails more
@@ -10793,12 +11670,40 @@ function pickDirection(){
   return Math.random() < wFwd / (wFwd + wRev) ? "fwd" : "rev";
 }
 
+// Restore the standard Raté/Réussi grade buttons. Useful between cards because
+// a grammar card temporarily swaps them out for a "Suivant" button, and we
+// want a clean slate before any new card displays (in case the user exits
+// before completing the previous grammar card).
+function restoreGradeButtons(){
+  const gradeActions = document.getElementById("reviewGradeActions");
+  if (!gradeActions) return;
+  // Only rebuild if the current content is not the standard pair (cheap check)
+  if (!document.getElementById("failBtn") || !document.getElementById("successBtn")) {
+    gradeActions.innerHTML = `
+      <button class="review-action-btn review-fail-btn" id="failBtn">
+        <i data-lucide="x"></i> Raté
+      </button>
+      <button class="review-action-btn review-success-btn" id="successBtn">
+        <i data-lucide="check"></i> Réussi
+      </button>
+    `;
+    document.getElementById("failBtn").addEventListener("click", () => gradeWord(false));
+    document.getElementById("successBtn").addEventListener("click", () => gradeWord(true));
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
 function showNextCard(){
-  // Mode vocab : moteur unifié qui peut tirer un mot OU un patron
+  // Mode vocab : moteur unifié qui peut tirer un mot, un patron OU une carte grammaire
+  restoreGradeButtons();
   if (reviewScope === "vocab") {
     const next = pickNextItem();
     if (next.kind === "pattern") {
       showNextPatternCard(next.pattern, next.instance);
+      return;
+    }
+    if (next.kind === "grammar") {
+      showNextGrammarCard(next.ruleKey, next.questionIdx);
       return;
     }
     // sinon, mot normal : on continue avec next.item
@@ -10945,6 +11850,9 @@ function showNextCard(){
     reviewRulesEl.classList.remove("shown");
     document.getElementById("reviewRulesList").innerHTML = "";
   }
+  // Hide the grammar quiz card (if visible from a previous grammar item)
+  const grammarEl = document.getElementById("reviewGrammar");
+  if (grammarEl) grammarEl.classList.remove("shown");
 
   if (window.lucide) lucide.createIcons();
 }
@@ -11005,8 +11913,200 @@ function showNextPatternCard(p, instance){
     reviewRulesEl2.classList.remove("shown");
     document.getElementById("reviewRulesList").innerHTML = "";
   }
+  // Hide the grammar quiz card (if visible from a previous grammar item)
+  const grammarEl2 = document.getElementById("reviewGrammar");
+  if (grammarEl2) grammarEl2.classList.remove("shown");
 
   if (window.lucide) lucide.createIcons();
+}
+
+// showNextGrammarCard — display a grammar quiz card for a given rule/question.
+// The user picks a choice ; we then reveal the explanation and the grade buttons.
+function showNextGrammarCard(ruleKey, questionIdx){
+  const rule = RULES[ruleKey];
+  if (!rule || !Array.isArray(rule.quiz) || !rule.quiz[questionIdx]) {
+    // Fallback : pick a normal word
+    showNextCard();
+    return;
+  }
+  const question = rule.quiz[questionIdx];
+  // Set session state for grading
+  reviewSession.currentWord = null;
+  reviewSession.currentItemKind = "grammar";
+  reviewSession.currentPattern = null;
+  reviewSession.currentInstance = null;
+  reviewSession.currentGrammarKey = ruleKey;
+  reviewSession.currentGrammarIdx = questionIdx;
+  reviewSession.currentGrammarAnswered = false;
+  reviewSession.currentGrammarCorrect = null;
+  // Anti-repeat at session level
+  if (!reviewSession.recentGrammarKeys) reviewSession.recentGrammarKeys = [];
+  reviewSession.recentGrammarKeys.push(ruleKey);
+  if (reviewSession.recentGrammarKeys.length > 3) reviewSession.recentGrammarKeys.shift();
+  // Track recent questions within this rule
+  const s = getGrammarStats(ruleKey);
+  if (!Array.isArray(s.recentQuestionIdx)) s.recentQuestionIdx = [];
+  s.recentQuestionIdx.push(questionIdx);
+  if (s.recentQuestionIdx.length > 2) s.recentQuestionIdx.shift();
+  s.lastSeen = Date.now();
+  persistGrammarStats();
+
+  // Hide other cards
+  document.getElementById("reviewAnswer").classList.remove("shown");
+  const reviewRulesEl = document.getElementById("reviewRules");
+  if (reviewRulesEl) {
+    reviewRulesEl.classList.remove("shown");
+    document.getElementById("reviewRulesList").innerHTML = "";
+  }
+  // Hide the main reveal button — grammar cards skip the "reveal" step
+  document.getElementById("reviewActions").style.display = "none";
+  document.getElementById("reviewGradeActions").style.display = "none";
+
+  // Populate prompt area like a normal card : a single line "Quiz grammaire"
+  const promptEl = document.getElementById("reviewPrompt");
+  const promptSubEl = document.getElementById("reviewPromptSub");
+  promptEl.className = "review-prompt is-fr";
+  promptEl.textContent = "Quiz grammaire";
+  promptSubEl.innerHTML = `📖 ${rule.title.replace(/^[^—]*— /, "")}`;
+  // Hide the direction badge
+  const directionEl = document.getElementById("reviewDirection");
+  if (directionEl) directionEl.innerHTML = "";
+
+  // Populate the grammar card
+  document.getElementById("grammarInstruction").innerHTML = "Choisis la bonne option";
+  document.getElementById("grammarContextFr").textContent = question.prompt_fr || "";
+
+  // Build the JP phrase with the blank highlighted
+  const jpWithBlank = (question.prompt_jp || "").replace(/_{2,}/, '<span class="blank" id="grammarBlank">？</span>');
+  document.getElementById("grammarPhraseJp").innerHTML = jpWithBlank;
+  document.getElementById("grammarPhraseRomaji").textContent = question.prompt_romaji || "";
+
+  // Render choices in randomized order
+  const choices = Array.isArray(question.choices) ? question.choices.slice() : [];
+  // Fisher-Yates shuffle
+  for (let i = choices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [choices[i], choices[j]] = [choices[j], choices[i]];
+  }
+  const choicesEl = document.getElementById("grammarChoices");
+  choicesEl.innerHTML = "";
+  for (const choice of choices) {
+    const btn = document.createElement("button");
+    btn.className = "grammar-choice-btn";
+    btn.type = "button";
+    btn.textContent = choice;
+    btn.dataset.choice = choice;
+    btn.addEventListener("click", () => handleGrammarChoice(choice, btn));
+    choicesEl.appendChild(btn);
+  }
+
+  // Hide the explanation initially
+  const expEl = document.getElementById("grammarExplanation");
+  expEl.classList.remove("shown");
+  expEl.innerHTML = "";
+
+  // Show the grammar card
+  document.getElementById("reviewGrammar").classList.add("shown");
+
+  reviewSession.seen += 1;
+  document.getElementById("reviewSeen").textContent = reviewSession.seen;
+
+  if (window.lucide) lucide.createIcons();
+}
+
+// User has picked an option. Mark it correct/incorrect, reveal the explanation,
+// and surface the grade buttons. The user's choice determines the grade automatically :
+// correct → success path will be auto-triggered on grade click ; incorrect → fail path.
+function handleGrammarChoice(choice, btn){
+  if (reviewSession.currentGrammarAnswered) return;
+  const ruleKey = reviewSession.currentGrammarKey;
+  const idx = reviewSession.currentGrammarIdx;
+  const rule = RULES[ruleKey];
+  const question = rule && rule.quiz && rule.quiz[idx];
+  if (!question) return;
+
+  const correct = (choice === question.answer);
+  reviewSession.currentGrammarAnswered = true;
+  reviewSession.currentGrammarCorrect = correct;
+
+  // Update all choice buttons : highlight correct, dim the others
+  const allBtns = document.querySelectorAll("#grammarChoices .grammar-choice-btn");
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.dataset.choice === question.answer) b.classList.add("correct");
+    else if (b === btn) b.classList.add("incorrect");
+    else b.classList.add("dimmed");
+  });
+
+  // Fill the blank with the correct or incorrect choice
+  const blankEl = document.getElementById("grammarBlank");
+  if (blankEl) {
+    blankEl.textContent = choice;
+    blankEl.classList.add(correct ? "filled" : "wrong");
+  }
+
+  // Reveal the explanation
+  const expEl = document.getElementById("grammarExplanation");
+  let explHtml = question.explanation || "";
+  if (!correct) {
+    explHtml = `<strong>Réponse : ${question.answer}</strong><br><br>` + explHtml;
+  }
+  expEl.innerHTML = explHtml;
+  expEl.classList.add("shown");
+
+  // Auto-grade immediately, then surface the Next button via the grade buttons.
+  // We bypass the user's "raté/réussi" click since the choice itself determines correctness.
+  flashFeedback(correct ? "success" : "fail");
+
+  // Show only a single "Suivant" button (we hide raté/réussi for grammar — auto-graded).
+  // We piggyback on reviewGradeActions but swap its content.
+  const gradeActions = document.getElementById("reviewGradeActions");
+  gradeActions.innerHTML = `
+    <button class="review-action-btn review-success-btn" id="grammarNextBtn">
+      <i data-lucide="arrow-right"></i> Suivant
+    </button>
+  `;
+  gradeActions.style.display = "flex";
+  document.getElementById("grammarNextBtn").addEventListener("click", () => gradeGrammar(correct));
+  if (window.lucide) lucide.createIcons();
+}
+
+// Apply the grammar result : update stats, persist, then advance to next card.
+// Restores the standard raté/réussi buttons for the next item.
+function gradeGrammar(correct){
+  const ruleKey = reviewSession.currentGrammarKey;
+  const idx = reviewSession.currentGrammarIdx;
+  if (!ruleKey) return;
+  const s = getGrammarStats(ruleKey);
+  if (correct) {
+    s.success = (s.success || 0) + 1;
+    s.consec = (s.consec || 0) + 1;
+    reviewSession.success += 1;
+  } else {
+    s.fail = (s.fail || 0) + 1;
+    s.consec = 0;
+    if (!s.failsByQ) s.failsByQ = {};
+    s.failsByQ[idx] = (s.failsByQ[idx] || 0) + 1;
+    reviewSession.fail += 1;
+  }
+  persistGrammarStats();
+  document.getElementById("reviewSuccess").textContent = reviewSession.success;
+  document.getElementById("reviewFail").textContent = reviewSession.fail;
+
+  // Restore the normal grade button layout for the next item
+  const gradeActions = document.getElementById("reviewGradeActions");
+  gradeActions.innerHTML = `
+    <button class="review-action-btn review-fail-btn" id="failBtn">
+      <i data-lucide="x"></i> Raté
+    </button>
+    <button class="review-action-btn review-success-btn" id="successBtn">
+      <i data-lucide="check"></i> Réussi
+    </button>
+  `;
+  document.getElementById("failBtn").addEventListener("click", () => gradeWord(false));
+  document.getElementById("successBtn").addEventListener("click", () => gradeWord(true));
+
+  setTimeout(() => { showNextCard(); }, 350);
 }
 
 // Render the inline grammar rules under the review card for a vocab word.
@@ -11048,6 +12148,12 @@ function renderReviewRules(rulesList){
 }
 
 function revealAnswer(){
+  // Grammar quiz : reveal is auto-handled by the choice click ;
+  // the global reveal button is hidden for grammar cards, so this should not fire.
+  // Safe-guard for keyboard "1"/"y" shortcuts that bypass the button.
+  if (reviewScope === "vocab" && reviewSession.currentItemKind === "grammar") {
+    return;
+  }
   // Dispatch sur le kind si on est en mode vocab unifié
   if (reviewScope === "vocab" && reviewSession.currentItemKind === "pattern") {
     const inst = reviewSession.currentInstance;
@@ -11145,6 +12251,15 @@ function flashFeedback(type){
 function gradeWord(success){
   // Dispatch sur le kind : si on est en mode vocab unifié sur un patron,
   // on délègue à gradePatternResult.
+  // Si on est sur une carte grammaire, on délègue à gradeGrammar (auto-géré).
+  if (reviewScope === "vocab" && reviewSession.currentItemKind === "grammar") {
+    // If user pressed keyboard shortcut before clicking a choice, ignore.
+    // Otherwise the grade is determined by the choice they made.
+    if (reviewSession.currentGrammarAnswered) {
+      gradeGrammar(reviewSession.currentGrammarCorrect);
+    }
+    return;
+  }
   if (reviewScope === "vocab" && reviewSession.currentItemKind === "pattern") {
     const p = reviewSession.currentPattern;
     if (!p) return;
@@ -11448,12 +12563,17 @@ function openReview(scope, intense){
     seen: 0, success: 0, fail: 0,
     recentIds: [],
     recentPatternIds: [],
+    recentGrammarKeys: [],
     priorityPatternIds: [],
     currentWord: null,
     currentDir: null,
     currentItemKind: "word",
     currentPattern: null,
-    currentInstance: null
+    currentInstance: null,
+    currentGrammarKey: null,
+    currentGrammarIdx: null,
+    currentGrammarAnswered: false,
+    currentGrammarCorrect: null
   };
   document.getElementById("reviewSeen").textContent = "0";
   document.getElementById("reviewSuccess").textContent = "0";
