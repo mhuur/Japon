@@ -12090,7 +12090,11 @@ function gradeGrammar(correct){
   document.getElementById("reviewSuccess").textContent = reviewSession.success;
   document.getElementById("reviewFail").textContent = reviewSession.fail;
 
-  setTimeout(() => { showNextCard(); }, 350);
+  // Hide the grammar card BEFORE advancing — this prevents the visual lag
+  // where the user keeps clicking thinking nothing happened.
+  document.getElementById("reviewGrammar").classList.remove("shown");
+  // Advance immediately — the flash already gave visual feedback on the choice click.
+  showNextCard();
 }
 
 // Render the inline grammar rules under the review card for a vocab word.
@@ -12233,13 +12237,27 @@ function flashFeedback(type){
 }
 
 function gradeWord(success){
-  // Dispatch sur le kind : si on est en mode vocab unifié sur un patron,
-  // on délègue à gradePatternResult.
-  // Si on est sur une carte grammaire, on délègue à gradeGrammar (auto-géré).
+  // Defensive dispatch : the DOM is the source of truth for which card is
+  // visible. If the grammar card is shown, route to gradeGrammar regardless
+  // of currentItemKind (which can be stale after a setTimeout chain).
+  const grammarEl = document.getElementById("reviewGrammar");
+  const grammarVisible = grammarEl && grammarEl.classList.contains("shown");
+  if (reviewScope === "vocab" && grammarVisible) {
+    if (reviewSession.currentGrammarAnswered) {
+      gradeGrammar(reviewSession.currentGrammarCorrect);
+    }
+    // If user clicks Raté/Réussi without having picked an option yet,
+    // force-advance to the next card to avoid being stuck.
+    else {
+      // Hide the grammar card and advance — treat as a skip with no score change.
+      grammarEl.classList.remove("shown");
+      reviewSession.currentGrammarGraded = true; // prevent re-entry
+      setTimeout(() => { showNextCard(); }, 100);
+    }
+    return;
+  }
+  // Legacy path : currentItemKind check (kept as a safety net).
   if (reviewScope === "vocab" && reviewSession.currentItemKind === "grammar") {
-    // Grammar correctness is determined by the user's choice, not by the button.
-    // If the user clicked a button before answering (shouldn't happen since the
-    // grade buttons are hidden initially), just ignore.
     if (reviewSession.currentGrammarAnswered) {
       gradeGrammar(reviewSession.currentGrammarCorrect);
     }
