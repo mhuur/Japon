@@ -6422,6 +6422,192 @@ const VOCAB = [
     usage:{when:["<em>Sushi wo tabemashita. Soshite, sake wo nomimashita</em> — J'ai mangé des sushis. Et puis j'ai bu du saké","<em>Soshite, doko ni ikimasu ka?</em> — Et ensuite, où allons-nous ?"],avoid:[],variants:[]}
   },
 
+  // ===== VERBES en forme dictionnaire (IDs 113-122) =====
+  // Ces verbes sont stockés en forme dict pour servir de référence aux quiz
+  // de grammaire (forme polie, -te, -tai, etc.). Le matcher d'annotation
+  // génère automatiquement toutes les conjugaisons.
+  {id:113, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"食べる", romaji:"taberu", fr:"manger", frSub:"forme dictionnaire",
+    rules:["verb_groups","masu_form","te_form","tai_form","mashita_form"],
+    note:"Verbe ichidan (groupe 2). Forme polie : <em>tabemasu</em>. Forme en -te : <em>tabete</em>.",
+    mnemo:"食 (manger) + べる. Conjugaisons : tabemasu / tabemashita / tabete / tabetai / tabenai.",
+    usage:{when:["<em>Sushi wo tabemasu</em> — Je mange des sushis","<em>Tabete mo ii desu ka?</em> — Puis-je manger ?","<em>Mou tabemashita</em> — J'ai déjà mangé"],avoid:[],variants:[{form:"食べます tabemasu",when:"Forme polie standard, à utiliser par défaut."}]}
+  },
+  {id:114, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"飲む", romaji:"nomu", fr:"boire", frSub:"forme dictionnaire",
+    rules:["verb_groups","masu_form","te_form","tai_form"],
+    note:"Verbe godan (groupe 1) en -mu. Forme polie : <em>nomimasu</em>. Forme en -te : <em>nonde</em>.",
+    mnemo:"Godan en -mu → -mu devient -mi devant masu (nomimasu), et -nde pour le -te (nonde). Schéma « mu-nu-bu → nde ».",
+    usage:{when:["<em>Mizu wo nomimasu</em> — Je bois de l'eau","<em>Sake wo nonde mo ii desu ka?</em> — Puis-je boire de l'alcool ?","<em>Bîru ga nomitai</em> — J'ai envie d'une bière"],avoid:[],variants:[{form:"飲みます nomimasu",when:"Forme polie standard."}]}
+  },
+  {id:115, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"する", romaji:"suru", fr:"faire", frSub:"verbe irrégulier",
+    rules:["verb_groups","masu_form","te_form"],
+    note:"L'un des deux verbes irréguliers du japonais (avec <em>kuru</em>). Forme polie : <em>shimasu</em>. Forme en -te : <em>shite</em>.",
+    mnemo:"Irrégulier : pas de logique godan/ichidan. À mémoriser : suru / shimasu / shimashita / shite / shitai / shinai.",
+    usage:{when:["<em>Nani wo shimasu ka?</em> — Que faites-vous ?","<em>Shitsumon ga arimasu</em> — J'ai une question (litt. il y a une question à faire)","<em>Benkyô shimasu</em> — Étudier (lit. faire de l'étude)"],avoid:["Ne pas conjuguer comme un verbe régulier."],variants:[{form:"します shimasu",when:"Forme polie."}]}
+  },
+  {id:116, category:"transports", catLabel:"Direction & transports", catNum:"捌",
+    jp:"来る", romaji:"kuru", fr:"venir", frSub:"verbe irrégulier",
+    rules:["verb_groups","masu_form","te_form"],
+    note:"Second verbe irrégulier japonais. Forme polie : <em>kimasu</em>. Forme en -te : <em>kite</em>.",
+    mnemo:"Irrégulier : pas de logique godan/ichidan. À mémoriser : kuru / kimasu / kimashita / kite / kitai / konai.",
+    usage:{when:["<em>Dare ga kimashita ka?</em> — Qui est venu ?","<em>Mata kite kudasai</em> — Revenez s'il vous plaît","<em>Densha ga kimasu</em> — Le train arrive"],avoid:[],variants:[{form:"来ます kimasu",when:"Forme polie."}]}
+  },
+  {id:117, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"分かる", romaji:"wakaru", fr:"comprendre", frSub:"saisir / piger",
+    rules:["verb_groups","masu_form","particle_ga"],
+    note:"Verbe godan en -ru (piège : malgré le -ru final, c'est godan). Forme polie : <em>wakarimasu</em>. Se construit avec が (ce qu'on comprend marque le sujet).",
+    mnemo:"分 (séparer, distinguer) + かる. Litt. « ce qui se distingue (à moi) ». Donc <em>X ga wakarimasu</em> = X devient clair pour moi.",
+    usage:{when:["<em>Nihongo ga wakarimasu</em> — Je comprends le japonais","<em>Wakarimasen</em> — Je ne comprends pas","<em>Wakatte imasu</em> — J'ai compris (et je le sais)"],avoid:["Avec を : faux. La chose comprise prend <strong>が</strong>, pas を."],variants:[{form:"分かります wakarimasu",when:"Forme polie standard."}]}
+  },
+  {id:118, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"話す", romaji:"hanasu", fr:"parler", frSub:"converser",
+    rules:["verb_groups","masu_form","te_form"],
+    note:"Verbe godan en -su. Forme polie : <em>hanashimasu</em>. Forme en -te : <em>hanashite</em>.",
+    mnemo:"Godan en -su → -shi devant masu (hanashimasu), -shite pour le -te. Schéma « su → shite ».",
+    usage:{when:["<em>Eigo wo hanashimasu ka?</em> — Parlez-vous anglais ?","<em>Yukkuri hanashite kudasai</em> — Parlez lentement s'il vous plaît","<em>Furansu-go ga hanasemasu</em> — Je peux parler français (potentiel)"],avoid:[],variants:[{form:"話します hanashimasu",when:"Forme polie."}]}
+  },
+  {id:119, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"見る", romaji:"miru", fr:"voir / regarder", frSub:"forme dictionnaire",
+    rules:["verb_groups","masu_form","te_form"],
+    note:"Verbe ichidan (groupe 2). Forme polie : <em>mimasu</em>. Forme en -te : <em>mite</em>.",
+    mnemo:"Court ichidan : mi-ru → mi-masu, mi-te, mi-tai. Très utile pour « regarder un menu », « voir un site ».",
+    usage:{when:["<em>Menyû wo misete kudasai</em> — Montrez-moi le menu (mise = forme causative ; mite = juste regarder)","<em>Sumimasen, chotto mite mo ii desu ka?</em> — Puis-je jeter un œil ?","<em>Mimashita</em> — J'ai vu / J'ai regardé"],avoid:[],variants:[{form:"見ます mimasu",when:"Forme polie."}]}
+  },
+  {id:120, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"待つ", romaji:"matsu", fr:"attendre", frSub:"forme dictionnaire",
+    rules:["verb_groups","te_kudasai","te_form"],
+    note:"Verbe godan en -tsu (irrégulier au matching mais régulier godan). Forme polie : <em>machimasu</em>. Forme en -te : <em>matte</em>.",
+    mnemo:"Godan en -tsu → -chi devant masu (machimasu), -tte pour le -te (matte). Schéma « tsu → tte ».",
+    usage:{when:["<em>Chotto matte kudasai</em> — Attendez un instant s'il vous plaît","<em>Densha wo machimasu</em> — J'attends le train","<em>Matte!</em> — Attends ! (familier)"],avoid:[],variants:[{form:"待ちます machimasu",when:"Forme polie."}]}
+  },
+  {id:121, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"いる", romaji:"iru", fr:"être / il y a (animé)", frSub:"pour personnes & animaux",
+    rules:["verb_groups","masu_form","particle_ga"],
+    note:"Verbe ichidan d'existence pour les êtres animés (personnes, animaux). Forme polie : <em>imasu</em>. À distinguer de <em>aru</em> (inanimé).",
+    mnemo:"いる iru pour <strong>i</strong>kiteiru (vivant). Pour les objets/lieux : <em>aru/arimasu</em>.",
+    usage:{when:["<em>Inu ga imasu</em> — Il y a un chien","<em>Kodomo ga sannin imasu</em> — J'ai trois enfants","<em>Doko ni imasu ka?</em> — Où êtes-vous ?"],avoid:["Pour les objets (livre, voiture, eau…) → utiliser <em>aru / arimasu</em>."],variants:[{form:"います imasu",when:"Forme polie standard."}]}
+  },
+  {id:122, category:"transports", catLabel:"Direction & transports", catNum:"捌",
+    jp:"曲がる", romaji:"magaru", fr:"tourner", frSub:"changer de direction",
+    rules:["verb_groups","te_kudasai"],
+    note:"Verbe godan en -ru (piège : c'est godan malgré le -ru). Forme polie : <em>magarimasu</em>. Forme en -te : <em>magatte</em>.",
+    mnemo:"Godan-ru exception (comme kaeru, hairu). Schéma : maga-ru → maga-ri-masu / maga-tte.",
+    usage:{when:["<em>Migi ni magatte kudasai</em> — Tournez à droite s'il vous plaît","<em>Tsugi no kado wo hidari ni magarimasu</em> — Je tourne à gauche au prochain coin"],avoid:[],variants:[{form:"曲がります magarimasu",when:"Forme polie."}]}
+  },
+
+  // ===== NOMS additionnels pour les quiz (IDs 123-132) =====
+  {id:123, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"写真", romaji:"shashin", fr:"photo", frSub:"photographie",
+    note:"Mot incontournable en voyage. Souvent avec le verbe <em>toru</em> (prendre).",
+    mnemo:"写 (copier, refléter) + 真 (vrai). Une photo « copie la réalité ».",
+    usage:{when:["<em>Shashin wo totte mo ii desu ka?</em> — Puis-je prendre une photo ?","<em>Shashin wo torimasu</em> — Je prends une photo","<em>Issho ni shashin, onegaishimasu</em> — Une photo ensemble, s'il vous plaît"],avoid:[],variants:[]}
+  },
+  {id:124, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"犬", romaji:"inu", fr:"chien",
+    note:"Mot simple, deux syllabes. Pour les chats : <em>neko</em>.",
+    mnemo:"いぬ — court, facile. Apparaît souvent dans les exemples de phrase (« il y a un chien »).",
+    usage:{when:["<em>Inu ga imasu</em> — Il y a un chien","<em>Kawaii inu desu ne</em> — Quel chien mignon !"],avoid:[],variants:[]}
+  },
+  {id:125, category:"hebergement", catLabel:"Hébergement & urgences", catNum:"拾",
+    jp:"予約", romaji:"yoyaku", fr:"réservation",
+    note:"Très utile pour les hôtels, restaurants, trains. Souvent avec <em>aru/arimasu</em> (j'ai une réservation).",
+    mnemo:"予 (d'avance) + 約 (promesse). Litt. « promesse faite à l'avance ».",
+    usage:{when:["<em>Yoyaku ga arimasu</em> — J'ai une réservation","<em>Yoyaku wo shitai desu</em> — Je voudrais faire une réservation","<em>Yoyaku no namae wa…</em> — Le nom de la réservation est…"],avoid:[],variants:[]}
+  },
+  {id:126, category:"presentation", catLabel:"Présentation", catNum:"伍",
+    jp:"子供", romaji:"kodomo", fr:"enfant",
+    note:"Mot générique pour enfant(s). Pour son propre enfant à un inconnu : on l'utilise tel quel.",
+    mnemo:"子 (enfant) + 供 (compagnon). Litt. « petit compagnon ».",
+    usage:{when:["<em>Kodomo ga sannin imasu</em> — J'ai trois enfants","<em>Kodomo desu ka? Otona desu ka?</em> — Enfant ou adulte ?"],avoid:[],variants:[]}
+  },
+  {id:127, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"お腹", romaji:"onaka", fr:"ventre / estomac",
+    note:"Forme avec préfixe honorifique お. Surtout dans l'expression « avoir faim » : <em>onaka ga suita</em>.",
+    mnemo:"お (honorifique) + 腹 (ventre, naka). On dit toujours <em>onaka</em>, pas <em>naka</em> seul.",
+    usage:{when:["<em>Onaka ga suita</em> — J'ai faim (litt. mon ventre s'est vidé)","<em>Onaka ga ippai desu</em> — Je suis rassasié (litt. ventre plein)","<em>Onaka ga itai</em> — J'ai mal au ventre"],avoid:[],variants:[]}
+  },
+  {id:128, category:"presentation", catLabel:"Présentation", catNum:"伍",
+    jp:"日本語", romaji:"nihongo", fr:"japonais (langue)",
+    note:"日本 (Japon) + 語 (langue). Pour le français : <em>furansu-go</em>. Pour l'anglais : <em>eigo</em>.",
+    mnemo:"Le suffixe -語 (-go) signifie « langue de ». Donc : <em>nihon-go, eigo (英語), furansu-go (フランス語)</em>.",
+    usage:{when:["<em>Nihongo ga wakarimasen</em> — Je ne comprends pas le japonais","<em>Nihongo wo benkyô shite imasu</em> — J'étudie le japonais","<em>Nihongo wo sukoshi hanasemasu</em> — Je parle un peu japonais"],avoid:[],variants:[]}
+  },
+  {id:129, category:"transports", catLabel:"Direction & transports", catNum:"捌",
+    jp:"東京", romaji:"tôkyô", fr:"Tokyo",
+    note:"Capitale du Japon. Litt. « capitale de l'est ». Attention à l'allongement des deux ô.",
+    mnemo:"東 (est) + 京 (capitale). Comparer avec 京都 (Kyôto, « capitale ») — l'ancienne capitale.",
+    usage:{when:["<em>Tôkyô e ikimasu</em> — Je vais à Tokyo","<em>Tôkyô-eki wa doko desu ka?</em> — Où est la gare de Tokyo ?"],avoid:[],variants:[]}
+  },
+  {id:130, category:"transports", catLabel:"Direction & transports", catNum:"捌",
+    jp:"京都", romaji:"kyôto", fr:"Kyoto",
+    note:"Ancienne capitale impériale. Litt. « capitale-capitale ». Attention à l'allongement du ô.",
+    mnemo:"京 (capitale) + 都 (métropole). Tokyo et Kyoto partagent le 京 — c'est l'idée de « capitale ».",
+    usage:{when:["<em>Kyôto ni ikimashita</em> — Je suis allé à Kyoto","<em>Kyôto wa kirei desu</em> — Kyoto est joli"],avoid:[],variants:[]}
+  },
+  {id:131, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"レストラン", romaji:"resutoran", fr:"restaurant",
+    note:"Mot d'emprunt (gairaigo) écrit en katakana. Désigne plutôt un restaurant occidental ou moderne. Pour un restaurant japonais traditionnel : <em>shokudô</em> ou un nom plus spécifique.",
+    mnemo:"レストラン — adaptation phonétique du mot français « restaurant ». À retenir comme tel.",
+    usage:{when:["<em>Resutoran de tabemasu</em> — Je mange au restaurant","<em>Ii resutoran wo shitte imasu ka?</em> — Connaissez-vous un bon restaurant ?"],avoid:["Pour un petit resto japonais classique : préférer <em>shokudô</em> ou <em>izakaya</em>."],variants:[]}
+  },
+  {id:132, category:"hebergement", catLabel:"Hébergement & urgences", catNum:"拾",
+    jp:"番号", romaji:"bangô", fr:"numéro",
+    note:"Pour téléphone, chambre d'hôtel, billet, vol… Souvent précédé du nom de la chose numérotée.",
+    mnemo:"番 (ordre, place) + 号 (numéro, code). Ensemble : « numéro de série ».",
+    usage:{when:["<em>Heya no bangô wa nan-ban desu ka?</em> — Quel est le numéro de la chambre ?","<em>Denwa-bangô wo onegaishimasu</em> — Votre numéro de téléphone, s'il vous plaît"],avoid:[],variants:[]}
+  },
+
+  // ===== Verbe complémentaire (ID 138) =====
+  {id:138, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"撮る", romaji:"toru", fr:"prendre (une photo)", frSub:"photographier",
+    rules:["verb_groups","te_form","te_kudasai"],
+    note:"Verbe godan en -ru (piège : c'est godan malgré le -ru). Sens spécifique : prendre une photo, capter une image. Forme polie : <em>torimasu</em>. Forme en -te : <em>totte</em>.",
+    mnemo:"Godan-ru exception. Schéma : toru → torimasu → totte (comme magaru, kaeru).",
+    usage:{when:["<em>Shashin wo totte mo ii desu ka?</em> — Puis-je prendre une photo ?","<em>Issho ni shashin wo torimashou</em> — Prenons une photo ensemble","<em>Karera wo totte kudasai</em> — Photographiez-les s'il vous plaît"],avoid:["Pour « prendre » au sens général (un objet) : <em>motsu</em> (tenir) ou <em>torimasu</em> peut aussi convenir."],variants:[{form:"取る toru",when:"Même prononciation, autre kanji, sens général « prendre / saisir »."}]}
+  },
+
+  // ===== ADJECTIFS / ADVERBES (IDs 133-137) =====
+  {id:133, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"ちょっと", romaji:"chotto", fr:"un peu / un instant",
+    note:"Adverbe multifonction : modère une demande, atténue une critique, ou signifie « un peu ». Indispensable en voyage pour adoucir.",
+    mnemo:"Litt. « petit-peu ». S'utilise partout : <em>chotto matte</em> (un instant), <em>chotto karai</em> (un peu épicé), <em>chotto sumimasen</em> (excusez-moi un instant).",
+    usage:{when:["<em>Chotto matte kudasai</em> — Attendez un instant","<em>Chotto karai desu</em> — C'est un peu épicé","<em>Chotto sumimasen</em> — Excusez-moi (pour interpeller)","<em>Chotto…</em> (seul, avec hésitation) — Hmm, c'est-à-dire… (refus poli)"],avoid:[],variants:[]}
+  },
+  {id:134, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"いい", romaji:"ii", fr:"bon / bien",
+    note:"Adjectif en -i (très irrégulier). Forme polie : <em>ii desu</em>. Au passé : <em>yokatta</em> (pas <em>iikatta</em>) — exception à mémoriser.",
+    mnemo:"Très court mais piégeux : son passé est <strong>yokatta</strong>, pas iikatta. Vient d'une ancienne forme <em>yoshi</em>.",
+    usage:{when:["<em>Ii desu ne</em> — C'est bien","<em>Ii desu yo</em> — C'est bon (j'accepte)","<em>Mite mo ii desu ka?</em> — Puis-je regarder ?","<em>Yokatta!</em> — Tant mieux ! (c'était bien)"],avoid:["Au passé jamais <em>iikatta</em> → <em>yokatta</em>."],variants:[{form:"良い yoi",when:"Forme plus formelle / écrite. À l'oral : <em>ii</em>."}]}
+  },
+  {id:135, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"好き", romaji:"suki", fr:"aimer / aimé",
+    rules:["particle_ga"],
+    note:"Adjectif en -na. <strong>Pas un verbe</strong> en japonais ! Se construit avec <em>ga</em> : <em>X ga suki desu</em> = j'aime X.",
+    mnemo:"Construction : <em>[chose aimée] ga suki desu</em>. La chose aimée prend <strong>が</strong>, pas を. Piège classique pour francophones.",
+    usage:{when:["<em>Sushi ga suki desu</em> — J'aime les sushis","<em>Nihon ga daisuki desu</em> — J'adore le Japon (dai- = grand)","<em>Suki na tabemono wa nan desu ka?</em> — Quelle est votre nourriture préférée ?"],avoid:["Avec を : faux. La chose aimée prend <strong>が</strong>."],variants:[{form:"大好き daisuki",when:"« Adorer » — intensifié avec 大 (dai, grand)."}]}
+  },
+  {id:136, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"ゆっくり", romaji:"yukkuri", fr:"lentement / doucement",
+    note:"Adverbe. Très utile pour demander à quelqu'un de parler ou de faire quelque chose moins vite.",
+    mnemo:"Le double k (-kk-) indique une pause sonore (sokuon). Onomatopée du « rythme lent ».",
+    usage:{when:["<em>Yukkuri hanashite kudasai</em> — Parlez lentement s'il vous plaît","<em>Yukkuri shite kudasai</em> — Prenez votre temps","<em>Yukkuri tabemasu</em> — Je mange lentement"],avoid:[],variants:[]}
+  },
+  {id:137, category:"pratique", catLabel:"Mots utiles", catNum:"参",
+    jp:"大丈夫", romaji:"daijôbu", fr:"OK / ça va",
+    note:"Adjectif en -na utilisé seul comme exclamation. Identique à #4 mais sans le <em>desu</em> pour reconnaître la forme nue dans les phrases.",
+    mnemo:"大 (grand) + 丈夫 (solide). Litt. « bien solide » → tout va bien. Voir #4 pour usage complet.",
+    usage:{when:["<em>Daijôbu desu</em> — Ça va / Non merci","<em>Daijôbu desu ka?</em> — Tout va bien ?","<em>O-sake wa daijôbu desu</em> — L'alcool, ça va (je peux/j'accepte)"],avoid:[],variants:[{form:"大丈夫です daijôbu desu",when:"Forme complète polie (cf. #4)."}]}
+  },
+  {id:139, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
+    jp:"空く", romaji:"suku", fr:"se vider / avoir faim",
+    rules:["godan","verb_forms_overview"],
+    note:"Verbe godan en -ku. Quasiment toujours utilisé dans l'expression idiomatique <em>onaka ga suita</em> (お腹が空いた) = « j'ai faim » (litt. « le ventre s'est vidé »).",
+    mnemo:"空 (vide, ciel) + く. L'estomac se vide → on a faim. La forme courante au présent est rare ; on entend surtout <em>suita</em> (passé).",
+    usage:{when:["<em>Onaka ga suita</em> — J'ai faim","<em>Onaka ga sukimashita</em> — J'ai faim (poli)","<em>Densha ga suite imasu</em> — Le train est vide"],avoid:["Ne pas confondre avec <em>suki</em> (好き = aimer) qui se ressemble à l'oreille."],variants:[{form:"sukimasu",when:"Forme polie présent."},{form:"suita / sukimashita",when:"Forme passée (la plus courante)."}]}
+  },
+
 ];
 
 /* ============================================================
@@ -7689,6 +7875,241 @@ Interrogative : <span class="rule-formula">[Chose] が あります か</span> �
     ]
   }
 };
+
+/* ============================================================
+   QUIZ VOCAB ANNOTATION — au boot, on annote chaque question du
+   quiz grammaire avec la liste des vocab IDs qu'elle utilise
+   (champ `_vocabUsed`) et un flag `_hasUnknownVocab` qui indique
+   si le prompt ou un choix contient un mot japonais non présent
+   dans VOCAB. Ces questions sont exclues du quiz pour ne pas
+   exposer l'utilisateur à du vocabulaire qu'il ne pourra pas
+   apprendre via l'app (cf phase 2 : ajout des mots manquants).
+   ============================================================ */
+(function annotateQuizVocab(){
+  // Stopwords : particules, copules, démonstratifs, pronoms, chiffres,
+  // termes grammaticaux, mots-outils. Ne sont PAS du vocab à apprendre.
+  const STOP = new Set([
+    // particules
+    "wa","ga","wo","o","no","ni","de","to","mo","e","ka","ya","kara","made","yo","ne","na","ba","demo","kedo","node","dake","shika","koso","sae","sura","nado","nara","tara","tte",
+    // copule et auxiliaires
+    "da","desu","deshita","dewa","ja","janai",
+    // démonstratifs / kosoado
+    "kore","sore","are","dore","kono","sono","ano","dono","koko","soko","asoko","doko","kou","sou","dou","kochira","sochira","achira","dochira","dotchi","kotchi","sotchi","atchi",
+    // pronoms
+    "watashi","watakushi","anata","kare","kanojo","boku","ore","kimi","jibun",
+    // chiffres et compteurs (gérés par leur propre onglet)
+    "ichi","san","shi","yon","go","roku","shichi","nana","hachi","ku","kyu","ju","rei","zero","hyaku","sen","man","ban","en",
+    "tsu","hon","mai","dai","hiki","ko","nin","satsu","kai","fun","pun","ji","nichi","gatsu","getsu","shu",
+    // interjections
+    "hai","iie","un","uun","ee","etto",
+    // termes grammaticaux (apparaissent dans les explications, pas du vocab)
+    "ichidan","godan","irregulier","rendaku","kosoado",
+    "present","passe","poli","futur","negatif","affirmatif","desiderative","forme","formes","verbe","verbes","adjectif",
+    "particule","particules","copule","suffixe","prefixe","neutre","groupe","groupes",
+    // fragments de morphèmes utilisés comme exemples (rendaku, suffixes, formes verbales nues)
+    "te","shita","su","kuda","sannin","bu","fu","gu","ku","mu","nu","tsu","ru",
+    "kuchi","guchi","buchi","zushi","bushi","dekuchi","deguchi","sans","voisement","sequentiel","cachee","transcription","erreur",
+    // français usuel
+    "le","la","les","un","une","des","de","du","et","ou","est","pas","plus","dans","sur","pour","avec","par","en","au","aux","ce","cette","ces","mon","ma","mes","ton","ta","tes","son","sa","ses","notre","nos","votre","vos","leur","leurs",
+    "je","tu","il","elle","nous","vous","ils","elles","que","qui","comment","quand","pourquoi","quoi","combien","oui","non",
+    // interrogatifs JP
+    "nan","nani","dare","itsu","ikura",
+    // suffixes/préfixes honorifiques sans valeur lexicale
+    "sama","chan","kun","sensei",
+  ]);
+
+  // Normalisation : minuscules + retrait des diacritiques (â → a)
+  function norm(s) {
+    return (s || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  // Génère toutes les formes plausibles d'un verbe à partir de son romaji
+  // (forme dictionnaire OU forme polie). On est volontairement PERMISSIF :
+  // on inclut les conjugaisons correctes ET les distracteurs courants
+  // (tabette, taberute, wakarinai…) que les quiz utilisent comme mauvaises
+  // réponses. Le but : si l'utilisateur connaît la forme dict, on considère
+  // qu'il est exposé à toutes ses variantes via le quiz lui-même.
+  function expandRomajiForms(romaji) {
+    const r = norm(romaji);
+    const forms = new Set([r]);
+    if (!r) return forms;
+
+    // Irréguliers explicites
+    if (r === "suru") {
+      ["shimasu","shimashita","shimasen","shimasendeshita","shimashou","shite","shita","shitai","shitakunai","shinai","shinakatta","shitara","sureba","shou","suruna"].forEach(f => forms.add(f));
+      return forms;
+    }
+    if (r === "kuru") {
+      ["kimasu","kimashita","kimasen","kimasendeshita","kimashou","kite","kita","kitai","kitakunai","konai","konakatta","kitara","kureba","koyou"].forEach(f => forms.add(f));
+      return forms;
+    }
+    if (r === "iku" || r === "ikimasu") {
+      ["iku","ikimasu","ikimashita","ikimasen","ikimasendeshita","ikimashou","itte","itta","ikitai","ikitakunai","ikitakatta","ikanai","ikanakatta","ittara","ikeba","ikou","ikute","ikite","iite"].forEach(f => forms.add(f));
+      return forms;
+    }
+    if (r === "aru" || r === "arimasu") {
+      ["aru","arimasu","arimashita","arimasen","arimasendeshita","atta","attara","areba","nai","nakatta"].forEach(f => forms.add(f));
+      return forms;
+    }
+    if (r === "iru" || r === "imasu") {
+      ["iru","imasu","imashita","imasen","imasendeshita","ite","ita","itai","inai","inakatta","itara","ireba"].forEach(f => forms.add(f));
+      return forms;
+    }
+
+    // Forme polie -masu : déduire racine et étendre
+    if (r.endsWith("masu")) {
+      const stem = r.slice(0, -4);
+      ["masu","mashita","masen","masendeshita","mashou"].forEach(suf => forms.add(stem + suf));
+      if (stem.endsWith("i")) {
+        const root = stem.slice(0, -1); // godan: tabemasu→tabe, nomimasu→nomi→nom
+        forms.add(stem + "tai"); forms.add(stem + "takunai"); forms.add(stem + "takatta");
+        forms.add(root + "anai"); forms.add(root + "anakatta");
+        ["u","ku","gu","su","tsu","nu","bu","mu","ru"].forEach(end => forms.add(root + end));
+        ["tte","ite","ide","shite","nde","ta"].forEach(suf => forms.add(root + suf));
+        forms.add(root + "umasu"); forms.add(stem + "masita");
+      } else {
+        // ichidan : stem = racine entière
+        ["ru","te","ta","tai","takunai","takatta","nai","nakatta","tara","reba","you"].forEach(suf => forms.add(stem + suf));
+        // distracteurs ichidan
+        ["rute","tte","rumasu","imasu","tainai"].forEach(suf => forms.add(stem + suf));
+        // distracteurs "ichidan→godan" (raccourcir stem : tabe → tab + imasu = tabimasu, + ite = tabite)
+        if (stem.length > 1) {
+          const shortStem = stem.slice(0, -1);
+          ["imasu","imashita","ite","itai","imasen"].forEach(suf => forms.add(shortStem + suf));
+        }
+      }
+      return forms;
+    }
+
+    // Forme dict en -ru : ichidan ou godan-ru → on génère pour les deux
+    if (r.endsWith("ru")) {
+      const stem = r.slice(0, -2);
+      // ichidan
+      ["masu","mashita","masen","masendeshita","mashou","te","ta","tai","takunai","takatta","nai","nakatta","tara","reba","you"].forEach(suf => forms.add(stem + suf));
+      // godan-ru variantes (kaeru, hairu, toru, magaru)
+      ["rimasu","rimashita","rimasen","rimasendeshita","rimashou","tte","tta","ranai","ranakatta","ritai","ritakunai"].forEach(suf => forms.add(stem + suf));
+      // distracteurs courants (formes fausses utilisées comme mauvaises réponses)
+      ["rute","rumasu","ite","mashitan","tainai","tagatte","rinai"].forEach(suf => forms.add(stem + suf));
+      // distracteurs "ichidan→godan" : raccourcir stem (tabe→tab + imasu = tabimasu, + ite = tabite)
+      if (stem.length > 1) {
+        const shortStem = stem.slice(0, -1);
+        ["imasu","imashita","imasen","ite","itai","itakunai"].forEach(suf => forms.add(shortStem + suf));
+      }
+      return forms;
+    }
+
+    // Forme dict godan en -u (non-ru)
+    if (r.endsWith("u")) {
+      const last = r.slice(-2, -1);
+      const stem = r.slice(0, -1);
+      const conjMap = {
+        k:{iStem:"ki", te:"ite"}, g:{iStem:"gi", te:"ide"},
+        s:{iStem:"shi", te:"shite"}, t:{iStem:"chi", te:"tte"},
+        n:{iStem:"ni", te:"nde"},   b:{iStem:"bi", te:"nde"},
+        m:{iStem:"mi", te:"nde"},   r:{iStem:"ri", te:"tte"},
+      };
+      if (conjMap[last]) {
+        const cm = conjMap[last];
+        let iRoot, teRoot, naiStem;
+        if (r.endsWith("tsu")) {
+          // 'tsu' compte pour 3 lettres en Hepburn → slice(0,-3) pour la vraie racine
+          const tsuRoot = r.slice(0, -3);
+          iRoot = tsuRoot + "chi";
+          teRoot = tsuRoot;
+          naiStem = tsuRoot + "t";  // 'mat' pour matsu, +anai = matanai
+          forms.add(teRoot + "tte"); forms.add(teRoot + "tta");
+        } else {
+          iRoot = stem.slice(0, -1) + cm.iStem;
+          teRoot = stem.slice(0, -1);
+          naiStem = stem;
+          forms.add(teRoot + cm.te);
+          forms.add(teRoot + cm.te.replace(/e$/, "a"));
+        }
+        ["masu","mashita","masen","masendeshita","mashou","tai","takunai","takatta"].forEach(suf => forms.add(iRoot + suf));
+        forms.add(naiStem + "anai"); forms.add(naiStem + "anakatta");
+        ["eba","ou","attara"].forEach(suf => forms.add(stem + suf));
+        // distracteurs courants
+        ["umasu","emasu","emashita","umashita"].forEach(suf => forms.add(stem + suf));
+        forms.add(iRoot + "masita");
+        // forme -te + masu (faux distracteur, ex: nondemasu)
+        const teForm = r.endsWith("tsu") ? teRoot + "tte" : teRoot + cm.te;
+        forms.add(teForm + "masu");
+        // distracteurs ichidan-style appliqués à godan (ex: nomete, nomite)
+        forms.add(stem + "ete"); forms.add(stem + "ite");
+        forms.add(iRoot + "tan");
+        // distracteurs te-form "naïfs" : r+te direct (matsute, nomute), iRoot+te (machite)
+        forms.add(r + "te");
+        forms.add(iRoot + "te");
+        // distracteurs godan-tsu-style appliqués à -mu/-bu/-nu/-ku (ex: nomatte, kakatte)
+        forms.add(stem + "atte"); forms.add(stem + "atta");
+      }
+      return forms;
+    }
+    return forms;
+  }
+
+  // Index : romaji normalisé + toutes formes dérivées → vocab id
+  const romajiToId = new Map();
+  for (const v of VOCAB) {
+    const allForms = expandRomajiForms(v.romaji);
+    for (const f of allForms) {
+      if (f && f.length >= 2 && !romajiToId.has(f)) romajiToId.set(f, v.id);
+    }
+  }
+
+  // Tokenisation : retire kanji et kana (on se base sur le romaji), garde les hyphens
+  // pour préserver les composés type "furansu-jin", "o-sake".
+  function tokenize(s) {
+    return norm(s)
+      .replace(/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]/g, " ")
+      .replace(/[.,!?'"_…—–()\[\]<>\/、。「」『』]/g, " ")
+      .split(/\s+/)
+      .map(t => t.replace(/^-+|-+$/g, ""))  // strip leading/trailing hyphens ("-te" → "te")
+      .filter(t => t.length >= 2 && !STOP.has(t));
+  }
+
+  // Tentative de matching d'un token contre le VOCAB, avec quelques variantes
+  // pour gérer le préfixe honorifique お (o-) et les composés hyphénés.
+  function matchVocab(token) {
+    if (romajiToId.has(token)) return romajiToId.get(token);
+    // sans hyphen : "o-sake" → "osake"
+    const noDash = token.replace(/-/g, "");
+    if (noDash !== token && romajiToId.has(noDash)) return romajiToId.get(noDash);
+    // préfixe honorifique : "sake" → "osake"
+    if (romajiToId.has("o" + token)) return romajiToId.get("o" + token);
+    // retrait du préfixe honorifique : "osake" → "sake" (rare, on garde au cas où)
+    if (token.length > 3 && token.startsWith("o") && romajiToId.has(token.slice(1))) return romajiToId.get(token.slice(1));
+    return null;
+  }
+
+  let totalQ = 0, withUnknown = 0;
+  for (const key of Object.keys(RULES)) {
+    const r = RULES[key];
+    if (!Array.isArray(r.quiz)) continue;
+    for (const q of r.quiz) {
+      totalQ++;
+      const tokens = new Set([
+        ...tokenize(q.prompt_romaji || ""),
+        ...((q.choices || []).flatMap(c => tokenize(c))),
+      ]);
+      const vocabIds = new Set();
+      const unknown = [];
+      for (const t of tokens) {
+        const id = matchVocab(t);
+        if (id != null) vocabIds.add(id);
+        else unknown.push(t);
+      }
+      q._vocabUsed = [...vocabIds];
+      q._unknownTokens = unknown;
+      q._hasUnknownVocab = unknown.length > 0;
+      if (q._hasUnknownVocab) withUnknown++;
+    }
+  }
+  // Log diagnostique
+  try {
+    console.info(`[QuizVocab] Annotated ${totalQ} questions; ${withUnknown} have unknown tokens (will be excluded).`);
+  } catch(e){}
+})();
 
 /* ============================================================
    ALPHABET data
@@ -9106,13 +9527,44 @@ function getGrammarStats(key){
   if (typeof s.failsByQ !== "object" || s.failsByQ === null) s.failsByQ = {};
   return s;
 }
-// Returns the list of rule keys that (a) are unlocked AND (b) have a quiz array.
+// Niveau minimum requis pour qu'un mot soit considéré "connu" dans le quiz grammaire.
+// 1 = "En cours" (l'utilisateur a vu le mot au moins une fois)
+// 2 = "Appris"   (plus restrictif)
+const GRAMMAR_QUIZ_MIN_VOCAB_LEVEL = 1;
+
+// Une question est "disponible pour l'utilisateur" si :
+//   - elle n'utilise aucun mot hors VOCAB (_hasUnknownVocab = false)
+//   - ET tous ses vocab utilisés sont au niveau minimum requis
+function isQuizQuestionAvailable(q){
+  if (!q) return false;
+  if (q._hasUnknownVocab) return false;
+  // Si pas annotée (ne devrait pas arriver après annotateQuizVocab), accepter
+  if (!Array.isArray(q._vocabUsed)) return true;
+  for (const vid of q._vocabUsed) {
+    const ld = getLevelDir(vid);
+    const lvl = Math.min(ld.fwd || 0, ld.rev || 0);
+    if (lvl < GRAMMAR_QUIZ_MIN_VOCAB_LEVEL) return false;
+  }
+  return true;
+}
+
+// Une règle est éligible au quiz si elle a au moins une question disponible
+function ruleHasAvailableQuestion(ruleKey){
+  const r = RULES[ruleKey];
+  if (!r || !Array.isArray(r.quiz)) return false;
+  return r.quiz.some(isQuizQuestionAvailable);
+}
+
+// Returns the list of rule keys that (a) are unlocked AND (b) have a quiz array
+// AND (c) have at least one question whose vocab is sufficiently learned.
 function getGrammarPool(){
   const unlocked = getUnlockedRuleKeys();
   const out = [];
   for (const key of unlocked) {
     const r = RULES[key];
-    if (r && Array.isArray(r.quiz) && r.quiz.length > 0) out.push(key);
+    if (r && Array.isArray(r.quiz) && r.quiz.length > 0 && ruleHasAvailableQuestion(key)) {
+      out.push(key);
+    }
   }
   return out;
 }
@@ -11620,24 +12072,33 @@ function pickNextGrammar(pool){
     if (r <= 0) { chosenKey = it.key; break; }
   }
   // 2. Choix de la question dans le quiz de la règle
+  // On ne considère QUE les questions dont le vocab est suffisamment appris
+  // (isQuizQuestionAvailable). Si aucune n'est disponible (cas rare car
+  // getGrammarPool a déjà filtré au niveau règle), on retourne null pour
+  // laisser pickNextItem retomber sur un mot ou un patron.
   const rule = RULES[chosenKey];
   if (!rule || !Array.isArray(rule.quiz) || rule.quiz.length === 0) return null;
   const s = getGrammarStats(chosenKey);
   const recentQ = Array.isArray(s.recentQuestionIdx) ? s.recentQuestionIdx : [];
-  const qWeights = rule.quiz.map((_, idx) => {
+  const availableIndices = [];
+  rule.quiz.forEach((q, idx) => {
+    if (isQuizQuestionAvailable(q)) availableIndices.push(idx);
+  });
+  if (availableIndices.length === 0) return null;
+  const qWeights = availableIndices.map(idx => {
     const failCount = (s.failsByQ && s.failsByQ[idx]) || 0;
     let w = 1 + failCount * 1.5;
     // Anti-répétition : les 2 dernières questions de cette règle pénalisées
     if (recentQ.includes(idx)) w *= 0.1;
-    return w;
+    return { idx, w };
   });
-  const qTotal = qWeights.reduce((a, x) => a + x, 0);
-  if (qTotal <= 0) return { ruleKey: chosenKey, questionIdx: 0 };
+  const qTotal = qWeights.reduce((a, x) => a + x.w, 0);
+  if (qTotal <= 0) return { ruleKey: chosenKey, questionIdx: availableIndices[0] };
   let qr = Math.random() * qTotal;
-  let chosenIdx = qWeights.length - 1;
-  for (let i = 0; i < qWeights.length; i++) {
-    qr -= qWeights[i];
-    if (qr <= 0) { chosenIdx = i; break; }
+  let chosenIdx = availableIndices[availableIndices.length - 1];
+  for (const item of qWeights) {
+    qr -= item.w;
+    if (qr <= 0) { chosenIdx = item.idx; break; }
   }
   return { ruleKey: chosenKey, questionIdx: chosenIdx };
 }
