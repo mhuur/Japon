@@ -11741,6 +11741,8 @@ function showNextCard(){
   const fromEl = document.getElementById("reviewFromLang");
   const toEl = document.getElementById("reviewToLang");
   const directionEl = document.getElementById("reviewDirection");
+  // Restaurer la visibilité de la zone direction (masquée par showNextGrammarCard)
+  if (directionEl) directionEl.style.display = "";
 
   // Clean mode validation kicks in once a word reaches level 2 in this direction.
   // - In JP→FR (fwd) : the romaji hint is removed → forces real reading
@@ -11890,6 +11892,8 @@ function showNextPatternCard(p, instance){
   const promptEl = document.getElementById("reviewPrompt");
   const promptSubEl = document.getElementById("reviewPromptSub");
   const directionEl = document.getElementById("reviewDirection");
+  // Restaurer la visibilité de la zone direction (masquée par showNextGrammarCard)
+  if (directionEl) directionEl.style.display = "";
 
   fromEl.textContent = "Situation";
   toEl.textContent = "Phrase JP";
@@ -11985,9 +11989,17 @@ function showNextGrammarCard(ruleKey, questionIdx){
   promptEl.className = "review-prompt is-fr";
   promptEl.textContent = "Quiz grammaire";
   promptSubEl.innerHTML = `📖 ${rule.title.replace(/^[^—]*— /, "")}`;
-  // Hide the direction badge
+  // Hide the direction badge entirely for grammar cards.
+  // IMPORTANT : on masque via display:none au lieu de innerHTML = "" pour ne
+  // PAS supprimer les enfants #reviewFromLang / #reviewToLang du DOM, qui sont
+  // récupérés par getElementById() dans showNextCard() et showNextPatternCard().
+  // Sans ça, la carte suivante crashait sur `fromEl.textContent = ...` (null).
   const directionEl = document.getElementById("reviewDirection");
-  if (directionEl) directionEl.innerHTML = "";
+  if (directionEl) {
+    // Nettoyer uniquement les badges ajoutés dynamiquement (par les patterns)
+    directionEl.querySelectorAll(".dir-level-pill, .hard-mode-badge, .pattern-level-inline").forEach(el => el.remove());
+    directionEl.style.display = "none";
+  }
 
   // Populate the grammar card
   document.getElementById("grammarInstruction").innerHTML = "Choisis la bonne option";
