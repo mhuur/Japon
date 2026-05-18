@@ -2262,6 +2262,18 @@ body.has-invite-banner{padding-top:84px}
 .mode-japonais .review-grammar .grammar-choice-btn.dimmed{
   opacity:.4;
 }
+.mode-japonais .review-grammar .grammar-next-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;max-width:600px;margin:18px auto 0;
+  padding:14px 12px;border-radius:14px;
+  font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;letter-spacing:.05em;
+  background:linear-gradient(135deg, var(--cyan), var(--violet));
+  color:#fff;border:none;cursor:pointer;
+  box-shadow:0 4px 14px rgba(34,211,238,.25);
+  transition:transform .15s;
+}
+.mode-japonais .review-grammar .grammar-next-btn:hover{transform:translateY(-1px)}
+.mode-japonais .review-grammar .grammar-next-btn svg{width:16px;height:16px}
 .mode-japonais .review-grammar .grammar-explanation{
   display:none;text-align:left;
   font-family:'Outfit',sans-serif;font-size:13px;line-height:1.6;
@@ -11960,9 +11972,12 @@ function showNextGrammarCard(ruleKey, questionIdx){
     reviewRulesEl.classList.remove("shown");
     document.getElementById("reviewRulesList").innerHTML = "";
   }
-  // Hide the main reveal button — grammar cards skip the "reveal" step
+  // Hide ALL grade-related buttons — grammar cards have their own Suivant button
   document.getElementById("reviewActions").style.display = "none";
   document.getElementById("reviewGradeActions").style.display = "none";
+  // Remove any leftover Suivant button from a previous grammar card
+  const oldNext = document.getElementById("grammarNextBtn");
+  if (oldNext) oldNext.remove();
 
   // Populate prompt area like a normal card : a single line "Quiz grammaire"
   const promptEl = document.getElementById("reviewPrompt");
@@ -12017,8 +12032,8 @@ function showNextGrammarCard(ruleKey, questionIdx){
 }
 
 // User has picked an option. Mark it correct/incorrect, reveal the explanation,
-// and surface the grade buttons. The user's choice determines the grade automatically :
-// correct → success path will be auto-triggered on grade click ; incorrect → fail path.
+// and show a dedicated "Suivant" button INSIDE the grammar card. The standard
+// Raté/Réussi buttons are NEVER shown for grammar — eliminates all dispatch ambiguity.
 function handleGrammarChoice(choice, btn){
   if (reviewSession.currentGrammarAnswered) return;
   const ruleKey = reviewSession.currentGrammarKey;
@@ -12059,42 +12074,62 @@ function handleGrammarChoice(choice, btn){
   // Flash the result visually
   flashFeedback(correct ? "success" : "fail");
 
-  // Show the standard grade buttons (already bound to gradeWord, which detects
-  // the grammar kind and routes to gradeGrammar with the auto-determined correctness).
-  // No HTML swap — keeps it simple and bug-free. One click on either button advances.
-  document.getElementById("reviewGradeActions").style.display = "flex";
+  // Inject a dedicated "Suivant" button INSIDE the grammar card.
+  // This is completely separate from the standard Raté/Réussi grade buttons,
+  // which remain hidden for grammar cards. No more dispatch ambiguity.
+  const choicesEl = document.getElementById("grammarChoices");
+  // Append a Suivant button after the choices (don't replace — leave the dimmed
+  // choices visible so user sees what they picked vs the right answer).
+  const existingNext = document.getElementById("grammarNextBtn");
+  if (existingNext) existingNext.remove();
+  const nextBtn = document.createElement("button");
+  nextBtn.id = "grammarNextBtn";
+  nextBtn.className = "grammar-next-btn";
+  nextBtn.type = "button";
+  nextBtn.innerHTML = `<i data-lucide="arrow-right"></i> Suivant`;
+  nextBtn.addEventListener("click", () => gradeGrammarAndAdvance(correct));
+  // Insert after the choices container, before the explanation
+  expEl.parentNode.insertBefore(nextBtn, expEl);
+  if (window.lucide) lucide.createIcons();
 }
 
-// Apply the grammar result : update stats, persist, then advance to next card.
-function gradeGrammar(correct){
-  // Guard against double-firing (e.g. user double-taps the button)
+// Apply the grammar result and advance. Dedicated handler bound only to the
+// Suivant button inside the grammar card.
+function gradeGrammarAndAdvance(correct){
   if (reviewSession.currentGrammarGraded) return;
   reviewSession.currentGrammarGraded = true;
 
   const ruleKey = reviewSession.currentGrammarKey;
   const idx = reviewSession.currentGrammarIdx;
-  if (!ruleKey) return;
-  const s = getGrammarStats(ruleKey);
-  if (correct) {
-    s.success = (s.success || 0) + 1;
-    s.consec = (s.consec || 0) + 1;
-    reviewSession.success += 1;
-  } else {
-    s.fail = (s.fail || 0) + 1;
-    s.consec = 0;
-    if (!s.failsByQ) s.failsByQ = {};
-    s.failsByQ[idx] = (s.failsByQ[idx] || 0) + 1;
-    reviewSession.fail += 1;
+  if (ruleKey) {
+    const s = getGrammarStats(ruleKey);
+    if (correct) {
+      s.success = (s.success || 0) + 1;
+      s.consec = (s.consec || 0) + 1;
+      reviewSession.success += 1;
+    } else {
+      s.fail = (s.fail || 0) + 1;
+      s.consec = 0;
+      if (!s.failsByQ) s.failsByQ = {};
+      s.failsByQ[idx] = (s.failsByQ[idx] || 0) + 1;
+      reviewSession.fail += 1;
+    }
+    persistGrammarStats();
+    document.getElementById("reviewSuccess").textContent = reviewSession.success;
+    document.getElementById("reviewFail").textContent = reviewSession.fail;
   }
-  persistGrammarStats();
-  document.getElementById("reviewSuccess").textContent = reviewSession.success;
-  document.getElementById("reviewFail").textContent = reviewSession.fail;
 
-  // Hide the grammar card BEFORE advancing — this prevents the visual lag
-  // where the user keeps clicking thinking nothing happened.
+  // Clean up the grammar card before advancing
   document.getElementById("reviewGrammar").classList.remove("shown");
-  // Advance immediately — the flash already gave visual feedback on the choice click.
+  const nextBtn = document.getElementById("grammarNextBtn");
+  if (nextBtn) nextBtn.remove();
+
   showNextCard();
+}
+
+// Kept for backward compat — does nothing now (grammar is handled by gradeGrammarAndAdvance).
+function gradeGrammar(correct){
+  gradeGrammarAndAdvance(correct);
 }
 
 // Render the inline grammar rules under the review card for a vocab word.
@@ -12237,35 +12272,21 @@ function flashFeedback(type){
 }
 
 function gradeWord(success){
-  // Defensive dispatch : the DOM is the source of truth for which card is
-  // visible. If the grammar card is shown, route to gradeGrammar regardless
-  // of currentItemKind (which can be stale after a setTimeout chain).
+  // Defensive : if a grammar card is currently shown, IGNORE the Raté/Réussi
+  // click entirely. Grammar has its own dedicated "Suivant" button inside
+  // the card. The standard buttons should never affect a grammar session.
   const grammarEl = document.getElementById("reviewGrammar");
-  const grammarVisible = grammarEl && grammarEl.classList.contains("shown");
-  if (reviewScope === "vocab" && grammarVisible) {
-    if (reviewSession.currentGrammarAnswered) {
-      gradeGrammar(reviewSession.currentGrammarCorrect);
-    }
-    // If user clicks Raté/Réussi without having picked an option yet,
-    // force-advance to the next card to avoid being stuck.
-    else {
-      // Hide the grammar card and advance — treat as a skip with no score change.
-      grammarEl.classList.remove("shown");
-      reviewSession.currentGrammarGraded = true; // prevent re-entry
-      setTimeout(() => { showNextCard(); }, 100);
-    }
+  if (grammarEl && grammarEl.classList.contains("shown")) {
     return;
   }
-  // Legacy path : currentItemKind check (kept as a safety net).
-  if (reviewScope === "vocab" && reviewSession.currentItemKind === "grammar") {
-    if (reviewSession.currentGrammarAnswered) {
-      gradeGrammar(reviewSession.currentGrammarCorrect);
-    }
-    return;
-  }
+  // Pattern branch : check null FIRST before incrementing counters
   if (reviewScope === "vocab" && reviewSession.currentItemKind === "pattern") {
     const p = reviewSession.currentPattern;
-    if (!p) return;
+    if (!p) {
+      // Zombie state — recover by advancing
+      showNextCard();
+      return;
+    }
     reviewSession.seen += 1;
     if (success) reviewSession.success += 1;
     else reviewSession.fail += 1;
