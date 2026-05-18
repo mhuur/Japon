@@ -2241,11 +2241,14 @@ body.has-invite-banner{padding-top:84px}
   margin-bottom:18px;
 }
 .mode-japonais .review-grammar .grammar-choice-btn{
-  flex:1;min-width:80px;max-width:140px;
-  padding:14px 8px;border-radius:14px;
-  font-family:'Zen Maru Gothic',sans-serif;font-size:22px;font-weight:700;
+  flex:1 1 auto;min-width:80px;
+  padding:14px 12px;border-radius:14px;
+  font-family:'Zen Maru Gothic',sans-serif;font-size:19px;font-weight:700;
   border:1.5px solid var(--rule);background:var(--surface);color:var(--ink);
   cursor:pointer;transition:all .15s;
+  text-align:center;line-height:1.25;
+  word-break:break-word;overflow-wrap:anywhere;
+  hyphens:none;
 }
 .mode-japonais .review-grammar .grammar-choice-btn:hover{
   border-color:var(--pink);transform:translateY(-1px);
@@ -12373,10 +12376,17 @@ function showNextPatternCard(p, instance){
   // Prompt FR
   promptEl.className = "review-prompt is-fr";
   promptEl.innerHTML = instance.promptFr;
-  // À partir du niveau Appris, on cache le template pour forcer la reconstitution
-  const cleanMode = lvl >= 2;
+  // À partir du niveau Appris, on cache le template pour forcer la reconstitution.
+  // Cas spécial : les phrases figées (slots vides) ont template === romaji,
+  // donc afficher le "Patron :" reviendrait à donner la réponse complète.
+  // → on bascule directement en mode "sans aide" pour ces phrases, dès le niveau 1.
+  const isFixedPhrase = !p.slots || p.slots.length === 0;
+  const cleanMode = lvl >= 2 || isFixedPhrase;
   if (cleanMode) {
-    promptSubEl.innerHTML = `<span style="color:var(--violet);font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 8px rgba(168,85,247,.4);">Sans aide — reconstituez la structure</span>`;
+    const label = isFixedPhrase && lvl < 2
+      ? "Phrase figée — reconstituez de mémoire"
+      : "Sans aide — reconstituez la structure";
+    promptSubEl.innerHTML = `<span style="color:var(--violet);font-size:12px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;text-shadow:0 0 8px rgba(168,85,247,.4);">${label}</span>`;
   } else {
     promptSubEl.innerHTML = `<span style="color:var(--ink-faint);font-size:13px;">Patron :</span> <span style="color:var(--cyan);font-weight:600;">${p.template}</span>`;
   }
