@@ -3260,6 +3260,51 @@ body.has-invite-banner{padding-top:84px}
 </style>
 </head>
 <body>
+<div id='_debug_errors' style='position:fixed;top:0;left:0;right:0;z-index:99999;background:#3a0000;color:#fff;font-family:monospace;font-size:11px;max-height:50vh;overflow:auto;border-bottom:2px solid #f00;padding:4px;display:none;line-height:1.3'></div>
+<script>
+(function(){
+  function log(label, msg){
+    var el = document.getElementById('_debug_errors');
+    if (!el) return;
+    el.style.display = 'block';
+    var line = document.createElement('div');
+    line.style.padding = '2px 4px';
+    line.style.borderBottom = '1px solid #500';
+    line.textContent = '[' + new Date().toTimeString().slice(0,8) + '] ' + label + ' : ' + msg;
+    el.appendChild(line);
+  }
+  window.addEventListener('error', function(e){
+    log('ERREUR', (e.message||'?') + ' @ ' + (e.filename||'?').split('/').pop() + ':' + (e.lineno||'?') + ':' + (e.colno||'?'));
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    log('PROMISE REJ', String(e.reason && (e.reason.stack || e.reason.message) || e.reason || '?').slice(0, 300));
+  });
+  var origErr = console.error;
+  console.error = function(){
+    try { log('console.error', Array.prototype.slice.call(arguments).map(function(a){
+      if (a && a.stack) return a.message + ' | ' + a.stack.split('\n').slice(0,2).join(' / ');
+      return String(a);
+    }).join(' ').slice(0, 400)); } catch(e){}
+    return origErr.apply(console, arguments);
+  };
+  // Bouton pour fermer le panel si gênant
+  var btn = document.createElement('button');
+  btn.textContent = 'X';
+  btn.style.cssText = 'position:fixed;top:2px;right:4px;z-index:100000;background:#600;color:#fff;border:1px solid #f00;padding:2px 8px;font-size:12px;display:none';
+  btn.id = '_debug_close';
+  btn.onclick = function(){
+    var el = document.getElementById('_debug_errors');
+    if (el) el.style.display = 'none';
+    btn.style.display = 'none';
+  };
+  document.documentElement.appendChild(btn);
+  var obs = new MutationObserver(function(){
+    var el = document.getElementById('_debug_errors');
+    if (el && el.style.display === 'block') btn.style.display = 'block';
+  });
+  obs.observe(document.documentElement, {childList:true, subtree:true, attributes:true, attributeFilter:['style']});
+})();
+</script>
 
 <!-- Mode switcher -->
 <nav class="mode-switcher" role="tablist" aria-label="Mode">
