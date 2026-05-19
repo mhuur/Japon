@@ -14756,6 +14756,15 @@ function scheduleLearningPush(){
   }, LEARNING_PUSH_DEBOUNCE_MS);
 }
 
+// Mesure la "richesse" d'un état learning pour éviter d'écraser un local
+// substantiel avec un cloud vide ou incomplet (cas d'une session corrompue).
+function learningRichness(s){
+  if (!s) return 0;
+  const levels = (s.levels && typeof s.levels === 'object') ? Object.keys(s.levels).length : 0;
+  const learned = Array.isArray(s.learned) ? s.learned.length : 0;
+  return Math.max(levels, learned);
+}
+
 async function bootstrapLearning(uid){
   if (learningUnsub){ learningUnsub(); learningUnsub = null; }
   if (learningPushTimer){ clearTimeout(learningPushTimer); learningPushTimer = null; }
@@ -14766,20 +14775,36 @@ async function bootstrapLearning(uid){
 
   try {
     const snap = await getDoc(learningStateRef(uid));
+    const local = window.learningAPI.getState();
+    const localRichness = learningRichness(local);
 
     if (!snap.exists()){
       // Premier signin : on uploade l'état local
-      const cur = window.learningAPI.getState();
       await setDoc(learningStateRef(uid), {
-        ...cur,
+        ...local,
         updatedAt: serverTimestamp()
       });
-      lastSentLearning = cur;
+      lastSentLearning = local;
     } else {
-      // Last-write-wins : le cloud écrase le local
       const cloud = snap.data();
-      window.learningAPI.applyRemoteState(cloud);
-      lastSentLearning = window.learningAPI.getState();
+      const cloudRichness = learningRichness(cloud);
+      // Garde-fou anti-écrasement : si le local est manifestement plus riche
+      // que le cloud (= cloud vide ou corrompu d'une session précédente),
+      // on REFUSE de pull et on push le local à la place. Évite la perte
+      // de données accidentelle observée avec LWW pur.
+      if (localRichness > cloudRichness + 5){
+        console.warn('bootstrapLearning : local plus riche que cloud (' +
+          localRichness + ' vs ' + cloudRichness + '). Push local.');
+        await setDoc(learningStateRef(uid), {
+          ...local,
+          updatedAt: serverTimestamp()
+        });
+        lastSentLearning = local;
+      } else {
+        // Last-write-wins normal : le cloud écrase le local
+        window.learningAPI.applyRemoteState(cloud);
+        lastSentLearning = window.learningAPI.getState();
+      }
     }
 
     // Listener temps réel (multi-device : si autre device push, on applique)
@@ -14792,6 +14817,12 @@ async function bootstrapLearning(uid){
       const sameAsLocal =
         JSON.stringify(stripMeta(remote)) === JSON.stringify(stripMeta(cur));
       if (sameAsLocal) return;
+      // Même garde-fou côté listener : un remote manifestement plus pauvre
+      // que le local est ignoré (évite multi-device qui écrase).
+      if (learningRichness(cur) > learningRichness(remote) + 5){
+        console.warn('learning listener : remote plus pauvre, ignoré.');
+        return;
+      }
       window.learningAPI.applyRemoteState(remote);
       lastSentLearning = window.learningAPI.getState();
     }, err => {
