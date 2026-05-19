@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagnostic app</title>
+<style>
+  body{margin:0;padding:12px;background:#0a0f1c;color:#cde;font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:13px;line-height:1.5}
+  h1{font-size:16px;color:#8cf;margin:0 0 8px}
+  h2{font-size:13px;color:#fa6;margin:14px 0 4px}
+  .box{background:#111a2e;padding:10px;border-radius:6px;margin:8px 0}
+  .err{background:#3a1a1a;color:#e88;border:1px solid #5a2a2a;padding:8px;border-radius:6px;margin:6px 0;font-family:monospace;font-size:11px;word-break:break-word;white-space:pre-wrap}
+  .ok{color:#9ec97a}
+  .info{color:#8cf}
+  button{background:#2a4a8a;color:#fff;border:0;padding:8px 12px;border-radius:5px;font-size:12px;margin:3px}
+  iframe{width:100%;height:300px;border:1px solid #234;border-radius:6px;background:#000;margin:8px 0}
+  pre{background:#0a1020;padding:6px;border-radius:4px;font-size:10px;max-height:120px;overflow:auto}
+</style>
+</head>
+<body>
+<h1>Diagnostic du chargement de l'app</h1>
+<div class="box">
+  <b>But</b> : ouvrir <code>index.html</code> dans une iframe à la même origine pour intercepter toutes les erreurs JavaScript du démarrage. Si l'app plante au chargement, ça s'affichera ci-dessous.
+</div>
+<div id="info" class="box info">Démarrage…</div>
+<button onclick="runTest()">Recharger l'app</button>
+<button onclick="checkLS()">Re-vérifier localStorage parent</button>
+<h2>Erreurs interceptées</h2>
+<div id="errors"><i style="color:#777">Aucune pour l'instant.</i></div>
+<h2>État localStorage de cette origine</h2>
+<div id="ls"></div>
+<h2>Iframe (visible pour comparaison)</h2>
+<iframe id="appframe" src="about:blank"></iframe>
+
+<script>
+const errors = [];
+const errBox = document.getElementById('errors');
+
+function logErr(label, e){
+  const msg = label + ' — ' + (e.message || e) + (e.filename ? '\n  at ' + e.filename + ':' + (e.lineno||'?') + ':' + (e.colno||'?') : '') + (e.error && e.error.stack ? '\n' + e.error.stack : '');
+  errors.push(msg);
+  errBox.innerHTML = errors.map(m => '<div class="err">'+m.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</div>').join('');
+}
+
+window.addEventListener('error', e => logErr('[parent] error', e));
+window.addEventListener('unhandledrejection', e => logErr('[parent] rejection', {message: String(e.reason)}));
+
+function runTest(){
+  errors.length = 0;
+  errBox.innerHTML = '<i style="color:#777">En attente…</i>';
+  const iframe = document.getElementById('appframe');
+  iframe.onload = () => {
+    document.getElementById('info').innerHTML = '<span class="ok">Iframe chargée.</span> Origin : <code>'+location.origin+'</code>';
+    try {
+      iframe.contentWindow.addEventListener('error', e => logErr('[iframe] error', e));
+      iframe.contentWindow.addEventListener('unhandledrejection', e => logErr('[iframe] rejection', {message: String(e.reason)}));
+    } catch(e) { logErr('[parent] cannot attach listener', e); }
+  };
+  iframe.src = 'index.html?nocache=' + Date.now();
+}
+
+function checkLS(){
+  const KEYS = [
+    'japonais_essentiel_v1',
+    'japonais_essentiel_levels_v1',
+    'japonais_essentiel_stats_v1',
+    'japonais_essentiel_vocab_unlocked',
+    'japonais_essentiel_alphabet_unlocked'
+  ];
+  let html = '';
+  for (const k of KEYS){
+    const v = localStorage.getItem(k);
+    let preview = v === null ? '[null]' : (v.length > 80 ? v.slice(0,80)+'…' : v);
+    let n = 0;
+    try { const p = JSON.parse(v); n = Array.isArray(p) ? p.length : Object.keys(p||{}).length; } catch(e){}
+    html += '<div class="box"><b>'+k+'</b> ('+n+' éléments)<br><pre>'+preview.replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]))+'</pre></div>';
+  }
+  document.getElementById('ls').innerHTML = html;
+}
+
+checkLS();
+runTest();
+</script>
+</body>
+</html>
