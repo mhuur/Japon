@@ -5400,20 +5400,20 @@ window.__japonData = data;
 window.activitiesAPI = {
   getState(){
     return {
-      deleted: [...deleted],
-      done:    [...done],
-      cities:  [...selectedCities],
-      order:   Array.isArray(state.customOrder) ? [...state.customOrder] : [],
-      sort:    (typeof state.sort === 'string') ? state.sort : 'default'
+      deleted:   [...deleted],
+      done:      [...done],
+      favorites: [...favorites],
+      order:     Array.isArray(state.customOrder) ? [...state.customOrder] : [],
+      sort:      (typeof state.sort === 'string') ? state.sort : 'default'
     };
   },
   applyRemoteState(s){
     _applyingRemote = true;
     try {
-      if (Array.isArray(s.deleted)) deleted = new Set(s.deleted);
-      if (Array.isArray(s.done))    done    = new Set(s.done);
-      if (Array.isArray(s.cities))  selectedCities = new Set(s.cities);
-      if (Array.isArray(s.order))   state.customOrder = [...s.order];
+      if (Array.isArray(s.deleted))   deleted   = new Set(s.deleted);
+      if (Array.isArray(s.done))      done      = new Set(s.done);
+      if (Array.isArray(s.favorites)) favorites = new Set(s.favorites);
+      if (Array.isArray(s.order))     state.customOrder = [...s.order];
       if (typeof s.sort === 'string') state.sort = s.sort;
       // Persist côté localStorage (versions originales, sans re-trigger)
       _persistOrig.call(this);
@@ -5511,13 +5511,6 @@ window.activitiesAPI = {
         <button class="review-btn review-intense-btn" id="openReviewIntenseBtn" title="Cibler les mots les plus mal connus">
           <i data-lucide="flame"></i> Intense
         </button>
-        <button class="reset-btn" id="jpExportBtn" title="Sauvegarder ma progression dans un fichier">
-          <i data-lucide="download"></i> Exporter
-        </button>
-        <button class="reset-btn" id="jpImportBtn" title="Restaurer ma progression depuis un fichier">
-          <i data-lucide="upload"></i> Importer
-        </button>
-        <input type="file" id="importInput" accept=".json,application/json" style="display:none;">
         <button class="reset-btn" id="resetBtn">
           <i data-lucide="rotate-ccw"></i> Réinitialiser
         </button>
@@ -12047,7 +12040,7 @@ document.addEventListener("keydown", (e) => {
 });
 
 /* ============================================================
-   EXPORT / IMPORT
+   TOAST (mode japonais)
    ============================================================ */
 function showToast(msg, type){
   const t = document.getElementById('jpToast');
@@ -12059,251 +12052,6 @@ function showToast(msg, type){
   }, 2800);
 }
 
-document.getElementById('jpExportBtn').addEventListener("click", () => {
-  const data = {
-    version: 8,
-    app: "japonais_essentiel",
-    exportedAt: new Date().toISOString(),
-    learned: [...learnedSet],
-    levels: levels,
-    levelDir: levelDir,
-    stats: stats,
-    patternLevels: patternLevels,
-    patternStats: patternStats,
-    grammarStats: grammarStats,
-    unlockedPhaseCount: unlockedPhaseCount,
-    unlockedVocabCount: unlockedVocabCount,
-    unlockedNumberGroupCount: unlockedNumberGroupCount,
-    wordRefs: [
-      ...VOCAB.map(v => ({ id: v.id, jp: v.jp, romaji: v.romaji, kind: "vocab" })),
-      ...ALPHABET.map(a => ({ id: a.id, jp: a.char, romaji: a.romaji, kind: "alphabet" })),
-      ...KANJI.map(k => ({ id: k.id, jp: k.char, romaji: k.on, kind: "kanji" })),
-      ...NUMBERS.map(n => ({ id: n.id, jp: n.jp, romaji: n.romaji, kind: "number" }))
-    ]
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  const date = new Date().toISOString().slice(0, 10);
-  a.href = url;
-  a.download = `japonais-progression-${date}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast("Progression exportée", "success");
-});
-
-document.getElementById('jpImportBtn').addEventListener("click", () => {
-  document.getElementById("importInput").click();
-});
-
-document.getElementById("importInput").addEventListener("change", (e) => {
-  const file = e.target.files && e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    try {
-      const data = JSON.parse(evt.target.result);
-      if (!data || data.app !== "japonais_essentiel") {
-        showToast("Fichier non reconnu", "error");
-        return;
-      }
-      if (!Array.isArray(data.learned) || typeof data.stats !== "object") {
-        showToast("Fichier invalide", "error");
-        return;
-      }
-
-      // Detect vocabulary mismatches (e.g., word renamed at same id)
-      let mismatchCount = 0;
-      const allItems = [...VOCAB, ...ALPHABET, ...KANJI, ...NUMBERS];
-      const allIds = new Set(allItems.map(x => x.id));
-      if (Array.isArray(data.wordRefs)) {
-        const currentMap = new Map();
-        VOCAB.forEach(v => currentMap.set(v.id, v.jp));
-        ALPHABET.forEach(a => currentMap.set(a.id, a.char));
-        KANJI.forEach(k => currentMap.set(k.id, k.char));
-        NUMBERS.forEach(n => currentMap.set(n.id, n.jp));
-        for (const ref of data.wordRefs) {
-          const cur = currentMap.get(ref.id);
-          if (cur && cur !== ref.jp) mismatchCount++;
-        }
-      }
-
-      const proceed = confirm(
-        `Importer ${data.learned.length} élément(s) appris et l'historique de révision ?\n\n` +
-        (mismatchCount > 0 ? `⚠ ${mismatchCount} élément(s) ont changé depuis l'export, leur progression sera quand même appliquée.\n\n` : "") +
-        `Cela remplacera votre progression actuelle.`
-      );
-      if (!proceed) {
-        e.target.value = "";
-        return;
-      }
-
-      // Apply
-      learnedSet = new Set(data.learned.filter(id => allIds.has(id)));
-      stats = {};
-      for (const [id, s] of Object.entries(data.stats)) {
-        const numId = parseInt(id, 10);
-        if (allIds.has(numId)) {
-          stats[numId] = {
-            failures: parseInt(s.failures || 0, 10),
-            consecutiveSuccesses: parseInt(s.consecutiveSuccesses || 0, 10)
-          };
-        }
-      }
-      // Levels: prefer explicit levels field; otherwise migrate from legacy data
-      levels = {};
-      if (data.levels && typeof data.levels === "object") {
-        for (const [id, lv] of Object.entries(data.levels)) {
-          const n = parseInt(lv, 10);
-          const numId = parseInt(id, 10);
-          if (allIds.has(numId) && !isNaN(n) && n >= 1 && n <= MAX_LEVEL) levels[numId] = n;
-        }
-      } else {
-        // Migrate from legacy: cs-based level + ensure learnedSet items at >=2
-        for (const [id, s] of Object.entries(stats)) {
-          const numId = parseInt(id, 10);
-          const cs = s.consecutiveSuccesses || 0;
-          if (cs >= 3) levels[numId] = 3;
-          else if (cs === 2) levels[numId] = 2;
-          else if (cs === 1) levels[numId] = 1;
-        }
-        for (const id of learnedSet) {
-          if (!levels[id] || levels[id] < 2) levels[id] = 2;
-        }
-      }
-      persistLevels();
-      rebuildLearnedSet();
-
-      // Restore directional levels (or initialize from global level)
-      levelDir = {};
-      if (data.levelDir && typeof data.levelDir === "object") {
-        for (const [id, d] of Object.entries(data.levelDir)) {
-          const numId = parseInt(id, 10);
-          if (allIds.has(numId) && d && typeof d === "object") {
-            levelDir[numId] = {
-              fwd: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.fwd,10) || 0)),
-              rev: Math.max(0, Math.min(MAX_LEVEL, parseInt(d.rev,10) || 0)),
-              cleanFwd: Math.max(0, parseInt(d.cleanFwd,10) || 0),
-              cleanRev: Math.max(0, parseInt(d.cleanRev,10) || 0),
-              lastCleanFwd: Math.max(0, parseInt(d.lastCleanFwd,10) || 0),
-              lastCleanRev: Math.max(0, parseInt(d.lastCleanRev,10) || 0),
-              lastFwdSuccess: Math.max(0, parseInt(d.lastFwdSuccess,10) || 0),
-              lastRevSuccess: Math.max(0, parseInt(d.lastRevSuccess,10) || 0),
-              nextDueFwd: Math.max(0, parseInt(d.nextDueFwd,10) || 0),
-              nextDueRev: Math.max(0, parseInt(d.nextDueRev,10) || 0),
-              srsIntervalFwd: Math.max(0, parseInt(d.srsIntervalFwd,10) || 0),
-              srsIntervalRev: Math.max(0, parseInt(d.srsIntervalRev,10) || 0)
-            };
-          }
-        }
-      }
-      // Fallback: any level without directional data gets both dirs at the global level
-      for (const [id, lv] of Object.entries(levels)) {
-        const numId = parseInt(id, 10);
-        if (!levelDir[numId]) levelDir[numId] = {
-          fwd: lv, rev: lv, cleanFwd: 0, cleanRev: 0,
-          lastCleanFwd: 0, lastCleanRev: 0,
-          lastFwdSuccess: 0, lastRevSuccess: 0,
-          nextDueFwd: 0, nextDueRev: 0,
-          srsIntervalFwd: 0, srsIntervalRev: 0
-        };
-      }
-      persistLevelDir();
-
-      // Restore pattern progression if present
-      if (data.patternLevels && typeof data.patternLevels === "object") {
-        patternLevels = {};
-        for (const [k, v] of Object.entries(data.patternLevels)) {
-          patternLevels[k] = Math.max(0, Math.min(3, parseInt(v, 10) || 0));
-        }
-        persistPatternLevels();
-      }
-      if (data.patternStats && typeof data.patternStats === "object") {
-        patternStats = {};
-        for (const [k, v] of Object.entries(data.patternStats)) {
-          if (v && typeof v === "object") patternStats[k] = v;
-        }
-        persistPatternStats();
-      }
-      // Restore grammar stats if present
-      if (data.grammarStats && typeof data.grammarStats === "object") {
-        grammarStats = {};
-        for (const [k, v] of Object.entries(data.grammarStats)) {
-          if (v && typeof v === "object") grammarStats[k] = v;
-        }
-        persistGrammarStats();
-      }
-
-      // Restore unlock state if present, then reconcile (handles old exports too)
-      const importedPhase = (typeof data.unlockedPhaseCount === "number") ? data.unlockedPhaseCount
-                          : (typeof data.unlockedRowCount === "number") ? data.unlockedRowCount
-                          : null;
-      if (importedPhase !== null && importedPhase >= 1) {
-        // Migration: legacy schema stored phase count (1-22), new stores char count (5-142)
-        if (importedPhase <= 22) {
-          // Legacy phase count → convert using LEGACY_ROW_ORDER
-          const LEGACY_PHASES = [];
-          for (const _t of ["hiragana", "katakana"]) {
-            for (const _r of LEGACY_ROW_ORDER) LEGACY_PHASES.push({ type: _t, row: _r });
-          }
-          let chars = 0;
-          for (let i = 0; i < Math.min(importedPhase, LEGACY_PHASES.length); i++) {
-            const p = LEGACY_PHASES[i];
-            chars += ALPHABET.filter(a => a.type === p.type && a.row === p.row).length;
-          }
-          unlockedPhaseCount = Math.max(KANA_UNLOCK_BATCH, Math.min(chars, KANA_TOTAL));
-        } else {
-          unlockedPhaseCount = Math.min(importedPhase, KANA_TOTAL);
-        }
-        persistUnlockState();
-      }
-      // Vocab unlock: support new schema (unlockedVocabCount = word count)
-      // and legacy schema (unlockedVocabGroupCount = group count).
-      if (typeof data.unlockedVocabCount === "number" && data.unlockedVocabCount >= VOCAB_UNLOCK_BATCH) {
-        unlockedVocabCount = Math.min(data.unlockedVocabCount, VOCAB_SORTED.length);
-        persistVocabUnlock();
-      } else if (typeof data.unlockedVocabGroupCount === "number" && data.unlockedVocabGroupCount >= 1) {
-        // Legacy: convert group count to approximate word count by counting words
-        // in the first N old groups (using legacy category order).
-        const LEGACY_ORDER = ["essentiel", "politesse", "pratique", "objet",
-          "salutations", "restaurant", "argent", "transports",
-          "temps", "hebergement", "phrases"];
-        const legacyN = Math.min(data.unlockedVocabGroupCount, LEGACY_ORDER.length);
-        const wordCount = VOCAB.filter(v => {
-          const idx = LEGACY_ORDER.indexOf(v.category);
-          return idx >= 0 && idx < legacyN;
-        }).length;
-        unlockedVocabCount = Math.max(VOCAB_UNLOCK_BATCH, Math.min(wordCount, VOCAB_SORTED.length));
-        persistVocabUnlock();
-      }
-      if (typeof data.unlockedNumberGroupCount === "number" && data.unlockedNumberGroupCount >= 1) {
-        unlockedNumberGroupCount = Math.min(data.unlockedNumberGroupCount, NUMBER_GROUP_ORDER.length);
-        persistNumbersUnlock();
-      }
-      reconcileUnlock(true);
-      reconcileVocabUnlock(true);
-      reconcilePhrases(true);
-      reconcileNumbersUnlock(true);
-      persist();
-      persistStats();
-      render();
-      renderAlphabet();
-      renderKanji();
-      renderNumbers();
-  renderPhrases();
-      showToast("Progression restaurée", "success");
-    } catch (err) {
-      console.error(err);
-      showToast("Erreur de lecture du fichier", "error");
-    } finally {
-      e.target.value = ""; // Allow re-importing same file
-    }
-  };
-  reader.onerror = () => showToast("Impossible de lire le fichier", "error");
-  reader.readAsText(file);
-});
 
 /* ============================================================
    ALPHABET rendering, filters & progressive unlocking
@@ -14009,9 +13757,107 @@ render();
 renderAlphabet();
 renderKanji();
 renderNumbers();
-  renderPhrases();
+renderPhrases();
 renderRulesView();
 if (window.lucide) lucide.createIcons();
+
+/* ============================================================
+   API exposée pour la SYNC CLOUD APPRENTISSAGE (per-user).
+   Symétrique à activitiesAPI : getState / applyRemoteState / onLocalChange.
+   Toutes les fonctions persist* du mode japonais sont wrappées pour
+   notifier onLocalChange après chaque écriture localStorage.
+   ============================================================ */
+let _applyingRemoteLearning = false;
+
+// Sauvegarder les références originales avant wrapping
+const _persistOrigJp                = persist;
+const _persistStatsOrig             = persistStats;
+const _persistLevelsOrig            = persistLevels;
+const _persistLevelDirOrig          = persistLevelDir;
+const _persistPatternLevelsOrig     = persistPatternLevels;
+const _persistPatternStatsOrig      = persistPatternStats;
+const _persistGrammarStatsOrig      = persistGrammarStats;
+const _persistPatternsNotifiedOrig  = persistPatternsNotified;
+const _persistUnlockStateOrig       = persistUnlockState;
+const _persistVocabUnlockOrig       = persistVocabUnlock;
+const _persistNumbersUnlockOrig     = persistNumbersUnlock;
+
+function _notifyLearningChange(){
+  if (_applyingRemoteLearning) return;
+  if (window.learningAPI && window.learningAPI.onLocalChange){
+    try { window.learningAPI.onLocalChange(); } catch(e){ console.warn(e); }
+  }
+}
+
+persist                 = function(){ _persistOrigJp.call(this);                _notifyLearningChange(); };
+persistStats            = function(){ _persistStatsOrig.call(this);             _notifyLearningChange(); };
+persistLevels           = function(){ _persistLevelsOrig.call(this);            _notifyLearningChange(); };
+persistLevelDir         = function(){ _persistLevelDirOrig.call(this);          _notifyLearningChange(); };
+persistPatternLevels    = function(){ _persistPatternLevelsOrig.call(this);     _notifyLearningChange(); };
+persistPatternStats     = function(){ _persistPatternStatsOrig.call(this);      _notifyLearningChange(); };
+persistGrammarStats     = function(){ _persistGrammarStatsOrig.call(this);      _notifyLearningChange(); };
+persistPatternsNotified = function(){ _persistPatternsNotifiedOrig.call(this);  _notifyLearningChange(); };
+persistUnlockState      = function(){ _persistUnlockStateOrig.call(this);       _notifyLearningChange(); };
+persistVocabUnlock      = function(){ _persistVocabUnlockOrig.call(this);       _notifyLearningChange(); };
+persistNumbersUnlock    = function(){ _persistNumbersUnlockOrig.call(this);     _notifyLearningChange(); };
+
+window.learningAPI = {
+  getState(){
+    return {
+      learned:                  [...learnedSet],
+      stats:                    stats,
+      levels:                   levels,
+      levelDir:                 levelDir,
+      patternLevels:            patternLevels,
+      patternStats:             patternStats,
+      grammarStats:             grammarStats,
+      patternsNotified:         [...patternsNotified],
+      unlockedPhaseCount:       unlockedPhaseCount,
+      unlockedVocabCount:       unlockedVocabCount,
+      unlockedNumberGroupCount: unlockedNumberGroupCount
+    };
+  },
+  applyRemoteState(s){
+    _applyingRemoteLearning = true;
+    try {
+      if (Array.isArray(s.learned))                       learnedSet       = new Set(s.learned);
+      if (s.stats && typeof s.stats === 'object')         stats            = s.stats;
+      if (s.levels && typeof s.levels === 'object')       levels           = s.levels;
+      if (s.levelDir && typeof s.levelDir === 'object')   levelDir         = s.levelDir;
+      if (s.patternLevels && typeof s.patternLevels === 'object')       patternLevels    = s.patternLevels;
+      if (s.patternStats && typeof s.patternStats === 'object')         patternStats     = s.patternStats;
+      if (s.grammarStats && typeof s.grammarStats === 'object')         grammarStats     = s.grammarStats;
+      if (Array.isArray(s.patternsNotified))              patternsNotified = new Set(s.patternsNotified);
+      if (typeof s.unlockedPhaseCount === 'number')       unlockedPhaseCount       = s.unlockedPhaseCount;
+      if (typeof s.unlockedVocabCount === 'number')       unlockedVocabCount       = s.unlockedVocabCount;
+      if (typeof s.unlockedNumberGroupCount === 'number') unlockedNumberGroupCount = s.unlockedNumberGroupCount;
+
+      // Persiste en localStorage SANS retrigger onLocalChange
+      try { _persistOrigJp.call(this); } catch(e){}
+      try { _persistStatsOrig.call(this); } catch(e){}
+      try { _persistLevelsOrig.call(this); } catch(e){}
+      try { _persistLevelDirOrig.call(this); } catch(e){}
+      try { _persistPatternLevelsOrig.call(this); } catch(e){}
+      try { _persistPatternStatsOrig.call(this); } catch(e){}
+      try { _persistGrammarStatsOrig.call(this); } catch(e){}
+      try { _persistPatternsNotifiedOrig.call(this); } catch(e){}
+      try { _persistUnlockStateOrig.call(this); } catch(e){}
+      try { _persistVocabUnlockOrig.call(this); } catch(e){}
+      try { _persistNumbersUnlockOrig.call(this); } catch(e){}
+
+      // Re-render les onglets affectés
+      try { if (typeof render === 'function') render(); } catch(e){}
+      try { if (typeof renderAlphabet === 'function') renderAlphabet(); } catch(e){}
+      try { if (typeof renderKanji === 'function') renderKanji(); } catch(e){}
+      try { if (typeof renderNumbers === 'function') renderNumbers(); } catch(e){}
+      try { if (typeof renderPhrases === 'function') renderPhrases(); } catch(e){}
+      try { if (typeof renderRulesView === 'function') renderRulesView(); } catch(e){}
+    } finally {
+      _applyingRemoteLearning = false;
+    }
+  },
+  onLocalChange: null
+};
 
 })();
 </script>
@@ -14107,6 +13953,12 @@ let pendingInvitations = [];       // invitations adressées à moi (status==pen
 let sentPendingInvitations = [];   // invitations envoyées sur l'espace courant (status==pending)
 let lastError = '';
 let busy = false;
+
+// Sync apprentissage (per-user, déclaré ici pour éviter TDZ depuis flushPendingPushes)
+let learningUnsub     = null;
+let learningPushTimer = null;
+let lastSentLearning  = null;
+const LEARNING_PUSH_DEBOUNCE_MS = 500;
 
 const unsub = { user:null, space:null, inbox:null, outbox:null };
 function unsubAll(){
@@ -14677,24 +14529,24 @@ async function pushActivities(){
     if (!lastSentState){
       // Premier push : full setDoc
       await setDoc(activitiesStateRef(currentSpaceId), {
-        deleted: cur.deleted,
-        done:    cur.done,
-        cities:  cur.cities,
-        order:   cur.order,
-        sort:    cur.sort,
+        deleted:   cur.deleted,
+        done:      cur.done,
+        favorites: cur.favorites,
+        order:     cur.order,
+        sort:      cur.sort,
         updatedBy: currentUser.uid,
         updatedAt: serverTimestamp()
       });
     } else {
-      const dDone   = diffArr(lastSentState.done,    cur.done);
-      const dDel    = diffArr(lastSentState.deleted, cur.deleted);
-      const dCities = diffArr(lastSentState.cities,  cur.cities);
+      const dDone = diffArr(lastSentState.done,      cur.done);
+      const dDel  = diffArr(lastSentState.deleted,   cur.deleted);
+      const dFav  = diffArr(lastSentState.favorites, cur.favorites);
 
       // Stage 1 : additions (arrayUnion)
       const s1 = {};
-      if (dDone.added.length)   s1.done    = arrayUnion(...dDone.added);
-      if (dDel.added.length)    s1.deleted = arrayUnion(...dDel.added);
-      if (dCities.added.length) s1.cities  = arrayUnion(...dCities.added);
+      if (dDone.added.length) s1.done      = arrayUnion(...dDone.added);
+      if (dDel.added.length)  s1.deleted   = arrayUnion(...dDel.added);
+      if (dFav.added.length)  s1.favorites = arrayUnion(...dFav.added);
       if (Object.keys(s1).length){
         s1.updatedBy = currentUser.uid;
         s1.updatedAt = serverTimestamp();
@@ -14703,9 +14555,9 @@ async function pushActivities(){
 
       // Stage 2 : retraits (arrayRemove) + overwrite order/sort
       const s2 = {};
-      if (dDone.removed.length)   s2.done    = arrayRemove(...dDone.removed);
-      if (dDel.removed.length)    s2.deleted = arrayRemove(...dDel.removed);
-      if (dCities.removed.length) s2.cities  = arrayRemove(...dCities.removed);
+      if (dDone.removed.length) s2.done      = arrayRemove(...dDone.removed);
+      if (dDel.removed.length)  s2.deleted   = arrayRemove(...dDel.removed);
+      if (dFav.removed.length)  s2.favorites = arrayRemove(...dFav.removed);
       if (!arrEq(lastSentState.order, cur.order)) s2.order = cur.order;
       if (lastSentState.sort !== cur.sort) s2.sort = cur.sort;
       if (Object.keys(s2).length){
@@ -14747,11 +14599,11 @@ async function bootstrapActivities(spaceId){
     if (!snap.exists()){
       // Cloud vide → on uploade l'état local
       await setDoc(activitiesStateRef(spaceId), {
-        deleted:  local.deleted,
-        done:     local.done,
-        cities:   local.cities,
-        order:    local.order,
-        sort:     local.sort,
+        deleted:   local.deleted,
+        done:      local.done,
+        favorites: local.favorites,
+        order:     local.order,
+        sort:      local.sort,
         updatedBy: currentUser.uid,
         updatedAt: serverTimestamp()
       });
@@ -14760,27 +14612,27 @@ async function bootstrapActivities(spaceId){
       // Cloud a des données → fusion (union pour les sets ; cloud gagne pour order/sort)
       const cloud = snap.data();
       const merged = {
-        done:    Array.from(new Set([...(cloud.done    || []), ...local.done])),
-        deleted: Array.from(new Set([...(cloud.deleted || []), ...local.deleted])),
-        cities:  Array.from(new Set([...(cloud.cities  || []), ...local.cities])),
-        order:   Array.isArray(cloud.order) && cloud.order.length ? cloud.order : local.order,
-        sort:    typeof cloud.sort === 'string' ? cloud.sort : local.sort
+        done:      Array.from(new Set([...(cloud.done      || []), ...local.done])),
+        deleted:   Array.from(new Set([...(cloud.deleted   || []), ...local.deleted])),
+        favorites: Array.from(new Set([...(cloud.favorites || []), ...local.favorites])),
+        order:     Array.isArray(cloud.order) && cloud.order.length ? cloud.order : local.order,
+        sort:      typeof cloud.sort === 'string' ? cloud.sort : local.sort
       };
       window.activitiesAPI.applyRemoteState(merged);
       lastSentState = {
-        done:    cloud.done    || [],
-        deleted: cloud.deleted || [],
-        cities:  cloud.cities  || [],
-        order:   Array.isArray(cloud.order) ? cloud.order : [],
-        sort:    cloud.sort || 'default'
+        done:      cloud.done      || [],
+        deleted:   cloud.deleted   || [],
+        favorites: cloud.favorites || [],
+        order:     Array.isArray(cloud.order) ? cloud.order : [],
+        sort:      cloud.sort || 'default'
       };
 
       // Si le local a des items que le cloud n'avait pas, push direct
       const localChanged =
-        !setEq(merged.done,    cloud.done) ||
-        !setEq(merged.deleted, cloud.deleted) ||
-        !setEq(merged.cities,  cloud.cities) ||
-        !arrEq(merged.order,   lastSentState.order) ||
+        !setEq(merged.done,      cloud.done) ||
+        !setEq(merged.deleted,   cloud.deleted) ||
+        !setEq(merged.favorites, cloud.favorites) ||
+        !arrEq(merged.order,     lastSentState.order) ||
         merged.sort !== lastSentState.sort;
       if (localChanged){
         await pushActivities();
@@ -14792,25 +14644,26 @@ async function bootstrapActivities(spaceId){
       if (!snap2.exists()) return;
       const remote = snap2.data();
 
-      // Si ce snapshot est notre propre écho, on rafraîchit juste lastSentState
+      // Bug A4 : ignorer purement nos propres échos.
+      // On met juste à jour lastSentState à partir du remote (qui contient maintenant
+      // les serverTimestamp résolus) et on ne touche pas à l'état local.
       if (remote.updatedBy === currentUser.uid){
-        const same =
-          setEq(remote.done,    lastSentState.done) &&
-          setEq(remote.deleted, lastSentState.deleted) &&
-          setEq(remote.cities,  lastSentState.cities) &&
-          arrEq(remote.order || [], lastSentState.order) &&
-          (remote.sort || 'default') === lastSentState.sort;
-        if (same){
-          setSyncStatus(navigator.onLine ? 'synced' : 'offline');
-          return;
-        }
+        lastSentState = {
+          done:      remote.done      || [],
+          deleted:   remote.deleted   || [],
+          favorites: remote.favorites || [],
+          order:     Array.isArray(remote.order) ? remote.order : [],
+          sort:      remote.sort || 'default'
+        };
+        setSyncStatus(navigator.onLine ? 'synced' : 'offline');
+        return;
       }
 
       // Appliquer le DIFF distant au local (préserve nos modifs non encore flushées)
       const cur = window.activitiesAPI.getState();
-      const dDone   = diffArr(lastSentState.done    || [], remote.done    || []);
-      const dDel    = diffArr(lastSentState.deleted || [], remote.deleted || []);
-      const dCities = diffArr(lastSentState.cities  || [], remote.cities  || []);
+      const dDone = diffArr(lastSentState.done      || [], remote.done      || []);
+      const dDel  = diffArr(lastSentState.deleted   || [], remote.deleted   || []);
+      const dFav  = diffArr(lastSentState.favorites || [], remote.favorites || []);
 
       const mDone = new Set(cur.done);
       dDone.added.forEach(x => mDone.add(x));
@@ -14818,33 +14671,33 @@ async function bootstrapActivities(spaceId){
       const mDel = new Set(cur.deleted);
       dDel.added.forEach(x => mDel.add(x));
       dDel.removed.forEach(x => mDel.delete(x));
-      const mCities = new Set(cur.cities);
-      dCities.added.forEach(x => mCities.add(x));
-      dCities.removed.forEach(x => mCities.delete(x));
+      const mFav = new Set(cur.favorites);
+      dFav.added.forEach(x => mFav.add(x));
+      dFav.removed.forEach(x => mFav.delete(x));
 
       window.activitiesAPI.applyRemoteState({
-        done:    [...mDone],
-        deleted: [...mDel],
-        cities:  [...mCities],
-        order:   Array.isArray(remote.order) ? remote.order : cur.order,
-        sort:    typeof remote.sort === 'string' ? remote.sort : cur.sort
+        done:      [...mDone],
+        deleted:   [...mDel],
+        favorites: [...mFav],
+        order:     Array.isArray(remote.order) ? remote.order : cur.order,
+        sort:      typeof remote.sort === 'string' ? remote.sort : cur.sort
       });
 
       lastSentState = {
-        done:    remote.done    || [],
-        deleted: remote.deleted || [],
-        cities:  remote.cities  || [],
-        order:   Array.isArray(remote.order) ? remote.order : [],
-        sort:    remote.sort || 'default'
+        done:      remote.done      || [],
+        deleted:   remote.deleted   || [],
+        favorites: remote.favorites || [],
+        order:     Array.isArray(remote.order) ? remote.order : [],
+        sort:      remote.sort || 'default'
       };
 
       // Si on a encore des modifs locales non synchronisées, on push
       const after = window.activitiesAPI.getState();
       const stillDirty =
-        !setEq(after.done,    lastSentState.done) ||
-        !setEq(after.deleted, lastSentState.deleted) ||
-        !setEq(after.cities,  lastSentState.cities) ||
-        !arrEq(after.order,   lastSentState.order) ||
+        !setEq(after.done,      lastSentState.done) ||
+        !setEq(after.deleted,   lastSentState.deleted) ||
+        !setEq(after.favorites, lastSentState.favorites) ||
+        !arrEq(after.order,     lastSentState.order) ||
         after.sort !== lastSentState.sort;
       if (stillDirty) schedulePush();
       else setSyncStatus(navigator.onLine ? 'synced' : 'offline');
@@ -14871,11 +14724,130 @@ function teardownActivitiesSync(){
   syncStatus = 'idle';
 }
 
+/* ============================================================ */
+/* MODULE FIREBASE : SYNC APPRENTISSAGE (per-user, last-write-wins) */
+/* Document : users/{uid}/learning/state                          */
+/* Pas de partage entre utilisateurs ; setDoc complet à chaque    */
+/* push (mono-user, pas de concurrence à gérer hors multi-device).*/
+/* ============================================================ */
+function learningStateRef(uid){
+  return doc(db, 'users', uid, 'learning', 'state');
+}
+
+async function pushLearning(){
+  if (!currentUser || !window.learningAPI) return;
+  try {
+    const cur = window.learningAPI.getState();
+    await setDoc(learningStateRef(currentUser.uid), {
+      ...cur,
+      updatedAt: serverTimestamp()
+    });
+    lastSentLearning = cur;
+  } catch (err){
+    console.error('pushLearning failed', err);
+  }
+}
+
+function scheduleLearningPush(){
+  if (learningPushTimer) clearTimeout(learningPushTimer);
+  learningPushTimer = setTimeout(() => {
+    learningPushTimer = null;
+    pushLearning();
+  }, LEARNING_PUSH_DEBOUNCE_MS);
+}
+
+async function bootstrapLearning(uid){
+  if (learningUnsub){ learningUnsub(); learningUnsub = null; }
+  if (learningPushTimer){ clearTimeout(learningPushTimer); learningPushTimer = null; }
+  lastSentLearning = null;
+  if (window.learningAPI) window.learningAPI.onLocalChange = null;
+
+  if (!uid || !window.learningAPI) return;
+
+  try {
+    const snap = await getDoc(learningStateRef(uid));
+
+    if (!snap.exists()){
+      // Premier signin : on uploade l'état local
+      const cur = window.learningAPI.getState();
+      await setDoc(learningStateRef(uid), {
+        ...cur,
+        updatedAt: serverTimestamp()
+      });
+      lastSentLearning = cur;
+    } else {
+      // Last-write-wins : le cloud écrase le local
+      const cloud = snap.data();
+      window.learningAPI.applyRemoteState(cloud);
+      lastSentLearning = window.learningAPI.getState();
+    }
+
+    // Listener temps réel (multi-device : si autre device push, on applique)
+    learningUnsub = onSnapshot(learningStateRef(uid), (snap2) => {
+      if (!snap2.exists()) return;
+      const remote = snap2.data();
+      // Ignorer les snapshots quasi-identiques à ce qu'on vient d'envoyer
+      // (notre propre écho, ou rien de neuf).
+      const cur = window.learningAPI.getState();
+      const sameAsLocal =
+        JSON.stringify(stripMeta(remote)) === JSON.stringify(stripMeta(cur));
+      if (sameAsLocal) return;
+      window.learningAPI.applyRemoteState(remote);
+      lastSentLearning = window.learningAPI.getState();
+    }, err => {
+      console.error('learning listener', err);
+    });
+
+    // Hook mutations locales
+    window.learningAPI.onLocalChange = () => scheduleLearningPush();
+
+  } catch (err){
+    console.error('bootstrapLearning failed', err);
+  }
+}
+
+function stripMeta(o){
+  if (!o) return {};
+  const out = {};
+  for (const k of Object.keys(o)){
+    if (k === 'updatedAt' || k === 'updatedBy') continue;
+    out[k] = o[k];
+  }
+  return out;
+}
+
+function teardownLearningSync(){
+  if (learningUnsub){ learningUnsub(); learningUnsub = null; }
+  if (learningPushTimer){ clearTimeout(learningPushTimer); learningPushTimer = null; }
+  lastSentLearning = null;
+  if (window.learningAPI) window.learningAPI.onLocalChange = null;
+}
+
 // État réseau
 window.addEventListener('online',  () => {
   if (syncStatus === 'offline') setSyncStatus('syncing');
 });
 window.addEventListener('offline', () => setSyncStatus('offline'));
+
+// Bug A3 : flush du push debouncé avant que l'onglet ne soit masqué/fermé.
+// 'visibilitychange' est plus fiable que 'beforeunload' sur mobile.
+function flushPendingPushes(){
+  if (pushTimer && currentSpaceId && currentUser){
+    clearTimeout(pushTimer);
+    pushTimer = null;
+    // Fire-and-forget : on ne peut pas await dans un handler synchrone.
+    pushActivities();
+  }
+  if (learningPushTimer && currentUser){
+    clearTimeout(learningPushTimer);
+    learningPushTimer = null;
+    pushLearning();
+  }
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') flushPendingPushes();
+});
+window.addEventListener('pagehide', flushPendingPushes);
 
 /* === Wiring : bootstrap quand l'espace courant change === */
 // On surveille les changements de currentSpaceId via le listener existant.
@@ -14904,6 +14876,7 @@ const _unsubAllOrig = unsubAll;
 unsubAll = function(){
   _unsubAllOrig();
   teardownActivitiesSync();
+  teardownLearningSync();
 };
 
 onAuthStateChanged(auth, async (user) => {
@@ -14923,6 +14896,8 @@ onAuthStateChanged(auth, async (user) => {
     const ud = userSnap.exists() ? userSnap.data() : {};
     await ensureSpaceForUser(user, ud.currentSpaceId);
     // subscribeUserDoc se chargera d'abonner l'espace ET la sync activités dès qu'il voit currentSpaceId
+    // Sync apprentissage : per-user, indépendante des espaces
+    bootstrapLearning(user.uid);
   } catch (err){
     console.error('post-signin setup failed', err);
     lastError = err.message || String(err);
