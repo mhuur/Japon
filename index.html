@@ -6642,7 +6642,7 @@ const VOCAB = [
   },
   {id:139, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
     jp:"空く", romaji:"suku", fr:"se vider / avoir faim",
-    rules:["godan","verb_forms_overview"],
+    rules:["verb_groups","verb_forms_overview"],
     note:"Verbe godan en -ku. Quasiment toujours utilisé dans l'expression idiomatique <em>onaka ga suita</em> (お腹が空いた) = « j'ai faim » (litt. « le ventre s'est vidé »).",
     mnemo:"空 (vide, ciel) + く. L'estomac se vide → on a faim. La forme courante au présent est rare ; on entend surtout <em>suita</em> (passé).",
     usage:{when:["<em>Onaka ga suita</em> — J'ai faim","<em>Onaka ga sukimashita</em> — J'ai faim (poli)","<em>Densha ga suite imasu</em> — Le train est vide"],avoid:["Ne pas confondre avec <em>suki</em> (好き = aimer) qui se ressemble à l'oreille."],variants:[{form:"sukimasu",when:"Forme polie présent."},{form:"suita / sukimashita",when:"Forme passée (la plus courante)."}]}
@@ -6920,7 +6920,7 @@ const VOCAB = [
   {id:192, category:"pratique", catLabel:"Verbes utiles", catNum:"参",
     jp:"包む", romaji:"tsutsumu", fr:"Emballer", frSub:"envelopper",
     note:"Verbe godan en -mu. Demande systématique en magasin : <em>okurimono desu ka?</em> (c'est un cadeau ?). Emballage cadeau souvent gratuit et superbe.",
-    rules:["godan"],
+    rules:["verb_groups"],
     mnemo:"包 = enveloppe, emballer. Le kanji ressemble à un paquet plié sur son contenu (勹 entoure 巳).",usage:{when:["<em>Tsutsunde kudasai</em> — Emballez s'il vous plaît","<em>Okurimono desu</em> — C'est un cadeau","<em>Betsubetsu ni tsutsunde kudasai</em> — Emballez séparément"],avoid:[],variants:[{form:"つつみます <em>tsutsumimasu</em>",when:"Forme polie présent."},{form:"つつんで <em>tsutsunde</em>",when:"Forme en -te (demande, requête)."}]}
   },
 
@@ -6971,6 +6971,40 @@ const VOCAB = [
     note:"Marque le terme préféré dans une comparaison : <em>A no hô ga B yori X</em> = A est plus X que B (avec accent sur A). 方 ici lu <em>hô</em>, « côté/option ».",
     rules:["comparatif_yori_ichiban"],
     mnemo:"の (liaison) + 方 (<em>hô</em> = côté/direction/option) + が (sujet). « Du côté de X ».",usage:{when:["<em>Kore no hô ga ii desu</em> — Plutôt celui-ci","<em>Densha no hô ga hayai desu</em> — Le train est plus rapide","<em>Kyô no hô ga atsui desu</em> — Aujourd'hui c'est plus chaud"],avoid:[],variants:[]}
+  },
+
+  // ===== ARRIVEE AU RESTAURANT (IDs 201-206) =====
+  {id:201, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"食べられますか", romaji:"tabe-raremasu ka", fr:"Peut-on manger ?", frSub:"forme potentielle de taberu",
+    note:"Question pour vérifier qu'on peut être servi maintenant — utile aux frontières d'horaire (entre services, fermeture imminente, attente cuisine). La forme potentielle <em>raremasu</em> distingue clairement « est-il possible de manger ici/maintenant » de la simple action <em>tabemasu</em>.",
+    rules:["potential_ga"],
+    mnemo:"食 (<em>taberu</em>, kun <em>ta-beru</em> / on SHOKU = manger) + suffixe potentiel <em>-rareru</em> pour verbes ichidan (<em>taberu → taberareru</em>) + forme polie <em>-masu</em> + <em>ka</em> interrogatif. Litt. « est-ce mangeable maintenant ? ».",usage:{when:["<em>Sumimasen, ima tabe-raremasu ka?</em> — Pardon, peut-on manger maintenant ?","<em>Ranchi taimu wa mada tabe-raremasu ka?</em> — Le service midi est-il encore servi ?","<em>Yoyaku nashi de tabe-raremasu ka?</em> — Peut-on manger sans réservation ?"],avoid:["À distinguer de <em>tabemasu ka</em> (« mangez-vous ? », action) : <em>tabe-raremasu ka</em> interroge la POSSIBILITÉ. Distinct aussi de <em>hairemasu ka</em> (« peut-on entrer ? »), qui porte sur l'accès à l'établissement."],variants:[{form:"食べれますか <em>tabe-remasu ka</em>",when:"Forme contractée orale (<em>ra-nuki kotoba</em>), très répandue mais familière."},{form:"お食事できますか <em>o-shokuji dekimasu ka</em>",when:"Alternative formelle (<em>shokuji</em> = repas + <em>dekiru</em>). Registre keigo."}]}
+  },
+  {id:202, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"〜名です", romaji:"-mei desu", fr:"Nous sommes ~ personne(s)", frSub:"compteur formel de personnes",
+    note:"Compteur de personnes en registre formel, utilisé à l'accueil restaurant/hôtel. Le personnel demande <em>nan-mei sama desu ka?</em> ; on peut répondre en <em>-mei</em> ou plus simplement en <em>-nin</em> (#196) : <em>futari desu</em> est tout aussi correct.",
+    rules:["desu"],
+    mnemo:"名 (<em>mei</em>, kun <em>na</em> / on MEI, MYÔ = nom) = 口 (<em>kuchi</em>, bouche) + 夕 (<em>yû</em>, soir, anciennement croissant lunaire). Litt. « nom prononcé dans l'obscurité du soir ». Comme compteur : « nombre de noms inscrits ».",usage:{when:["<em>Ni-mei desu</em> — Nous sommes deux","<em>San-mei de yoyaku shite imasu</em> — J'ai réservé pour trois","<em>Nan-mei sama desu ka?</em> — Vous êtes combien ? (entendu)"],avoid:["<em>-mei</em> est FORMEL (employé par le personnel) ; <em>-nin/-ri</em> (#196) est usuel et tout aussi correct en réponse. Le suffixe <em>-sama</em> dans <em>nan-mei sama</em> est honorifique : ne l'employer QUE pour parler du client, jamais de soi. À ne pas confondre avec 名前 (<em>namae</em>, nom propre)."],variants:[{form:"〜人 <em>-nin / -ri</em>",when:"Compteur quotidien : hitori (1), futari (2), san-nin (3)… plus naturel à l'oral courant — voir #196."},{form:"〜名様 <em>-mei sama</em>",when:"Forme honorifique employée PAR le personnel pour parler du client."}]}
+  },
+  {id:203, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"席", romaji:"seki", fr:"Table / siège", frSub:"place assise",
+    note:"Désigne le siège ou la place assise. À distinguer de <em>tennai</em> (#142, « sur place » par opposition à emporter). Mot clé pour demander de la place à l'entrée et préciser le type souhaité (table, comptoir, tatami).",
+    mnemo:"席 (<em>seki</em>, lecture on uniquement, sino-japonais) = 巾 (<em>kin</em>, tissu/serviette) sous 广 (<em>mada-re</em>, toit/abri). Litt. « coussin sous un toit » — la place préparée. Composés : 座席 (zaseki, siège), 空席 (kûseki, place libre), 出席 (shusseki, présence).",usage:{when:["<em>Seki wa arimasu ka?</em> — Avez-vous de la place ?","<em>Mado-gawa no seki wo onegaishimasu</em> — Une table côté fenêtre s'il vous plaît","<em>O-seki ni go-an'nai shimasu</em> — Je vous conduis à votre table (entendu, keigo)"],avoid:["À ne pas confondre avec <em>tennai</em> (#142, « sur place ») : <em>seki</em> = le siège spécifiquement. テーブル <em>têburu</em> existe mais sonne calque ; <em>seki</em> est l'idiome japonais pour parler d'une place."],variants:[{form:"テーブル席 <em>têburu-seki</em>",when:"Place à table (par opposition au comptoir) — à préciser dans les izakaya/ramen où le comptoir est l'option par défaut."},{form:"カウンター席 <em>kauntâ-seki</em>",when:"Place au comptoir, courante en sushiya / ramen / izakaya, souvent la seule option seul."},{form:"座敷 <em>zashiki</em>",when:"Salle à tatami où l'on s'assied au sol, registre traditionnel."}]}
+  },
+  {id:204, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"満席", romaji:"manseki", fr:"Complet", frSub:"plus de place",
+    note:"Réponse type à <em>seki wa arimasu ka?</em> (#203) quand le restaurant est plein. Souvent affiché à l'entrée des izakaya populaires sur un écriteau. À comprendre à l'oral — on l'entendra plus qu'on ne le produira. Pour réserver à l'avance, voir <em>yoyaku</em> (#125).",
+    mnemo:"満 (<em>man</em>, kun <em>mi-tsu</em> / on MAN = plein, rempli) + 席 (<em>seki</em>, voir #203). Litt. « sièges pleins ». Composé sino-japonais (on/on). Antonyme : 空席 (kûseki).",usage:{when:["<em>Sumimasen, ima manseki desu</em> — Désolé, c'est complet (entendu)","<em>Manseki na node, machi-jikan ga arimasu</em> — C'est complet, il y a de l'attente (entendu)","<em>Manseki desu ka?</em> — Est-ce complet ?"],avoid:["À distinguer de 予約済み <em>yoyaku-zumi</em> (« réservé », seulement pour une table donnée) : <em>manseki</em> = tout l'établissement est plein. Distinct aussi de 満員 <em>man'in</em> qui s'emploie pour des gens (trains bondés, salles) plutôt que pour des sièges spécifiques."],variants:[{form:"空席 <em>kûseki</em>",when:"Place libre (antonyme) ; <em>kûseki ari</em> = il y a des places, <em>kûseki nashi</em> = complet."},{form:"満員 <em>man'in</em>",when:"« Plein » pour des gens (trains bondés, salles), pas pour des sièges spécifiques."}]}
+  },
+  {id:205, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"待ち時間", romaji:"machi-jikan", fr:"Temps d'attente",
+    note:"Affiché à l'entrée des restaurants populaires (souvent en minutes, parfois avec liste d'inscription). Permet de décider de patienter ou de chercher ailleurs. Question type : <em>machi-jikan wa dono kurai desu ka?</em>",
+    mnemo:"待 (<em>matsu / machi</em>, kun <em>ma-tsu</em> / on TAI = attendre) = 彳 (<em>gyônin-ben</em>, route) + 寺 (<em>tera</em>, temple). 待ち = nominalisation (renyôkei) de <em>matsu</em>. + 時間 (<em>jikan</em> = temps, durée) = 時 (<em>toki/JI</em>) + 間 (<em>aida/KAN</em>, intervalle). Litt. « durée d'attente ».",usage:{when:["<em>Machi-jikan wa dono kurai desu ka?</em> — Combien de temps d'attente ?","<em>Machi-jikan wa nijuppun gurai desu</em> — Environ vingt minutes (entendu)","<em>Machi-jikan nashi de hairemasu ka?</em> — Peut-on entrer sans attendre ?"],avoid:["À distinguer de 順番 <em>junban</em> (ordre / tour de passage), souvent matérialisé par un ticket numéroté à l'entrée : <em>machi-jikan</em> donne la DURÉE, <em>junban</em> donne le RANG. Distinct du verbe brut 待つ (<em>matsu</em>, attendre) qui exprime l'action — <em>machi-jikan</em> est le nom abstrait."],variants:[{form:"順番待ち <em>junban-machi</em>",when:"Attente avec système de tour/ticket numéroté ; ramen et izakaya populaires affichent souvent une liste à l'entrée."},{form:"並ぶ <em>narabu</em>",when:"Verbe « faire la queue » ; impératif poli <em>onarabi kudasai</em>."}]}
+  },
+  {id:206, category:"restaurant", catLabel:"Au restaurant", catNum:"陸",
+    jp:"禁煙", romaji:"kin'en", fr:"Non-fumeur",
+    note:"Depuis avril 2020 (loi Kenkô Zôshin-hô révisée), la majorité des restaurants sont non-fumeurs par défaut — la question kin'en/kitsuen est devenue rare en pratique. À vérifier en izakaya, surtout les vieux établissements et les snack-bars.",
+    mnemo:"禁 (<em>kin</em>, on KIN = interdiction) = 示 (<em>shi</em>, autel) sous 林 (<em>hayashi</em>, deux arbres). + 煙 (<em>en</em>, kun <em>kemuri</em> / on EN = fumée) = 火 (<em>hi</em>, feu) + 垔 (composante phonétique). Litt. « interdiction de fumée ». L'apostrophe dans <em>kin'en</em> sépare morphologiquement <em>kin + en</em> pour éviter la lecture parasite <em>ki-nen</em>.",usage:{when:["<em>Kin'en-seki wo onegaishimasu</em> — Une table non-fumeur s'il vous plaît","<em>Kin'en desu ka, kitsuen desu ka?</em> — Non-fumeur ou fumeur ? (entendu)","<em>Zenseki kin'en desu</em> — Tout l'établissement est non-fumeur (entendu)"],avoid:["À ne pas confondre avec 喫煙 <em>kitsuen</em> (« fumeur » — inversion de sens kanji par kanji : <em>kitsu</em> = ingérer, <em>en</em> = fumée). 分煙 <em>bun'en</em> = séparation physique fumeurs/non-fumeurs dans un même lieu (rare aujourd'hui)."],variants:[{form:"禁煙席 <em>kin'en-seki</em>",when:"Table/section non-fumeur ; combine 禁煙 + 席 (#203)."},{form:"喫煙 <em>kitsuen</em>",when:"« Fumeur » ; <em>kitsuen-seki</em> = section fumeur, <em>kitsuen-jo</em> = espace fumeurs séparé."},{form:"分煙 <em>bun'en</em>",when:"Séparation physique fumeurs/non-fumeurs dans un même établissement (rare aujourd'hui)."}]}
   },
 
 ];
